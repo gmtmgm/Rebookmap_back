@@ -1,10 +1,12 @@
 package BookMap.PentaRim.Repository;
 
 import BookMap.PentaRim.User.User;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Component
 public class UserRepositoryImpl implements UserRepository{
 
     private static Map<Long, User> store = new ConcurrentHashMap<>();
