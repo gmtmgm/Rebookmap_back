@@ -29,11 +29,27 @@ public class BookMapServiceImpl implements BookMapService{
     @Override
     public BookMap addMemo(BookMap bookMap, Memo memo) {
         bookMap.addMemoToMemo(bookMap, memo);
+
         return bookMap;
     }
 
     @Override
     public void deleteBookMap(BookMap bookMap) {
-        //구현필요
+        bookMap = null;     //임시로 null 할당하긴 했는데 상의 필요
     }
+
+    @Override
+    public void deleteBook(BookMap bookMap, Book book){
+        bookMap.deleteBookFromMap(bookMap, book);
+    }
+
+    @Override
+    public void deleteMemo(BookMap bookMap, Memo memo){
+        bookMap.deleteMemoFromMap(bookMap, memo);
+    }
+
+    public void changeBookMapIndex(BookMap bookMap){
+
+    }
+
 }

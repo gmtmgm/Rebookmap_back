@@ -22,13 +22,21 @@ public class BookMap {
     private Long bookMapId;
 
 
-    public void addBookToMap(BookMap bookMap, Book book) {
-        bookMap.map.add(book);
-    }
+
+    public void addBookToMap(BookMap bookMap, Book book) { bookMap.map.add(book); }
 
     public void addMemoToMemo(BookMap bookMap, Memo memo) {
         bookMap.memo.add(memo);
     }
 
+    public int getMapCount(BookMap bookMap) { return bookMap.map.size(); }
+
+    public void deleteBookFromMap(BookMap bookMap, Book book) { bookMap.map.remove(book); }
+
+    public void deleteMemoFromMap(BookMap bookMap, Memo memo) { bookMap.memo.remove(memo); }
+
+    public void changeIndex(BookMap bookMap){
+
+    }
 
 }

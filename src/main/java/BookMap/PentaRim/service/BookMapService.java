@@ -16,4 +16,11 @@ public interface BookMapService {
 
     void deleteBookMap(BookMap bookMap);
 
+    void deleteBook(BookMap bookMap, Book book);
+
+    void deleteMemo(BookMap bookMap, Memo memo);
+
+    void changeBookMapIndex(BookMap bookMap);
+
+
 }
