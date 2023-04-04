@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 public class BookPersonal {
-
-    private boolean readOrNot;
-    private boolean wantOrNot;
+    //이야기 해봐야함, book에 안넣는다면 따로 이런식으로?
+    private Book book;
+    private BookState bookState;
     private Memo memo;
+
 }
