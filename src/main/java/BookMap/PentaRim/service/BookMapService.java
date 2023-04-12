@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 public interface BookMapService {
 
     BookMap createBookMap(Book book);
-    BookMap.MapAndMemo addBook(BookMap.MapAndMemo mapAndMemo, Book book);
+
+    void addBook(BookMap.MapAndMemo mapAndMemo, Book book);
 
     void addMemo(BookMap bookMap, Memo memo);
 
@@ -17,8 +18,9 @@ public interface BookMapService {
 
     void deleteObj(BookMap bookMap, BookMap.MapAndMemo mapAndMemo, int index);
 
+    void changeMapIndex(BookMap.MapAndMemo mapAndMemo, int inputIndex, int outIndex);
 
-    BookMap changeBookMapIndex(BookMap bookMap);
+    void changeBookMapIndex(BookMap bookMap, int inputIndex, int outIndex);
 
 
 }
