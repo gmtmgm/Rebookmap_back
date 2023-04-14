@@ -14,4 +14,7 @@ public class Memo {
     private Long isbn;
     private Long MemoId;
     private String Data;
+
+
 }
+

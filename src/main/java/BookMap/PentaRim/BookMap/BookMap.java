@@ -17,10 +17,15 @@ import java.util.Map;
 public class BookMap {
 
     private Long userId;
-    private Long isbn; //꼭 필요한지
+    private Long isbn; //꼭 필요한지 //책 식별용도로 필요함
     private String BookMapName;
     private Long bookMapId;
-    private static Long serialNum = 1L;
+    private static Long serialNum = 0L;
+
+    Long getSerialNum() {
+        return serialNum;
+    }
+
     public class MapAndMemo{        //하나의 클래스로 통일되었으므로 어떤게 책이고 메모인지 구별하는 작업 필요
         private ArrayList<Book> map;
         private Memo memo;
@@ -37,6 +42,8 @@ public class BookMap {
             map.add(outIndex, changeBook);
         }
     }
+
+
     private ArrayList<MapAndMemo> bookMapIndex = new ArrayList<>();
 
 
@@ -71,3 +78,4 @@ public class BookMap {
     }
 
 }
+
