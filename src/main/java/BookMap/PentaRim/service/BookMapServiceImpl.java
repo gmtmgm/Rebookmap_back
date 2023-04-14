@@ -13,7 +13,7 @@ public class BookMapServiceImpl implements BookMapService{
 
     @Override
     public BookMap createBookMap(Book book) { //책을 반드시 한 권 이상 선택하여 북맵 만들도록
-        //북맵 이름을 받고 시작할 것인지?
+        //북맵 이름을 받고 시작할 것인지? //받고 시작
         BookMap bookMap = new BookMap();
         BookMap.MapAndMemo bookList = bookMap.new MapAndMemo();
         addBook(bookList, book);
@@ -23,7 +23,7 @@ public class BookMapServiceImpl implements BookMapService{
 
     @Override
     public void addBook(BookMap.MapAndMemo mapAndMemo, Book book) {
-        //책 추가를 무조건 맨 뒤에 오게 했는데 따로 원하는 위치에 추가하게 할지 상의 필요
+        //책 추가를 무조건 맨 뒤에 오게 했는데 따로 원하는 위치에 추가하게 할지 상의 필요//맨 뒤가 나을거같아요
         ArrayList<Book> map = mapAndMemo.getMap();
         if (isMapNotFull(map)) {                    //5권 미만일때만 실행
             if (!map.contains(book)) {              //동일한 책이 없을 경우 추가

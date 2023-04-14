@@ -7,6 +7,5 @@ import org.springframework.stereotype.Component;
 public interface MemoService {
 
     Memo createMemo(String string);
-    void deleteMemo(Memo memo);
-    Memo modifyMemo(Memo memo);
+
 }

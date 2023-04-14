@@ -15,6 +15,6 @@ public class Memo {
     private Long MemoId;
     private String Data;
 
-
 }
+
 

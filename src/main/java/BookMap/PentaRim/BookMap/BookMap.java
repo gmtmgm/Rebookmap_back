@@ -26,6 +26,8 @@ public class BookMap {
         return serialNum;
     }
 
+    @Getter
+    @Setter
     public class MapAndMemo{        //하나의 클래스로 통일되었으므로 어떤게 책이고 메모인지 구별하는 작업 필요
         private ArrayList<Book> map;
         private Memo memo;

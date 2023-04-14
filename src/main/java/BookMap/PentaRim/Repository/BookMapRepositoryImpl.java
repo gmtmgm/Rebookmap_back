@@ -20,4 +20,5 @@ public class BookMapRepositoryImpl implements BookMapRepository{
     public BookMap findByBookMapId(Long bookMapId) {
         return store.get(bookMapId);
     }
+
 }
