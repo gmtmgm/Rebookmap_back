@@ -2,10 +2,7 @@ package BookMap.PentaRim.BookMap;
 import BookMap.PentaRim.AppConfig;
 import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Book.BookState;
-import BookMap.PentaRim.Repository.BookMapRepository;
-import BookMap.PentaRim.Repository.BookMapRepositoryImpl;
 import BookMap.PentaRim.service.BookMapService;
-import BookMap.PentaRim.service.BookMapServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -20,7 +17,7 @@ public class BookMapTest {
     AnnotationConfigApplicationContext ac = new
             AnnotationConfigApplicationContext(AppConfig.class);
 
-    BookMapService bookMapService = new BookMapServiceImpl();
+    BookMapService bookMapService;
 
     @Test
     @DisplayName("북맵에 메모와 북맵이 잘 만들어지는지 테스트")
