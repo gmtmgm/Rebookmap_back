@@ -1,10 +1,10 @@
-package BookMap.PentaRim.AppConfig;
+package BookMap.PentaRim;
 
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
 @ComponentScan
+@Configuration
 public class AppConfig {
 }

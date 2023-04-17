@@ -1,8 +1,9 @@
 package BookMap.PentaRim;
-import BookMap.PentaRim.AppConfig.AppConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+
 
 
 public class ApplicationContextBasicFindTest {
@@ -23,5 +24,6 @@ public class ApplicationContextBasicFindTest {
         }
 
     }
+
 
 }

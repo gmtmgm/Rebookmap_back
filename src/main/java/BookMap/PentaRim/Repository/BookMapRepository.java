@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public interface BookMapRepository {
 
+
+
     void save(BookMap bookMap);
 
     BookMap findByBookMapId(Long bookMapId);

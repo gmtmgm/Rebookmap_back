@@ -1,5 +1,5 @@
 package BookMap.PentaRim.BookMap;
-import BookMap.PentaRim.AppConfig.AppConfig;
+import BookMap.PentaRim.AppConfig;
 import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Book.BookState;
 import BookMap.PentaRim.Repository.BookMapRepository;
@@ -21,7 +21,6 @@ public class BookMapTest {
             AnnotationConfigApplicationContext(AppConfig.class);
 
     BookMapService bookMapService = new BookMapServiceImpl();
-    BookMapRepository bookMapRepository = new BookMapRepositoryImpl();
 
     @Test
     @DisplayName("북맵에 메모와 북맵이 잘 만들어지는지 테스트")
