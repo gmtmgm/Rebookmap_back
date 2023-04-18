@@ -3,12 +3,12 @@ package BookMap.PentaRim.service;
 import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.memo.Memo;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-@Component
+@Service
 public class BookMapServiceImpl implements BookMapService{
 
 

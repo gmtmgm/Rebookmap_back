@@ -1,9 +1,9 @@
 package BookMap.PentaRim.service;
 
 import BookMap.PentaRim.memo.Memo;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class MemoServiceImpl implements MemoService{
 
     @Override
