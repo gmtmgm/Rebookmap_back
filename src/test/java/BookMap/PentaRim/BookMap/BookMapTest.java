@@ -18,7 +18,7 @@ public class BookMapTest {
     AnnotationConfigApplicationContext ac = new
             AnnotationConfigApplicationContext(AppConfig.class);
 
-    BookMapService bookMapService = new BookMapServiceImpl();
+    BookMapService bookMapService = ac.getBean(BookMapService.class);
 
     @Test
     @DisplayName("북맵에 메모와 북맵이 잘 만들어지는지 테스트")
