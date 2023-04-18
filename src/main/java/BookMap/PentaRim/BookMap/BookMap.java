@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMapAdapter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 
 @Component
@@ -30,7 +31,9 @@ public class BookMap {
     @Getter
     @Setter
     public class MapAndMemo {
-        ArrayList<Book> map;
+        private ArrayList<Book> map;
+
+        private HashSet<String> HashTag;
         private Memo memo;
         private String type;
 
