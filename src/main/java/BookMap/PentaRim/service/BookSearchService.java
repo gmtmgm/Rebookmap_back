@@ -20,6 +20,9 @@ import java.nio.charset.StandardCharsets;
 @PropertySource("classpath:application.properties")
 public class BookSearchService {
 
+    //현재는 모든 키워드(제목, 작가, isbn 등등) 다 받을 수 있습니다
+    //나중에 isbn만 받는다면 굳이 SearchListBooks로 list<searchbook>에 넣지않고
+    //바로 searchbook 객체로 넣을 수도 있을 것 같습니다.
     @Value("${kakao-admin-key}")
     String adminKey;
 
