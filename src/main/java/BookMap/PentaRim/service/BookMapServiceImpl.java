@@ -52,6 +52,30 @@ public class BookMapServiceImpl implements BookMapService{
     }
 
     @Override
+    public void changeBook(ArrayList<Book> map, int index, Book book) {
+        if (!map.contains(book)) {
+            map.set(index, book);
+        }
+        else {
+            map.remove(map.indexOf(book));
+            map.set(index, book);
+        }
+    }
+
+    @Override
+    public void checkAndAddMap(BookMap bookMap, int index, Book book) {
+        if (bookMap.getBookMapIndex().size() > index) {
+            if (bookMap.getBookMapIndex().get(index) != null) {
+                modiMap(bookMap, index, book);
+                System.out.println("실행 완료");
+            }
+        }
+        else
+            System.out.println("실행 불가");
+
+    }
+
+    @Override
     public void modiMemo(BookMap bookMap, int index, Memo memo) {
         bookMap.getBookMapIndex().get(index).setMemo(memo);
     }
