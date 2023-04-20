@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class BookRepositoryImpl implements BookRepository{
 
-    private static Map<Long, Book> Bookstore = new ConcurrentHashMap<>();
+    private static Map<String, Book> Bookstore = new ConcurrentHashMap<>();
 
     @Override
     public void save(Book book) {
@@ -17,7 +17,7 @@ public class BookRepositoryImpl implements BookRepository{
     }
 
     @Override
-    public Book findByIsbn(Long isbn) {
+    public Book findByIsbn(String isbn) {
         return Bookstore.get(isbn);
     }
 }

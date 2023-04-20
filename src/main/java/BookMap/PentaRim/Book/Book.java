@@ -1,23 +1,32 @@
 package BookMap.PentaRim.Book;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
 @Getter
 @Setter
+@ToString
 public class Book {
 
     private String title;
+    @JsonProperty("authors")
     private List<String> author;
     private String publisher;
     private List<String> hashTag;
-    private String publishedDay;
-    private Long isbn;
+    @JsonProperty("datetime")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date publishedDay;
+    private String isbn;
+    @JsonProperty("thumbnail")
     private String image;
-    private BookState bookstate;   //bookpersonal로 따로 만들기보다는 book 자체에 넣는 건 어떨까요?(default는 NOT, WISH/READING/DONE 4가지로)
 }

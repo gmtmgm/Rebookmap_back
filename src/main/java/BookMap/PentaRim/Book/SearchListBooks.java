@@ -15,5 +15,5 @@ import java.util.List;
 @AllArgsConstructor
 public class SearchListBooks {
     @JsonProperty("documents")
-    List<SearchBook> books = new ArrayList<>();
+    List<Book> books = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package BookMap.PentaRim.service;
 
+import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Book.SearchListBooks;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,13 +21,10 @@ import java.nio.charset.StandardCharsets;
 @PropertySource("classpath:application.properties")
 public class BookSearchService {
 
-    //현재는 모든 키워드(제목, 작가, isbn 등등) 다 받을 수 있습니다
-    //나중에 isbn만 받는다면 굳이 SearchListBooks로 list<searchbook>에 넣지않고
-    //바로 searchbook 객체로 넣을 수도 있을 것 같습니다.
     @Value("${kakao-admin-key}")
     String adminKey;
 
-    public SearchListBooks searchBooks(String keyword){
+    public Book searchBooks(String keyword){
 
         try {
             ClientHttpRequestFactory factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
@@ -40,11 +38,14 @@ public class BookSearchService {
                     .fromUriString("https://dapi.kakao.com/v3/search/book") //기본 url
                     .queryParam("query", keyword) //인자
                     .build()
-                    .encode(StandardCharsets.UTF_8) //인코딩
+                    .encode(StandardCharsets.UTF_8) //한글로 받으려고 인코딩
                     .toUri();
             ResponseEntity<SearchListBooks> resultResponseEntity = restTemplate.exchange(targetUrl, HttpMethod.GET, httpEntity, SearchListBooks.class);
+            //현재로서는 받을 때 list로 밖에 없음 -> SearchListBooks 객체는 필요함
             SearchListBooks searchListBooks = resultResponseEntity.getBody();
-            return searchListBooks;
+
+            return searchListBooks.getBooks().get(0);  //isbn으로 검색시 고유의 id이므로 하나의 책밖에 안뜸
+
         }catch (HttpStatusCodeException e) {
             if(e.getStatusCode() == HttpStatus.NOT_FOUND){
 
