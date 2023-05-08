@@ -24,10 +24,6 @@ public interface BookMapService {
 
     void modiMemo(BookMap bookMap, int index, Memo memo);
 
-    void changeBook(ArrayList<Book> map, int index, Book book);
-
-    void checkAndAddMap(BookMap bookMap, int index, Book book);
-
     String checkType(BookMap bookMap, int index);
 
     void deleteBookMap(BookMap bookMap);
