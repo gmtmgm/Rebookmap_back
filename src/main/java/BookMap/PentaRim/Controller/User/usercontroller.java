@@ -79,12 +79,14 @@ public class usercontroller {
         return userService.update(id, userUpdateRequestDto);
     }
 
+    /*
     @GetMapping("/user/{id}")
     public UserResponseDto findById(@PathVariable Long id){
         return userService.findByID(id);
     }
 
 
+     */
 
 
 }

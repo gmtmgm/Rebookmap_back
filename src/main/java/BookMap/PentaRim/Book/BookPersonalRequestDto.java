@@ -24,7 +24,7 @@ public class BookPersonalRequestDto {
     private LocalDate endDate;
     private Integer readingPage;
     private Integer totalPage;
-    private float grade;
+    private Float grade;
 
     @Builder
     public BookPersonalRequestDto(User user, Book book, BookState bookState, LocalDate startDate, Integer readingPage, Integer totalPage){
@@ -36,6 +36,8 @@ public class BookPersonalRequestDto {
         this.totalPage = totalPage;
     }
 
+
+
     public BookPersonal toEntity(){
         return BookPersonal.builder()
                 .user(user)
@@ -46,6 +48,7 @@ public class BookPersonalRequestDto {
                 .totalPage(totalPage)
                 .build();
     }
+
 
 
 

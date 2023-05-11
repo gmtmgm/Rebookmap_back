@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("https://8172-203-255-63-30.ngrok-free.app")
 public class bookcontroller {
     private final BookSearchService bookSearchService;
     private final BookMemoService bookMemoService;
@@ -37,17 +38,26 @@ public class bookcontroller {
     //지금 파라미터를 뭘로 해야할지 안정했음
 
     @PostMapping("/bookmemo/save/{id}")
-    public void bookMemoSave(@PathVariable Long id, @RequestBody BookMemoRequestDto bookMemoRequestDto){
-        bookMemoService.save(id, bookMemoRequestDto);
+    public void bookMemoSave(@PathVariable Long id, @PathVariable String isbn, @RequestBody BookMemoRequestDto bookMemoRequestDto){
+        bookMemoService.save(id, isbn, bookMemoRequestDto);
     }
 
-    @GetMapping("/book/{userid}")
+    @GetMapping(value = "/book/{userid}",produces = "application/json; charset=utf8")
     public ResponseEntity<?> bookPersonaLoad(@PathVariable Long userid){
         return new ResponseEntity<>(bookSaved.findByUser(userid), HttpStatus.OK);
     }
 
-    @PostMapping("/book/changestate/{id}")
-    public void changeBookState(@PathVariable Long userId, @RequestParam Long bookId, @RequestBody BookState bookState){
+    @PostMapping("/book/changeall/{id}")
+    public void changeBookAll(@PathVariable Long userId, @RequestParam Long bookId, @RequestBody BookState bookState){
+
+    }
+    @DeleteMapping("/book/delete/{id}")
+    public void deletebook(@PathVariable Long userId, @RequestParam String isbn){
+        bookSaved.deleteBookPersonal(userId, isbn);
+    }
+
+    @DeleteMapping("/book/memo/{id}")
+    public void deletememo(@PathVariable Long userId, @RequestParam Long memoId){
 
     }
 
