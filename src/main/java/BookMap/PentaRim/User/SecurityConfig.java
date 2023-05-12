@@ -3,6 +3,8 @@ package BookMap.PentaRim.User;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,22 +12,26 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static BookMap.PentaRim.User.Role.USER;
 
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig  {
+public class SecurityConfig implements WebMvcConfigurer, InitializingBean{
 
 
-    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomAuthSuccessHandler customAuthSuccessHandler;
 
     private final CustomAuthFailureHandler customFailureHandler;
 
@@ -38,10 +44,14 @@ public class SecurityConfig  {
     }
 
     @Bean
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .passwordEncoder(Encoder())
-                .withUser("user").password("secret123").roles("USER");
+    public InMemoryUserDetailsManager userDetailsManager() {
+        CustomUserDetails user = (new CustomUserDetails(User.builder()
+                .username("user")
+                .password("password")
+                .role(USER)
+                .build()));
+
+        return new InMemoryUserDetailsManager(user);
     }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -49,14 +59,17 @@ public class SecurityConfig  {
     }
 
     //시큐리티 암호화 확인
-    public InMemoryUserDetailsManager userDetailsManager() {
-        CustomUserDetails user = (User) User.builder()
-                .username("user")
-                .password("password")
-                .role(USER)
-                .build();
 
-        return new InMemoryUserDetailsManager(user);
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        // Additional custom security configurations, if needed
+    }
+
+
+
+    public void configure(WebSecurity web) throws Exception {
+    web
+    .ignoring().requestMatchers( "/css/**", "/js/**", "/img/**");
     }
 
 
@@ -72,13 +85,15 @@ public class SecurityConfig  {
                 .and()
                 .formLogin()
                 .loginPage("/auth/login")
-                .loginProcessingUrl("/auth/loginProc")
+                .loginProcessingUrl("/auth/loginProcess")
                 .failureHandler(customFailureHandler)
+                .successHandler(customAuthSuccessHandler)
+                .permitAll()
                 .defaultSuccessUrl("/")
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .invalidateHttpSession(true).deleteCookies("JESSIONID")
+                .invalidateHttpSession(true).deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/")
                 .and()
                 .oauth2Login()
