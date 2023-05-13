@@ -1,6 +1,7 @@
 package BookMap.PentaRim.User;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -9,6 +10,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     private final UserRepository userRepository;
 
     // Spring Security를 사용한 로그인 구현 시 사용
@@ -48,7 +50,7 @@ public class UserService {
      * loginId, nickname 중복 체크는 Controller에서 진행 => 에러 메세지 출력을 위해
      */
     public void join2(UserDto dto) {
-        userRepository.save(dto.toEntity());
+        userRepository.save(dto.toEntity(bCryptPasswordEncoder.encode(dto.getPassword())));
     }
 
     /**
@@ -59,7 +61,7 @@ public class UserService {
     public User login(LoginRequest req) {
         Optional<User> optionalUser = userRepository.findByUsername(req.getUsername());
 
-        // loginId와 일치하는 User가 없으면 null return
+        // Username와 일치하는 User가 없으면 null return
         if(optionalUser.isEmpty()) {
             return null;
         }
@@ -80,10 +82,10 @@ public class UserService {
      * userId가 null이거나(로그인 X) userId로 찾아온 User가 없으면 null return
      * userId로 찾아온 User가 존재하면 User return
      */
-    public User getLoginUserByUsername(String username) {
-        if(username == null) return null;
+    public User getLoginUserById(Long userId) {
+        if(userId == null) return null;
 
-        Optional<User> optionalUser = userRepository.findByUsername(username);
+        Optional<User> optionalUser = userRepository.findById(userId);
         if(optionalUser.isEmpty()) return null;
 
         return optionalUser.get();
@@ -95,7 +97,7 @@ public class UserService {
      * loginId가 null이거나(로그인 X) userId로 찾아온 User가 없으면 null return
      * loginId로 찾아온 User가 존재하면 User return
      */
-    public User getLoginUserByLoginId(String username) {
+    public User getLoginUserByUsername(String username) {
         if(username == null) return null;
 
         Optional<User> optionalUser = userRepository.findByUsername(username);

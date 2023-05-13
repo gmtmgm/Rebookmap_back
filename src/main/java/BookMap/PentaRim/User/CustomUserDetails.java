@@ -1,18 +1,39 @@
 package BookMap.PentaRim.User;
-
-import lombok.AllArgsConstructor;
+;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 
-@AllArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public class CustomUserDetails implements UserDetails, OAuth2User {
 
     private final User user;
 
+    public CustomUserDetails(User user) {
+        this.user = user;
+    }
+
+    private Map<String, Object> attributes;
+
+    public CustomUserDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     @Override
     public String getPassword() { return user.getPassword(); }

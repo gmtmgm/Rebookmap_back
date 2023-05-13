@@ -1,5 +1,9 @@
-package BookMap.PentaRim.User;
+package BookMap.PentaRim;
 
+import BookMap.PentaRim.User.LoginRequest;
+import BookMap.PentaRim.User.User;
+import BookMap.PentaRim.User.UserDto;
+import BookMap.PentaRim.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.stereotype.Controller;
@@ -10,7 +14,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RestController
+@Controller
+@RequestMapping("/security-login")
 public class LoginController {
 
 
@@ -22,7 +27,7 @@ public class LoginController {
         model.addAttribute("pageName", "Security 로그인");
 
         if(auth != null) {
-            User loginUser = userService.getLoginUserByLoginId(auth.name());
+            User loginUser = userService.getLoginUserByUsername(auth.name());
             if (loginUser != null) {
                 model.addAttribute("nickname", loginUser.getNickname());
             }
@@ -66,7 +71,7 @@ public class LoginController {
         return "redirect:/security-login";
     }
 
-    @GetMapping("/auth/login")
+    @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("loginType", "security-login");
         model.addAttribute("pageName", "Security 로그인");
@@ -80,7 +85,7 @@ public class LoginController {
         model.addAttribute("loginType", "security-login");
         model.addAttribute("pageName", "Security 로그인");
 
-        User loginUser = userService.getLoginUserByLoginId(auth.name());
+        User loginUser = userService.getLoginUserByUsername(auth.name());
 
         if(loginUser == null) {
             return "redirect:/security-login/login";

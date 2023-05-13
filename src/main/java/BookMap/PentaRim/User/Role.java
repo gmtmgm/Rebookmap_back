@@ -10,8 +10,7 @@ public enum Role {
 
 
     USER("ROLE_USER"),
-    ADMIN("ROLE_ADMIN"),
-    SOCIAL("ROLE_SOCIAL");
+    ADMIN("ROLE_ADMIN");
 
     private final String value;
 
