@@ -2,103 +2,61 @@ package BookMap.PentaRim.User;
 
 
 
+import BookMap.PentaRim.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
-import static BookMap.PentaRim.User.Role.USER;
 
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig implements WebMvcConfigurer, InitializingBean{
+public class SecurityConfig {
 
-
-    private final CustomAuthSuccessHandler customAuthSuccessHandler;
-
-    private final CustomAuthFailureHandler customFailureHandler;
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
-
-    @Bean
-    public BCryptPasswordEncoder Encoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public InMemoryUserDetailsManager userDetailsManager() {
-        CustomUserDetails user = (new CustomUserDetails(User.builder()
-                .username("user")
-                .password("password")
-                .role(USER)
-                .build()));
-
-        return new InMemoryUserDetailsManager(user);
-    }
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    //시큐리티 암호화 확인
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        // Additional custom security configurations, if needed
-    }
-
-
-
-    public void configure(WebSecurity web) throws Exception {
-    web
-    .ignoring().requestMatchers( "/css/**", "/js/**", "/img/**");
-    }
+    private final CustomAuthFailureHandler customAuthFailureHandler;
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().ignoringRequestMatchers("/api/**")
-                .and()
+                .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/","/auth/**",
-                        "/posts/read/**","/posts/search/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/security-login/info").authenticated()
+                .requestMatchers("/security-login/admin/**").hasAuthority(Role.ADMIN.name())
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/auth/login")
-                .loginProcessingUrl("/auth/loginProcess")
-                .failureHandler(customFailureHandler)
-                .successHandler(customAuthSuccessHandler)
-                .permitAll()
-                .defaultSuccessUrl("/")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .loginPage("/security-login/login")
+                .defaultSuccessUrl("/security-login")
+                .failureUrl("/security-login/login")
                 .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutUrl("/security-login/logout")
                 .invalidateHttpSession(true).deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/")
                 .and()
                 .oauth2Login()
+                .loginPage("/security-login/login")
+                .defaultSuccessUrl("/security-login")
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
+        http
+                .exceptionHandling()
+                .authenticationEntryPoint(new BasicAuthenticationEntryPoint())
+                .accessDeniedHandler(new AccessDeniedHandlerImpl());
 
         return http.build();
 

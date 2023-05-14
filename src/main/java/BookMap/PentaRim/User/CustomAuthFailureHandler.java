@@ -17,7 +17,7 @@ import java.io.IOException;
 public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
 
 
-    private final String DEFAULT_FAILURE_URL = "/auth/login?error=true";
+    private final String DEFAULT_FAILURE_URL = "/security-login/login?error";
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)

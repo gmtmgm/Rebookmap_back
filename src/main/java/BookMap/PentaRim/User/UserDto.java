@@ -1,37 +1,39 @@
 package BookMap.PentaRim.User;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import static BookMap.PentaRim.User.Role.USER;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder
 public class UserDto {
 
+
+    @NotBlank(message = "로그인 아이디가 비어있습니다.")
     private String username;
 
+    @NotBlank(message = "비밀번호가 비어있습니다.")
     private String password;
 
     private String passwordCheck;
 
+
+    @NotBlank(message = "닉네임이 비어있습니다")
     private String nickname;
 
-    private String email;
 
-    private Role role;
 
     public User toEntity() {
         User user = User.builder()
                 .username(username)
                 .password(password)
                 .nickname(nickname)
-                .email(email)
                 .role(USER)
                 .build();
 
