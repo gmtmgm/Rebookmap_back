@@ -1,6 +1,7 @@
 package BookMap.PentaRim.Controller.Book;
 
 import BookMap.PentaRim.Book.*;
+import BookMap.PentaRim.Book.Dto.BookMemoRequestDto;
 import BookMap.PentaRim.Book.Dto.BookPersonalRequestDto;
 import BookMap.PentaRim.Book.Dto.BookPersonalUpdateRequestDto;
 import BookMap.PentaRim.Book.Dto.BookPersonalUpdateStateDto;
@@ -26,6 +27,8 @@ public class bookcontroller {
 
 
     private final UserRepository userRepository;
+
+    //DB 저장 확인용 controller 작성함
 
     @PostMapping("/book/save/{id}")
     public Long bookSave(@PathVariable Long id, @RequestParam String isbn, @RequestBody BookPersonalRequestDto bookPersonalRequestDto){
@@ -56,19 +59,25 @@ public class bookcontroller {
         bookSaved.deleteBook(id, isbn);
     }
 
-    /*
+
     @PostMapping("/bookmemo/save/{id}")
-    public void bookMemoSave(@PathVariable Long id, @PathVariable String isbn, @RequestBody BookMemoRequestDto bookMemoRequestDto){
-        bookMemoService.save(id, isbn, bookMemoRequestDto);
-    }
-    */
-
-
-    @DeleteMapping("/book/memo/{id}")
-    public void deletememo(@PathVariable Long userId, @RequestParam Long memoId){
-
+    public void bookMemoSave(@PathVariable Long id, @RequestParam String isbn, @RequestBody BookMemoRequestDto bookMemoRequestDto){
+        bookSaved.bookMemoSave(id, isbn, bookMemoRequestDto);
     }
 
+    @PostMapping("/bookmemo/update/{bookMemoId}")
+    public void bookMemoUpdate(@PathVariable Long bookMemoId, @RequestBody BookMemoRequestDto bookMemoRequestDto){
+        bookSaved.bookMemoUpdate(bookMemoId, bookMemoRequestDto);
+    }
 
+    @DeleteMapping("/book/memo/{bookMemoId}")
+    public void deletememo(@PathVariable Long bookMemoId){
+        bookSaved.bookMemoDelete(bookMemoId);
+    }
+
+    @GetMapping("/bookmemo/{id}")
+    public ResponseEntity<?> bookMemoLoad(@PathVariable Long id, @RequestParam String isbn){
+        return new ResponseEntity<>(bookSaved.findByUserAndBook(id, isbn), HttpStatus.OK);
+    }
 
 }

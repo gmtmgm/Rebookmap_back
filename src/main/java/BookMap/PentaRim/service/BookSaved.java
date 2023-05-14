@@ -1,9 +1,7 @@
 package BookMap.PentaRim.service;
 
-import BookMap.PentaRim.Book.Dto.BookPersonalRequestDto;
-import BookMap.PentaRim.Book.Dto.BookPersonalResponseDto;
-import BookMap.PentaRim.Book.Dto.BookPersonalUpdateRequestDto;
-import BookMap.PentaRim.Book.Dto.BookPersonalUpdateStateDto;
+import BookMap.PentaRim.Book.BookMemo;
+import BookMap.PentaRim.Book.Dto.*;
 
 import java.util.List;
 
@@ -17,5 +15,12 @@ public interface BookSaved {
 
     void deleteBook(Long id, String isbn);
     List<BookPersonalResponseDto> findByUser(Long id);
+
+    void bookMemoSave(Long id, String isbn, BookMemoRequestDto bookMemoRequestDto);
+    void bookMemoUpdate(Long id, BookMemoRequestDto bookMemoRequestDto);
+
+    void bookMemoDelete(Long id);
+
+    List<BookMemoResponseDto> findByUserAndBook(Long id, String isbn);
 
 }

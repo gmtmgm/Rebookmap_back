@@ -25,6 +25,7 @@ public class BookMemo {
     @Column
     private String content;
     @Column
+
     private LocalDateTime saved;
     @Column
     private Integer page;
@@ -32,6 +33,12 @@ public class BookMemo {
     @Builder
     public BookMemo(BookPersonal bookPersonal, String content, LocalDateTime saved, Integer page){
         this.bookPersonal = bookPersonal;
+        this.content = content;
+        this.saved = saved;
+        this.page = page;
+    }
+
+    public void update(String content, LocalDateTime saved, Integer page){
         this.content = content;
         this.saved = saved;
         this.page = page;
