@@ -1,5 +1,8 @@
-package BookMap.PentaRim.Book;
+package BookMap.PentaRim.Book.Dto;
 
+import BookMap.PentaRim.Book.Book;
+import BookMap.PentaRim.Book.BookPersonal;
+import BookMap.PentaRim.Book.BookState;
 import lombok.Getter;
 
 import java.time.LocalDate;

@@ -1,6 +1,7 @@
 package BookMap.PentaRim.Book;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -9,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import org.checkerframework.common.aliasing.qual.Unique;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
@@ -30,25 +30,28 @@ public class Book implements Serializable {
     private Long id;
 
     private String title;
-    @JsonProperty("authors")
     private String author;
     private String publisher;
 
-    @JsonProperty("datetime")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date publishedDay;
+    @Column(unique = true)
     private String isbn;
-    @JsonProperty("thumbnail")
+
     private String image;
+
+    private String description;
 
     public Book(){
     }
-    public Book(String title, String author, String publisher, String isbn, String image){
+    public Book(String title, String author, String publisher, String isbn, String image, Date publishedDay, String description){
         this.isbn = isbn;
         this.author = author;
         this.publisher = publisher;
         this.title = title;
         this.image = image;
+        this.description = description;
+        this.publishedDay = publishedDay;
 
     }
     public String splitIsbn(String isbn){

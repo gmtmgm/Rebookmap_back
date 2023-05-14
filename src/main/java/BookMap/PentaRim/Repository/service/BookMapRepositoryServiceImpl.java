@@ -2,7 +2,6 @@ package BookMap.PentaRim.Repository.service;
 
 import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.Repository.BookMapRepository;
-import BookMap.PentaRim.Repository.BookMapRepositoryImpl;
 import org.springframework.stereotype.Service;
 
 

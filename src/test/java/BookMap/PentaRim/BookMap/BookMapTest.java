@@ -26,7 +26,7 @@ public class BookMapTest {
         List<String> author = new ArrayList<>();
         author.add("오주연");
         Book book = new Book();
-        book.setAuthor(author);
+        //book.setAuthor(author);
         String publisher = "민음사";
         List<String> hashTag = new ArrayList<>();
         hashTag.add("재미있는");
@@ -37,7 +37,7 @@ public class BookMapTest {
 
         book.setIsbn(isbn);
         book.setPublishedDay(publishedDay);
-        book.setHashTag(hashTag);
+        //book.setHashTag(hashTag);
         //book.setBookstate(bookState);
 
         BookMap bookMap1 = bookMapService.createBookMap(book);

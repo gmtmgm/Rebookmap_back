@@ -1,6 +1,7 @@
 package BookMap.PentaRim.Book;
 
 import BookMap.PentaRim.Repository.BookRepository;
+import BookMap.PentaRim.service.BookSearchService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,8 +15,16 @@ public class BookRepositoryTest {
     @Autowired
     BookRepository bookRepository;
 
+    @Autowired
+    BookSearchService bookSearchService;
+
     @Test
     public void 책_불러오기(){
+        Book exampleBook = bookSearchService.searchBooks("8996991341");
+
+        if(bookRepository.existsByIsbn("8996991341") != true){
+            bookRepository.save(exampleBook);
+        }
         String title = "미움받을 용기";
         String publisher = "인플루엔셜";
         String isbn = "8996991341 9788996991342";  //수정전 isbn
@@ -26,10 +35,10 @@ public class BookRepositoryTest {
 
         //bookRepository.save(new Book(title, author, publisher, isbn, image));
 
-        Book book = bookRepository.findByIsbn(isbn).orElseThrow(() ->
+        Book book = bookRepository.findByIsbn("8996991341").orElseThrow(() ->
                 new IllegalArgumentException("해당 book이 없습니다."));
 
-        assertThat(book.getIsbn()).isEqualTo(isbn);
+        assertThat(book.getIsbn()).isEqualTo("8996991341");
         assertThat(book.getTitle()).isEqualTo(title);
         assertThat(book.getAuthor()).isEqualTo(author);
         assertThat(book.getImage()).isEqualTo(image);

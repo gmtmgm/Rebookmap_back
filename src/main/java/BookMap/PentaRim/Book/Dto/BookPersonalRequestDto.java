@@ -1,5 +1,8 @@
-package BookMap.PentaRim.Book;
+package BookMap.PentaRim.Book.Dto;
 
+import BookMap.PentaRim.Book.Book;
+import BookMap.PentaRim.Book.BookPersonal;
+import BookMap.PentaRim.Book.BookState;
 import BookMap.PentaRim.User.User;
 import jakarta.persistence.Entity;
 import lombok.Builder;
@@ -19,7 +22,7 @@ public class BookPersonalRequestDto {
 
     private User user;
     private Book book;
-    private BookState bookState;
+    private String bookState;
     private LocalDate startDate;
     private LocalDate endDate;
     private Integer readingPage;
@@ -27,7 +30,7 @@ public class BookPersonalRequestDto {
     private Float grade;
 
     @Builder
-    public BookPersonalRequestDto(User user, Book book, BookState bookState, LocalDate startDate, Integer readingPage, Integer totalPage){
+    public BookPersonalRequestDto(User user, Book book, String bookState, LocalDate startDate, Integer readingPage, Integer totalPage){
         this.user = user;
         this.book = book;
         this.bookState = bookState;
@@ -37,17 +40,20 @@ public class BookPersonalRequestDto {
     }
 
 
-
     public BookPersonal toEntity(){
         return BookPersonal.builder()
                 .user(user)
                 .book(book)
-                .bookState(bookState)
+                .bookState(BookState.from(bookState))
                 .startDate(startDate)
                 .readingPage(readingPage)
                 .totalPage(totalPage)
                 .build();
     }
+
+
+
+
 
 
 

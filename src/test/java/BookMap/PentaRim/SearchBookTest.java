@@ -4,6 +4,7 @@ import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.service.BookSearchService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -12,9 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class SearchBookTest {
-    AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
-
-    BookSearchService bookSearchService = ac.getBean(BookSearchService.class);
+    @Autowired
+    BookSearchService bookSearchService;
     @Test
     @DisplayName("카카오 책 api 정보 가져오와서 book객체에 넣기")
     void searchBook() {
@@ -23,7 +23,7 @@ public class SearchBookTest {
         //검색할때는 isbn 10자리 13자리 합쳐서는 검색이 안됨, 한가지 입력해야합니다.
         Book book = bookSearchService.searchBooks("8996991341");   //listbooks은 책 검색한 후 나오는 책 리스트에서 제일 첫번째걸로 받습니다.
         //isbn으로 검색하면 한 개만 나옵니다.
-        assertThat(book.getIsbn()).isEqualTo("8996991341 9788996991342"); //저장은 10과 13이 string으로 "156151 156154"으로 저장됩니다.
+        assertThat(book.getIsbn()).isEqualTo("8996991341"); //저장은 10과 13이 string으로 "156151 156154"으로 저장됩니다.
 
         //프린트하려고 Book 객체에다가 @Tostring으로 넣어놨습니다.(나중에 수정하셔도 됩니다!)
         System.out.println(book);
