@@ -25,7 +25,7 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
-    private final CustomAuthFailureHandler customAuthFailureHandler;
+
 
 
     @Bean
@@ -38,8 +38,6 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .usernameParameter("username")
-                .passwordParameter("password")
                 .loginPage("/security-login/login")
                 .defaultSuccessUrl("/security-login")
                 .failureUrl("/security-login/login")
@@ -61,4 +59,12 @@ public class SecurityConfig {
         return http.build();
 
     }
+
+
+
+
+
+
+
+
 }
