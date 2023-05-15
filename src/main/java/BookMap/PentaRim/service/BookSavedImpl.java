@@ -184,6 +184,7 @@ public class BookSavedImpl implements BookSaved{
     @Override
     @Transactional
     public BookPersonalMonthStatisticsResponseDto findByMonth(Long id, BookPersonalMonthRequestDto bookPersonalMonthRequestDto){
+        //현재는 달별 조회인데 달이 넘어가는 책들은 어떻게 해야할지 모르겠다아....
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
