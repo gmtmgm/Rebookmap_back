@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,6 @@ public class BookSavedImpl implements BookSaved{
     final BookPersonalRepository bookPersonalRepository;
     final BookMemoRepository bookMemoRepository;
 
-    private final EntityManager em;
 
     @Override
     @Transactional
@@ -178,5 +179,70 @@ public class BookSavedImpl implements BookSaved{
             bookMemoResponseDtoList.add(new BookMemoResponseDto(bookMemo));
         }
         return bookMemoResponseDtoList;
+    }
+
+    @Override
+    @Transactional
+    public BookPersonalMonthStatisticsResponseDto findByMonth(Long id, BookPersonalMonthRequestDto bookPersonalMonthRequestDto){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
+        LocalDate monthStart = LocalDate.of(bookPersonalMonthRequestDto.getYear(),
+                bookPersonalMonthRequestDto.getMonth(), 1);
+        //LocalDate monthStart = LocalDate.of(localDate.getYear(), localDate.getMonth(), 1);
+        LocalDate monthEnd = monthStart.plusDays(monthStart.lengthOfMonth()-1);
+        System.out.println(monthStart);
+        System.out.println(monthEnd);
+        List<BookPersonal> bookPersonalList = bookPersonalRepository.findAllBetweenDatesForUser(monthStart,monthEnd,user.getId());
+        List<BookPersonalMonthResponseDto> bookPersonalMonthResponseDtos = new ArrayList<>();
+        Integer totalBooks = 0;
+        Integer totalReadingPages = 0;
+        Integer totalDays = 0;
+
+        System.out.println(bookPersonalList.size());
+        /*
+
+        for(BookPersonal bookPersonal: bookPersonalList){
+            if(bookPersonal.getBookState() == BookState.DONE){
+                totalBooks++;
+                totalReadingPages += bookPersonal.getTotalPage();
+                totalDays++;
+            }
+            if(bookPersonal.getBookState() == BookState.READING){
+                totalReadingPages += bookPersonal.getReadingPage();
+                totalDays++;
+            }
+        }
+        for(BookPersonal bookPersonal: bookPersonalList){
+            if(bookPersonal.getBookState() == BookState.DONE){
+                bookPersonalMonthResponseDtos.add(new BookPersonalMonthResponseDto(bookPersonal,totalBooks, totalReadingPages, totalDays));
+            }
+            if(bookPersonal.getBookState() == BookState.READING){
+                bookPersonalMonthResponseDtos.add(new BookPersonalMonthResponseDto(bookPersonal,totalBooks, totalReadingPages, totalDays));
+            }
+
+         */
+        for(BookPersonal bookPersonal: bookPersonalList){
+            if(bookPersonal.getBookState() == BookState.DONE){
+                totalBooks++;
+                totalReadingPages += bookPersonal.getTotalPage();
+                totalDays++;
+                bookPersonalMonthResponseDtos.add(new BookPersonalMonthResponseDto(bookPersonal));
+            }
+            if(bookPersonal.getBookState() == BookState.READING){
+                totalReadingPages += bookPersonal.getReadingPage();
+                totalDays++;
+                bookPersonalMonthResponseDtos.add(new BookPersonalMonthResponseDto(bookPersonal));
+            }
+        }
+
+        //totalDays는 현재 완성 못함!
+        BookPersonalMonthStatisticsResponseDto bookPersonalMonthStatisticsResponseDtos = new BookPersonalMonthStatisticsResponseDto(
+                bookPersonalMonthResponseDtos,
+                totalBooks,
+                totalReadingPages,
+                totalDays
+        );
+        return bookPersonalMonthStatisticsResponseDtos;
     }
 }

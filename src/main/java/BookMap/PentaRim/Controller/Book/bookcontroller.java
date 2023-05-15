@@ -1,10 +1,7 @@
 package BookMap.PentaRim.Controller.Book;
 
 import BookMap.PentaRim.Book.*;
-import BookMap.PentaRim.Book.Dto.BookMemoRequestDto;
-import BookMap.PentaRim.Book.Dto.BookPersonalRequestDto;
-import BookMap.PentaRim.Book.Dto.BookPersonalUpdateRequestDto;
-import BookMap.PentaRim.Book.Dto.BookPersonalUpdateStateDto;
+import BookMap.PentaRim.Book.Dto.*;
 import BookMap.PentaRim.Repository.BookPersonalRepository;
 import BookMap.PentaRim.User.UserRepository;
 import BookMap.PentaRim.service.BookSaved;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class bookcontroller {
 
     private final BookSearchService bookSearchService;
-    //private final BookMemoService bookMemoService;
     private final BookSaved bookSaved;
 
     private final BookPersonalRepository bookPersonalRepository;
@@ -78,6 +74,11 @@ public class bookcontroller {
     @GetMapping("/bookmemo/{id}")
     public ResponseEntity<?> bookMemoLoad(@PathVariable Long id, @RequestParam String isbn){
         return new ResponseEntity<>(bookSaved.findByUserAndBook(id, isbn), HttpStatus.OK);
+    }
+
+    @GetMapping("/bookpersonal/{id}")
+    public ResponseEntity<?> bookPersonalMoth(@PathVariable Long id, @RequestBody BookPersonalMonthRequestDto bookPersonalMonthRequestDto){
+        return new ResponseEntity<>(bookSaved.findByMonth(id,bookPersonalMonthRequestDto), HttpStatus.OK);
     }
 
 }
