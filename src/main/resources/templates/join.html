@@ -12,7 +12,7 @@
     <form th:method="post" th:action="|@{/{loginType}/join (loginType=${loginType})}|" th:object="${joinRequest}">
         <div>
             <label th:for="username">로그인 아이디 : </label>
-            <input type="text" th:field="*{user}" th:errorclass="error-input"/>
+            <input type="text" th:field="*{username}" th:errorclass="error-input"/>
             <div class="error-class" th:errors="*{username}"></div>
         </div>
         <br/>
