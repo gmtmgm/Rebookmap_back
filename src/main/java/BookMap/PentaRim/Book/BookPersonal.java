@@ -1,14 +1,11 @@
 package BookMap.PentaRim.Book;
 
 import BookMap.PentaRim.User.User;
-import BookMap.PentaRim.memo.Memo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Component;
-
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
@@ -30,13 +27,12 @@ public class BookPersonal implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOOKPERSONAL_ID")
     private Long id;
-    //이야기 해봐야함, book에 안넣는다면 따로 이런식으로?
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;  //사용자 아이디
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOOK_ID")
     private Book book;
 

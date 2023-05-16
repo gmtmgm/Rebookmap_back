@@ -7,7 +7,6 @@ import BookMap.PentaRim.Repository.BookPersonalRepository;
 import BookMap.PentaRim.Repository.BookRepository;
 import BookMap.PentaRim.User.User;
 import BookMap.PentaRim.User.UserRepository;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,6 +117,7 @@ public class BookSavedImpl implements BookSaved{
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 bookpersonal이 없습니다."));
 
+        bookMemoRepository.deleteAllByBookPersonal(bookPersonal);
         bookPersonalRepository.delete(bookPersonal);
     }
 
