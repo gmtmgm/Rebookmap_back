@@ -34,6 +34,7 @@ public class Book implements Serializable {
     private String publisher;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date publishedDay;
     @Column(unique = true)
     private String isbn;

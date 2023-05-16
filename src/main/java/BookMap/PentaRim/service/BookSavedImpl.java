@@ -42,7 +42,7 @@ public class BookSavedImpl implements BookSaved{
                             IllegalArgumentException("해당 book이 없습니다."));
             bookPersonalRequestDto.setBook(alreadySavedBook);
         }else{
-            bookRepository.save(bookPersonalRequestDto.getBook());  //존재하지 않을경우 book DB에 저장
+            bookRepository.save(book);  //존재하지 않을경우 book DB에 저장
             bookPersonalRequestDto.setBook(book);
         }
 
