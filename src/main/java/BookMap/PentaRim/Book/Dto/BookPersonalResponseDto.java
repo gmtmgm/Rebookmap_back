@@ -18,7 +18,7 @@ public class BookPersonalResponseDto {
     private LocalDate endDate;
     private Integer readingPage;
     private Integer totalPage;
-    private float grade;
+    private Float grade;
 
     public BookPersonalResponseDto(BookPersonal bookPersonal){
         this.id = bookPersonal.getId();

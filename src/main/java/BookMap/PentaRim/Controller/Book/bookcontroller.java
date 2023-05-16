@@ -27,12 +27,8 @@ public class bookcontroller {
     //DB 저장 확인용 controller 작성함
 
     @PostMapping("/book/save/{id}")
-    public Long bookSave(@PathVariable Long id, @RequestParam String isbn, @RequestBody BookPersonalRequestDto bookPersonalRequestDto){
-        //Book requestbook = bookPersonalRequestDto.getBook();
-        Book book = bookSearchService.searchBooks(isbn);
-        bookPersonalRequestDto.setBook(book);
-        bookSaved.Reading(id, bookPersonalRequestDto);
-        return id;
+    public boolean bookSave(@PathVariable Long id, @RequestParam String isbn, @RequestBody BookPersonalRequestDto bookPersonalRequestDto){
+        return bookSaved.Reading(id, isbn, bookPersonalRequestDto);
     }
 
     @GetMapping(value = "/book/{userid}",produces = "application/json; charset=utf8")

@@ -30,11 +30,12 @@ public class BookPersonalRequestDto {
     private Float grade;
 
     @Builder
-    public BookPersonalRequestDto(User user, Book book, String bookState, LocalDate startDate, Integer readingPage, Integer totalPage){
+    public BookPersonalRequestDto(User user, Book book, String bookState, LocalDate startDate, LocalDate endDate, Integer readingPage, Integer totalPage){
         this.user = user;
         this.book = book;
         this.bookState = bookState;
         this.startDate = startDate;
+        this.endDate = endDate;
         this.readingPage = readingPage;
         this.totalPage = totalPage;
     }
@@ -46,6 +47,7 @@ public class BookPersonalRequestDto {
                 .book(book)
                 .bookState(BookState.from(bookState))
                 .startDate(startDate)
+                .endDate(endDate)
                 .readingPage(readingPage)
                 .totalPage(totalPage)
                 .build();

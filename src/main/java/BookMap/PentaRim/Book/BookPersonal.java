@@ -15,6 +15,15 @@ import java.util.List;
 @Entity
 @RequiredArgsConstructor
 @Component
+@Table(
+        name="book_personal",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "UniqueUserAndBook",
+                        columnNames=  {"user_id", "book_id"}
+                ),
+        }
+)
 public class BookPersonal implements Serializable {
 
     @Id
@@ -27,7 +36,7 @@ public class BookPersonal implements Serializable {
     @JoinColumn(name = "USER_ID")
     private User user;  //사용자 아이디
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "BOOK_ID")
     private Book book;
 
@@ -53,11 +62,12 @@ public class BookPersonal implements Serializable {
     //빌더 필요
 
     @Builder
-    public BookPersonal(User user, Book book, BookState bookState, LocalDate startDate, Integer readingPage, Integer totalPage, Float grade){
+    public BookPersonal(User user, Book book, BookState bookState, LocalDate startDate, LocalDate endDate, Integer readingPage, Integer totalPage, Float grade){
         this.user = user;
         this.book = book;
         this.bookState = bookState;
         this.startDate = startDate;
+        this.endDate = endDate;
         this.readingPage = readingPage;
         this.totalPage = totalPage;
         this.grade = grade;

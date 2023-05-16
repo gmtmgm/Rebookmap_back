@@ -27,23 +27,32 @@ public class BookSavedImpl implements BookSaved{
     final BookRepository bookRepository;
     final BookPersonalRepository bookPersonalRepository;
     final BookMemoRepository bookMemoRepository;
-
-
+    final BookSearchService bookSearchService;
     @Override
     @Transactional
-    public void Reading(Long id, BookPersonalRequestDto bookPersonalRequestDto) {
+    public boolean Reading(Long id, String isbn, BookPersonalRequestDto bookPersonalRequestDto) {
+        Book book = bookSearchService.searchBooks(isbn);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
 
-        if(bookRepository.existsByIsbn(bookPersonalRequestDto.getBook().getIsbn()) == true){  //책 존재할 경우 그냥 넘어감
-
+        if(bookRepository.existsByIsbn(book.getIsbn())){  //책 존재할 경우 그냥 넘어감
+            Book alreadySavedBook = bookRepository.findByIsbn(isbn)
+                    .orElseThrow(() ->  new
+                            IllegalArgumentException("해당 book이 없습니다."));
+            bookPersonalRequestDto.setBook(alreadySavedBook);
         }else{
             bookRepository.save(bookPersonalRequestDto.getBook());  //존재하지 않을경우 book DB에 저장
-            bookPersonalRequestDto.setUser(user);
-            bookPersonalRepository.save(bookPersonalRequestDto.toEntity());
+            bookPersonalRequestDto.setBook(book);
         }
 
+        if(bookPersonalRepository.existsByBookAndUser(bookPersonalRequestDto.getBook(),user)){
+            return false;
+        }else{
+            bookPersonalRequestDto.setUser(user);
+            bookPersonalRepository.save(bookPersonalRequestDto.toEntity());
+            return true;
+        }
     }
 
     @Override
@@ -181,6 +190,7 @@ public class BookSavedImpl implements BookSaved{
         return bookMemoResponseDtoList;
     }
 
+    //수정 필요, endDate로만 만들어서 완독 책만 보내주기
     @Override
     @Transactional
     public BookPersonalMonthStatisticsResponseDto findByMonth(Long id, BookPersonalMonthRequestDto bookPersonalMonthRequestDto){
