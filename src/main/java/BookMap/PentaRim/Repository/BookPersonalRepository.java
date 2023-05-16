@@ -20,4 +20,6 @@ public interface BookPersonalRepository extends JpaRepository<BookPersonal, Long
 
     @Query("SELECT bp FROM BookPersonal bp WHERE bp.user.id = :userId AND bp.startDate <= :endDate AND bp.endDate >= :startDate")
     List<BookPersonal> findAllBetweenDatesForUser(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("userId") Long userId);
+
+    List<BookPersonal> findAllByEndDateBetween(LocalDate monthStart, LocalDate monthEnd);
 }

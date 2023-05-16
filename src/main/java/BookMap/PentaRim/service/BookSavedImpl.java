@@ -202,15 +202,14 @@ public class BookSavedImpl implements BookSaved{
                 bookPersonalMonthRequestDto.getMonth(), 1);
         //LocalDate monthStart = LocalDate.of(localDate.getYear(), localDate.getMonth(), 1);
         LocalDate monthEnd = monthStart.plusDays(monthStart.lengthOfMonth()-1);
-        System.out.println(monthStart);
-        System.out.println(monthEnd);
-        List<BookPersonal> bookPersonalList = bookPersonalRepository.findAllBetweenDatesForUser(monthStart,monthEnd,user.getId());
+        //System.out.println(monthStart);
+        //System.out.println(monthEnd);
+        List<BookPersonal> bookPersonalList = bookPersonalRepository.findAllByEndDateBetween(monthStart, monthEnd);
         List<BookPersonalMonthResponseDto> bookPersonalMonthResponseDtos = new ArrayList<>();
         Integer totalBooks = 0;
         Integer totalReadingPages = 0;
-        Integer totalDays = 0;
 
-        System.out.println(bookPersonalList.size());
+        //System.out.println(bookPersonalList.size());
         /*
 
         for(BookPersonal bookPersonal: bookPersonalList){
@@ -237,12 +236,6 @@ public class BookSavedImpl implements BookSaved{
             if(bookPersonal.getBookState() == BookState.DONE){
                 totalBooks++;
                 totalReadingPages += bookPersonal.getTotalPage();
-                totalDays++;
-                bookPersonalMonthResponseDtos.add(new BookPersonalMonthResponseDto(bookPersonal));
-            }
-            if(bookPersonal.getBookState() == BookState.READING){
-                totalReadingPages += bookPersonal.getReadingPage();
-                totalDays++;
                 bookPersonalMonthResponseDtos.add(new BookPersonalMonthResponseDto(bookPersonal));
             }
         }
@@ -251,8 +244,7 @@ public class BookSavedImpl implements BookSaved{
         BookPersonalMonthStatisticsResponseDto bookPersonalMonthStatisticsResponseDtos = new BookPersonalMonthStatisticsResponseDto(
                 bookPersonalMonthResponseDtos,
                 totalBooks,
-                totalReadingPages,
-                totalDays
+                totalReadingPages
         );
         return bookPersonalMonthStatisticsResponseDtos;
     }
