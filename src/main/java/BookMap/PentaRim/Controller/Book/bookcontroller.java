@@ -1,6 +1,5 @@
 package BookMap.PentaRim.Controller.Book;
 
-import BookMap.PentaRim.Book.*;
 import BookMap.PentaRim.Book.Dto.*;
 import BookMap.PentaRim.Repository.BookPersonalRepository;
 import BookMap.PentaRim.User.UserRepository;
@@ -75,6 +74,16 @@ public class bookcontroller {
     @GetMapping("/bookpersonal/{id}")
     public ResponseEntity<?> bookPersonalMoth(@PathVariable Long id, @RequestBody BookPersonalMonthRequestDto bookPersonalMonthRequestDto){
         return new ResponseEntity<>(bookSaved.findByMonth(id,bookPersonalMonthRequestDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/book/top2")
+    public ResponseEntity<?> findByTop2(){
+        return new ResponseEntity<>(bookSaved.findByTop2(),HttpStatus.OK);
+    }
+
+    @GetMapping("/book/top10")
+    public ResponseEntity<?> findByTop10(){
+        return new ResponseEntity<>(bookSaved.findByTop10(),HttpStatus.OK);
     }
 
 }

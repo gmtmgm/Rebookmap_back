@@ -247,4 +247,26 @@ public class BookSavedImpl implements BookSaved{
         );
         return bookPersonalMonthStatisticsResponseDtos;
     }
+
+    @Override
+    @Transactional
+    public List<BookTopResponseDto> findByTop2(){
+        List<Book> bookList = bookPersonalRepository.findBooksTop2ByOrderByBookCountDesc();
+        List<BookTopResponseDto> bookTopResponseDtos = new ArrayList<>();
+        for(Book book: bookList){
+            bookTopResponseDtos.add(new BookTopResponseDto(book));
+        }
+        return bookTopResponseDtos;
+    }
+
+    @Override
+    @Transactional
+    public List<BookTopResponseDto> findByTop10(){
+        List<Book> bookList = bookPersonalRepository.findBooksTop10ByOrderByBookCountDesc();
+        List<BookTopResponseDto> bookTopResponseDtos = new ArrayList<>();
+        for(Book book: bookList){
+            bookTopResponseDtos.add(new BookTopResponseDto(book));
+        }
+        return bookTopResponseDtos;
+    }
 }

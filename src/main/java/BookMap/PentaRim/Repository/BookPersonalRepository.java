@@ -22,4 +22,11 @@ public interface BookPersonalRepository extends JpaRepository<BookPersonal, Long
     List<BookPersonal> findAllBetweenDatesForUser(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("userId") Long userId);
 
     List<BookPersonal> findAllByEndDateBetween(LocalDate monthStart, LocalDate monthEnd);
+
+    @Query("SELECT bp.book FROM BookPersonal bp GROUP BY bp.book ORDER BY count (bp.book.id) DESC LIMIT 2")
+    List<Book> findBooksTop2ByOrderByBookCountDesc();
+
+    @Query("SELECT bp.book FROM BookPersonal bp GROUP BY bp.book ORDER BY count (bp.book.id) DESC LIMIT 10")
+    List<Book> findBooksTop10ByOrderByBookCountDesc();
+
 }

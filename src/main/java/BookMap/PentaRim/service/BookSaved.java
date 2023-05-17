@@ -23,4 +23,8 @@ public interface BookSaved {
 
     BookPersonalMonthStatisticsResponseDto findByMonth(Long id, BookPersonalMonthRequestDto bookPersonalMonthRequestDto);
 
+    List<BookTopResponseDto> findByTop2();
+
+    List<BookTopResponseDto> findByTop10();
+
 }
