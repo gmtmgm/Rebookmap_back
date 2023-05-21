@@ -34,6 +34,7 @@ public class BookSavedImpl implements BookSaved{
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
 
+        //OrElse로 변경 가능함!
         if(bookRepository.existsByIsbn(book.getIsbn())){  //책 존재할 경우 그냥 넘어감
             Book alreadySavedBook = bookRepository.findByIsbn(isbn)
                     .orElseThrow(() ->  new
