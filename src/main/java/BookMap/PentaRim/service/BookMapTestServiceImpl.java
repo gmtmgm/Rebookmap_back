@@ -24,8 +24,7 @@ public class BookMapTestServiceImpl implements BookMapTestService{
     final HashtagRepository hashtagRepository;
     final UserRepository userRepository;
 
-    //코드 중복도 많음
-    //해시태그 변겅은 다 삭제하고 다시 넣는 구조
+    //해시태그 변경은 다 삭제하고 다시 넣는 구조
     @Override
     @Transactional
     public void tagssave(Long id, TagRequestDto tagRequestDto){

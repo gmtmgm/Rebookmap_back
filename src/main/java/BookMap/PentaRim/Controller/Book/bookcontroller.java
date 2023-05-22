@@ -2,12 +2,15 @@ package BookMap.PentaRim.Controller.Book;
 
 import BookMap.PentaRim.Book.Dto.*;
 import BookMap.PentaRim.Repository.BookPersonalRepository;
+import BookMap.PentaRim.User.User;
 import BookMap.PentaRim.User.UserRepository;
 import BookMap.PentaRim.service.BookSaved;
 import BookMap.PentaRim.service.BookSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,10 +18,17 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("https://8172-203-255-63-30.ngrok-free.app")
 public class bookcontroller {
 
+    @GetMapping("/user")
+    public UserDetails getUser(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return userDetails;
+    }
+
     private final BookSearchService bookSearchService;
     private final BookSaved bookSaved;
 
     private final BookPersonalRepository bookPersonalRepository;
+
 
 
     private final UserRepository userRepository;
@@ -30,9 +40,15 @@ public class bookcontroller {
         return bookSaved.Reading(id, isbn, bookPersonalRequestDto);
     }
 
-    @GetMapping(value = "/book/{userid}",produces = "application/json; charset=utf8")
-    public ResponseEntity<?> bookPersonaLoad(@PathVariable Long userid){
-        return new ResponseEntity<>(bookSaved.findByUser(userid), HttpStatus.OK);
+    @GetMapping(value = "/book",produces = "application/json; charset=utf8")
+    public ResponseEntity<?> bookPersonaLoad(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저가 없습니다.")
+        );
+
+        return new ResponseEntity<>(bookSaved.findByUser(user.getId()), HttpStatus.OK);
     }
     @PostMapping("/book/changestate/{id}")
     public void changeState(@PathVariable Long id, @RequestParam String isbn, @RequestBody BookPersonalUpdateStateDto bookPersonalUpdateStateDto){
