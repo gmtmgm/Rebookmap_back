@@ -6,7 +6,7 @@ import BookMap.PentaRim.Book.BookPersonal;
 import BookMap.PentaRim.Book.BookState;
 import BookMap.PentaRim.Book.Dto.*;
 import BookMap.PentaRim.BookMap.BookMapTest;
-import BookMap.PentaRim.BookMap.dto.BookMapResponseDto;
+import BookMap.PentaRim.BookMap.Dto.BookMapTestResponseDto;
 import BookMap.PentaRim.Dto.BookShelfResponseDto;
 import BookMap.PentaRim.Dto.MainResponseDto;
 import BookMap.PentaRim.Dto.ProfileResponseDto;
@@ -47,9 +47,9 @@ public class TotalServiceImpl implements TotalService{
             bookImageDtos.add(new BookImageDto(book));
         }
         List<BookMapTest> bookMapTests = bookMapTestRepository.findAllByUser(user);
-        List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
+        List<BookMapTestResponseDto> bookMapResponseDtos = new ArrayList<>();
         for(BookMapTest bookMapTest: bookMapTests) {
-            bookMapResponseDtos.add(new BookMapResponseDto(bookMapTest.getId()));
+            bookMapResponseDtos.add(new BookMapTestResponseDto(bookMapTest.getId()));
         }
         List<BookTopResponseDto> bookTopResponseDtos = bookSaved.findByTop2();
         return new MainResponseDto(bookImageDtos, bookMapResponseDtos, bookTopResponseDtos);

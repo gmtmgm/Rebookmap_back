@@ -1,4 +1,4 @@
-package BookMap.PentaRim.BookMap.dto;
+package BookMap.PentaRim.BookMap.Dto;
 
 import lombok.Getter;
 

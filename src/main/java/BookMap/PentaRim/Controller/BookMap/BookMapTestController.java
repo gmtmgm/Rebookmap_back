@@ -1,6 +1,6 @@
 package BookMap.PentaRim.Controller.BookMap;
 
-import BookMap.PentaRim.BookMap.dto.TagRequestDto;
+import BookMap.PentaRim.BookMap.Dto.TagRequestDto;
 import BookMap.PentaRim.service.BookMapTestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-public class BookMapController {
+public class BookMapTestController {
     final BookMapTestService bookMapTestService;
     @PostMapping("/bookmap/hashtag/save/{id}")
     public void savetags(@PathVariable Long id, @RequestBody TagRequestDto tagRequestDto){

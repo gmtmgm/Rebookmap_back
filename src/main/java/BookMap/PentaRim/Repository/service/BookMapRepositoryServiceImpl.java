@@ -6,6 +6,7 @@ import BookMap.PentaRim.BookMap.Dto.*;
 import BookMap.PentaRim.Repository.*;
 import BookMap.PentaRim.User.User;
 import BookMap.PentaRim.User.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
 
     @Override
+    @Transactional
     public BookMap EntityToBookMap(Long bookMapId) { //저장소 > BookMap 객체
         BookMap bookMap = new BookMap();
         bookMap.setBookMapId(bookMapId);
@@ -52,6 +54,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
+    @Transactional
     public List<BookMapResponseDto> findByUserId(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new
@@ -65,6 +68,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
+    @Transactional
     public List<BookMapDetailResponseDto> findByBookMapId(Long bookMapId){ //예외처리 다 빼기!!
         BookMapEntity bookMapEntity = bookMapRepository.findByBookMapId(bookMapId);
         List<BookMapDetailEntity> bookMapDetailEntiy = bookMapDetailRepository.findByBookMapEntityOrderByIndex(bookMapEntity);
@@ -76,9 +80,10 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
+    @Transactional
     public List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId){ //책목록
         BookMapDetailEntity bookMapDetailEntity = bookMapDetailRepository.findByBookMapDetailId(bookMapDetailId);
-        List<BookListEntity> bookListEntity = bookListRepository.findByBookMapDetailEntityOrderByIndex(bookMapDetailEntity);
+        List<BookListEntity> bookListEntity = bookListRepository.findByBookMapDetailOrderByIndex(bookMapDetailEntity);
         List<BookListResponseDto> bookList = new ArrayList<>();
         for (BookListEntity book : bookListEntity){
             bookList.add(new BookListResponseDto(book));
@@ -87,17 +92,20 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
+    @Transactional
     public Book findByBookListId(Long bookListId){
         BookListEntity bookListEntity = bookListRepository.findByBookListId(bookListId);
         return bookListEntity.getBook();
     }
 
     @Override
+    @Transactional
     public BookMapDetailResponseDto BookMapDetailEntityToDto(Long bookMapDetailId){
         return new BookMapDetailResponseDto(bookMapDetailRepository.findByBookMapDetailId(bookMapDetailId));
     }
 
     @Override
+    @Transactional
     public void updateBookMap(Long bookMapId, BookMapRequestDto bookMapRequestDto){
         BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
                 .orElseThrow(() -> new
@@ -109,6 +117,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
+    @Transactional
     public void updateBookMapDetail(Long bookMapDetailId, BookMapDetailRequestDto bookMapDetailRequestDto){
         BookMapDetailEntity bookMapDetailEntity = bookMapDetailRepository.findById(bookMapDetailId)
                 .orElseThrow(() -> new
@@ -119,6 +128,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
+    @Transactional
     public void updateBookList(Long bookListId, BookListRequestDto bookListRequestDto){
         BookListEntity bookListEntity = bookListRepository.findById(bookListId)
                 .orElseThrow(() -> new
@@ -129,6 +139,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
+    @Transactional
     public void bookMapDelete(Long bookMapId){
         BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
                 .orElseThrow(() -> new
@@ -137,6 +148,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
+    @Transactional
     public void bookMapDetailDelete(Long bookMapDetailId){
         BookMapDetailEntity bookMapDetailEntity = bookMapDetailRepository.findById(bookMapDetailId)
                 .orElseThrow(() -> new
@@ -145,6 +157,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
+    @Transactional
     public void bookListDelete(Long bookListId){
         BookListEntity bookListEntity = bookListRepository.findById(bookListId)
                 .orElseThrow(() -> new
