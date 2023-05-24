@@ -2,7 +2,6 @@ package BookMap.PentaRim.service;
 
 import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.BookMap.BookMap;
-import BookMap.PentaRim.memo.Memo;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
@@ -20,24 +19,25 @@ public class BookMapServiceImpl implements BookMapService{
         return bookMap;
     }
 
-    //매번 new mapandmemo를 만들어서 목록에 집어넣는것 까지를 하나의 프로세스로 가정, 분리
-    //기존 리스트에 추가하는것과 분리하기
+
     @Override
     public void addBook(ArrayList<Book> map, Book book) { map.add(book); }
     @Override
     public ArrayList<Book> addMap(BookMap bookMap) {
-        ArrayList<Book> map = new ArrayList<Book>();
+        ArrayList<Book> map = new ArrayList<>();
         bookMap.addObj(map);
         return map;
     }
 
     @Override
-    public void addMemo(BookMap bookMap, Memo memo) { bookMap.addObj(memo); }
+    public void addMemo(BookMap bookMap, String memo) { bookMap.addObj(memo); }
 
     @Override
     public void modiMap(BookMap bookMap, int index, Book book) { //이미 있는 책 줄 수정(책 추가)
-        // 책이 1개 이상 존재한다는 가정이므로 삭제하여 0개가 되었을때를 고려해야함 < 책 모두 삭제되면 책 줄도 삭제되도록 만들기 (미구현 상태)
         //index: 수정할 부분
+        if (bookMap.getBookMapIndex().get(index).getMap() == null){
+            // 책이 1개 이상 존재한다는 가정이므로 삭제하여 0개가 되었을때를 고려해야함 < 책 모두 삭제되면 책 줄도 삭제되도록 만들기 (미구현 상태)
+        }
         ArrayList<Book> map = bookMap.getBookMapIndex().get(index).getMap();
         if (isMapNotFull(map)) {                    //5권 미만일때만 실행
             if (!map.contains(book)) {              //동일한 책이 없을 경우 추가
@@ -52,7 +52,7 @@ public class BookMapServiceImpl implements BookMapService{
     }
 
     @Override
-    public void modiMemo(BookMap bookMap, int index, Memo memo) {
+    public void modiMemo(BookMap bookMap, int index, String memo) {
         bookMap.getBookMapIndex().get(index).setMemo(memo);
     }
 
@@ -65,8 +65,8 @@ public class BookMapServiceImpl implements BookMapService{
     public void deleteBookMap(BookMap bookMap) { bookMap = null; } //임시로 null 할당
 
     @Override
-    public void deleteObj(BookMap bookMap, BookMap.MapAndMemo mapAndMemo, int index){
-        bookMap.deleteObj(mapAndMemo, index);
+    public void deleteObj(BookMap bookMap, BookMap.BookMapDetail bookMapDetail, int index){
+        bookMap.deleteObj(bookMapDetail, index);
     }
     @Override
     public void changeMapIndex(ArrayList<Book> map, int inputIndex, int outIndex) {
@@ -75,8 +75,10 @@ public class BookMapServiceImpl implements BookMapService{
         map.remove(inputIndex);
         map.add(outIndex, changeBook);
     }
+
     @Override
     public void changeBookMapIndex(BookMap bookMap, int inputIndex, int outIndex){
         bookMap.changeIndex(inputIndex, outIndex);
     }
+
 }

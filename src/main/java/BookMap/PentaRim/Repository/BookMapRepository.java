@@ -1,9 +1,16 @@
 package BookMap.PentaRim.Repository;
 
-import BookMap.PentaRim.BookMap.BookMap;
+import BookMap.PentaRim.BookMap.*;
+import BookMap.PentaRim.User.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface BookMapRepository {
-    void save(BookMap bookMap);
+import java.util.List;
 
-    BookMap findByBookMapId(Long bookMapId);
+
+@Repository
+public interface BookMapRepository extends JpaRepository<BookMapEntity,Long> {
+    boolean existsByBookMapId(Long bookMapId);
+    List<BookMapEntity> findByUser(User user);
+    BookMapEntity findByBookMapId(Long bookMapId);
 }

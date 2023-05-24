@@ -2,86 +2,83 @@ package BookMap.PentaRim.BookMap;
 
 
 import BookMap.PentaRim.Book.Book;
-import BookMap.PentaRim.memo.Memo;
+import BookMap.PentaRim.User.User;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMapAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
+
 
 @Component
 @Getter
 @Setter
-public class BookMap {
+public class BookMap implements Serializable {
 
-    private Long userId;
-    private String BookMapName;
+
     private Long bookMapId;
-    private static Long serialNum = 0L;
 
-    Long getSerialNum() {
-        return serialNum;
-    }
+    private User user;
+    private String bookMapTitle; //북맵이름
+    private String bookMapContent; //북맵설명
+    private HashSet<String> hashTag; //북맵 하나에 해쉬태그여러개를 붙이는 형식으로 수정(각 줄X)
+    //private int index;
+    private boolean lock = false; //북맵 잠금 여부
 
     @Component
     @Getter
     @Setter
-    public class MapAndMemo {
+    public class BookMapDetail {
+        private Long bookMapDetailId;
+        private String type; //부모클래스 리스트에 넣은 후 자식클래스 메소드 어떻게 해야 할지 모르겠어서 일단 type 설정
         private ArrayList<Book> map;
+        private String memo;
+        private int index;
 
-        private HashSet<String> HashTag;
-        private Memo memo;
-        private String type;
-
-        @Autowired
-        MapAndMemo(){}
-
-        MapAndMemo(ArrayList<Book> map){
-            this.map = map;
-            this.type = "Map";
-        }
-
-        MapAndMemo(Memo memo){
-            this.memo = memo;
-            this.type = "Memo";
-        }
     }
 
+    public class BookMapBook extends BookMapDetail {
+        public void setMap(ArrayList<Book> map){
+            super.map = map;
+            super.setType("Book");
+        }
 
-    private ArrayList<MapAndMemo> bookMapIndex = new ArrayList<>();
-
-    public BookMap(){ //생성 시 ID 증가
-        bookMapId = serialNum;
-        serialNum++;
     }
+
+    public class BookMapMemo extends BookMapDetail {
+        public void setMemo(String memo) {
+            super.memo = memo;
+            super.setType("Memo");
+        }
+    }
+    private ArrayList<BookMapDetail> bookMapIndex = new ArrayList<>();
 
     //오버로딩 사용하여 객체 추가 메소드 이름 통일
     public void addObj(ArrayList<Book> map){
-        MapAndMemo mapObj = new MapAndMemo(map);
+        BookMapBook mapObj = new BookMapBook();
+        mapObj.setMap(map);
         bookMapIndex.add(mapObj);
     }
 
-    public void addObj(Memo memo){ //북맵에 메모 줄 추가
-        MapAndMemo memoObj = new MapAndMemo(memo);
+    public void addObj(String memo){ //북맵에 메모 줄 추가
+        BookMapMemo memoObj = new BookMapMemo();
+        memoObj.setMemo(memo);
         bookMapIndex.add(memoObj);
     }
 
-    public void deleteObj(MapAndMemo mapAndMemo, int index) {
+    public void deleteObj(BookMapDetail bookMapDetail, int index) {
         bookMapIndex.remove(index);
-        mapAndMemo = null; //임시
+        bookMapDetail = null; //임시
     }
 
     //북맵 내부 순서 변경
     public void changeIndex(int inputIndex, int outIndex){
-        MapAndMemo changeObj = new MapAndMemo();
+        BookMapDetail changeObj = new BookMapDetail();
         changeObj = bookMapIndex.get(inputIndex);
         bookMapIndex.remove(inputIndex);
         bookMapIndex.add(outIndex, changeObj);
     }
-
 }
 
