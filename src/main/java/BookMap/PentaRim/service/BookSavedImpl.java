@@ -2,9 +2,7 @@ package BookMap.PentaRim.service;
 
 import BookMap.PentaRim.Book.*;
 import BookMap.PentaRim.Book.Dto.*;
-import BookMap.PentaRim.Repository.BookMemoRepository;
-import BookMap.PentaRim.Repository.BookPersonalRepository;
-import BookMap.PentaRim.Repository.BookRepository;
+import BookMap.PentaRim.Repository.*;
 import BookMap.PentaRim.User.User;
 import BookMap.PentaRim.User.UserRepository;
 import jakarta.transaction.Transactional;
@@ -26,6 +24,7 @@ public class BookSavedImpl implements BookSaved{
     final BookPersonalRepository bookPersonalRepository;
     final BookMemoRepository bookMemoRepository;
     final BookSearchService bookSearchService;
+    final BookMapTestRepository bookMapTestRepository;
     @Override
     @Transactional
     public boolean Reading(Long id, String isbn, BookPersonalRequestDto bookPersonalRequestDto) {
@@ -49,6 +48,7 @@ public class BookSavedImpl implements BookSaved{
             return false;
         }else{
             bookPersonalRequestDto.setUser(user);
+            bookPersonalRequestDto.setSaved(LocalDateTime.now());
             bookPersonalRepository.save(bookPersonalRequestDto.toEntity());
             return true;
         }
@@ -125,6 +125,7 @@ public class BookSavedImpl implements BookSaved{
     @Override
     @Transactional
     public void bookMemoSave(Long id, String isbn, BookMemoRequestDto bookMemoRequestDto){
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
@@ -270,4 +271,7 @@ public class BookSavedImpl implements BookSaved{
         }
         return bookTopResponseDtos;
     }
+
+
+
 }

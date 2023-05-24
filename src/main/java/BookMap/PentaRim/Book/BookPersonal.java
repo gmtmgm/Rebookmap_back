@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -55,10 +56,13 @@ public class BookPersonal implements Serializable {
     @Column
     private Float grade;  //별점
 
+    private LocalDateTime saved;
+
     //빌더 필요
 
     @Builder
-    public BookPersonal(User user, Book book, BookState bookState, LocalDate startDate, LocalDate endDate, Integer readingPage, Integer totalPage, Float grade){
+    public BookPersonal(User user, Book book, BookState bookState, LocalDate startDate, LocalDate endDate, Integer readingPage, Integer totalPage, Float grade,
+                        LocalDateTime saved){
         this.user = user;
         this.book = book;
         this.bookState = bookState;
@@ -67,6 +71,7 @@ public class BookPersonal implements Serializable {
         this.readingPage = readingPage;
         this.totalPage = totalPage;
         this.grade = grade;
+        this.saved = saved;
     }
 
     public void update(BookState bookState, LocalDate startDate, LocalDate endDate, Integer readingPage, Integer totalPage, Float grade){

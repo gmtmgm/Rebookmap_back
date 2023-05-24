@@ -2,6 +2,7 @@ package BookMap.PentaRim.Repository;
 
 import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Book.BookPersonal;
+import BookMap.PentaRim.Book.BookState;
 import BookMap.PentaRim.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,5 +29,13 @@ public interface BookPersonalRepository extends JpaRepository<BookPersonal, Long
 
     @Query("SELECT bp.book FROM BookPersonal bp GROUP BY bp.book ORDER BY count (bp.book.id) DESC LIMIT 10")
     List<Book> findBooksTop10ByOrderByBookCountDesc();
+
+
+    List<BookPersonal> findTop4ByUserOrderBySavedDesc(User user);
+
+    List<BookPersonal> findBookPersonalsByUserOrderBySavedDesc(User user);
+
+    List<BookPersonal> findBookPersonalsByUserAndBookStateOrderBySaved(User user, BookState bookState);
+
 
 }

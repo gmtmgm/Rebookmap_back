@@ -4,15 +4,14 @@ import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Book.BookPersonal;
 import BookMap.PentaRim.Book.BookState;
 import BookMap.PentaRim.User.User;
-import jakarta.persistence.Entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -29,8 +28,11 @@ public class BookPersonalRequestDto {
     private Integer totalPage;
     private Float grade;
 
+    private LocalDateTime saved;
+
     @Builder
-    public BookPersonalRequestDto(User user, Book book, String bookState, LocalDate startDate, LocalDate endDate, Integer readingPage, Integer totalPage){
+    public BookPersonalRequestDto(User user, Book book, String bookState, LocalDate startDate, LocalDate endDate, Integer readingPage, Integer totalPage,
+                                  LocalDateTime saved){
         this.user = user;
         this.book = book;
         this.bookState = bookState;
@@ -38,6 +40,7 @@ public class BookPersonalRequestDto {
         this.endDate = endDate;
         this.readingPage = readingPage;
         this.totalPage = totalPage;
+        this.saved = saved;
     }
 
 
@@ -50,6 +53,7 @@ public class BookPersonalRequestDto {
                 .endDate(endDate)
                 .readingPage(readingPage)
                 .totalPage(totalPage)
+                .saved(saved)
                 .build();
     }
 
