@@ -8,9 +8,6 @@ import BookMap.PentaRim.User.UserRepository;
 import BookMap.PentaRim.service.BookSaved;
 import BookMap.PentaRim.service.BookSearchService;
 import BookMap.PentaRim.service.TotalService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -72,14 +69,8 @@ public class bookcontroller {
 
         return "ok";
     }
-    private final BookSearchService bookSearchService;
+
     private final BookSaved bookSaved;
-
-    private final BookPersonalRepository bookPersonalRepository;
-
-
-
-    private final CustomOAuth2UserService customOAuth2UserService;
 
     private final UserRepository userRepository;
 
@@ -186,6 +177,11 @@ public class bookcontroller {
     @GetMapping("/summary/{id}")
     public ResponseEntity<?> bookPersonalMoth(@PathVariable Long id, @RequestBody BookPersonalMonthRequestDto bookPersonalMonthRequestDto){
         return new ResponseEntity<>(bookSaved.findByMonth(id,bookPersonalMonthRequestDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<?> profile(@PathVariable Long id){
+        return new ResponseEntity<>(totalService.profile(id), HttpStatus.OK);
     }
 
 }

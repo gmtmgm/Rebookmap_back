@@ -205,7 +205,7 @@ public class BookSavedImpl implements BookSaved{
         LocalDate monthEnd = monthStart.plusDays(monthStart.lengthOfMonth()-1);
         //System.out.println(monthStart);
         //System.out.println(monthEnd);
-        List<BookPersonal> bookPersonalList = bookPersonalRepository.findAllByEndDateBetween(monthStart, monthEnd);
+        List<BookPersonal> bookPersonalList = bookPersonalRepository.findAllByUserAndEndDateBetween(user, monthStart, monthEnd);
         List<BookPersonalMonthResponseDto> bookPersonalMonthResponseDtos = new ArrayList<>();
         Integer totalBooks = 0;
         Integer totalReadingPages = 0;
@@ -272,6 +272,18 @@ public class BookSavedImpl implements BookSaved{
         return bookTopResponseDtos;
     }
 
-
-
+    @Override
+    @Transactional
+    public Integer findByMonthCount(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
+        LocalDate localDate = LocalDate.now();
+        LocalDate monthStart = LocalDate.of(localDate.getYear(),
+                localDate.getMonth(), 1);
+        LocalDate monthEnd = monthStart.plusDays(monthStart.lengthOfMonth()-1);
+        Integer count = bookPersonalRepository.countBookPersonalByUserAndBookStateAndEndDateBetween(
+                user, BookState.DONE, monthStart, monthEnd);
+        return count;
+    }
 }

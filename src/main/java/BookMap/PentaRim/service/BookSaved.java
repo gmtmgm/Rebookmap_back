@@ -28,7 +28,7 @@ public interface BookSaved {
 
     List<BookTopResponseDto> findByTop10();
 
-
+    Integer findByMonthCount(Long id);
 
 
 

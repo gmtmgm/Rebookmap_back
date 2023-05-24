@@ -1,6 +1,7 @@
 package BookMap.PentaRim.service;
 
 import BookMap.PentaRim.Book.Book;
+import BookMap.PentaRim.Book.BookMemo;
 import BookMap.PentaRim.Book.BookPersonal;
 import BookMap.PentaRim.Book.BookState;
 import BookMap.PentaRim.Book.Dto.*;
@@ -8,7 +9,9 @@ import BookMap.PentaRim.BookMap.BookMapTest;
 import BookMap.PentaRim.BookMap.dto.BookMapResponseDto;
 import BookMap.PentaRim.Dto.BookShelfResponseDto;
 import BookMap.PentaRim.Dto.MainResponseDto;
+import BookMap.PentaRim.Dto.ProfileResponseDto;
 import BookMap.PentaRim.Repository.BookMapTestRepository;
+import BookMap.PentaRim.Repository.BookMemoRepository;
 import BookMap.PentaRim.Repository.BookPersonalRepository;
 import BookMap.PentaRim.User.User;
 import BookMap.PentaRim.User.UserRepository;
@@ -25,6 +28,7 @@ public class TotalServiceImpl implements TotalService{
     final UserRepository userRepository;
     final BookPersonalRepository bookPersonalRepository;
     final BookMapTestRepository bookMapTestRepository;
+    final BookMemoRepository bookMemoRepository;
     final BookSaved bookSaved;
 
     @Override
@@ -109,4 +113,18 @@ public class TotalServiceImpl implements TotalService{
         return bookShelfResponseDtos;
     }
 
+    @Override
+    @Transactional
+    public ProfileResponseDto profile(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
+        Integer count = bookSaved.findByMonthCount(id);
+        List<BookMemo> bookMemoList = bookMemoRepository.findByBookPersonal_UserOrderBySavedDesc(user);
+        List<ProfileMemoResponseDto> profileMemoResponseDtoList = new ArrayList<>();
+        for(BookMemo bookMemo: bookMemoList){
+            profileMemoResponseDtoList.add(new ProfileMemoResponseDto(bookMemo));
+        }
+        return new ProfileResponseDto(user, count, profileMemoResponseDtoList);
+    }
 }

@@ -19,10 +19,11 @@ public interface BookPersonalRepository extends JpaRepository<BookPersonal, Long
     Optional<BookPersonal> findByUserAndBook(User user, Book book);
     boolean existsByBookAndUser(Book book, User user);
 
-    @Query("SELECT bp FROM BookPersonal bp WHERE bp.user.id = :userId AND bp.startDate <= :endDate AND bp.endDate >= :startDate")
-    List<BookPersonal> findAllBetweenDatesForUser(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("userId") Long userId);
+    //@Query("SELECT bp FROM BookPersonal bp WHERE bp.user.id = :userId AND bp.startDate <= :endDate AND bp.endDate >= :startDate")
+    //List<BookPersonal> findAllBetweenDatesForUser(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("userId") Long userId);
 
-    List<BookPersonal> findAllByEndDateBetween(LocalDate monthStart, LocalDate monthEnd);
+    List<BookPersonal> findAllByUserAndEndDateBetween(User user,LocalDate monthStart, LocalDate monthEnd);
+    Integer countBookPersonalByUserAndBookStateAndEndDateBetween(User user,BookState bookState, LocalDate monthStart, LocalDate monthEnd);
 
     @Query("SELECT bp.book FROM BookPersonal bp GROUP BY bp.book ORDER BY count (bp.book.id) DESC LIMIT 2")
     List<Book> findBooksTop2ByOrderByBookCountDesc();
