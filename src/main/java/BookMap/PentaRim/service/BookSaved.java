@@ -30,6 +30,6 @@ public interface BookSaved {
 
     Integer findByMonthCount(Long id);
 
-
+    boolean checkSavedOrNot(Long id, String isbn);
 
 }

@@ -1,10 +1,9 @@
 package BookMap.PentaRim.Controller.Book;
 
 import BookMap.PentaRim.Book.Dto.*;
-import BookMap.PentaRim.CustomOAuth2UserService;
-import BookMap.PentaRim.Repository.BookPersonalRepository;
 import BookMap.PentaRim.User.User;
 import BookMap.PentaRim.User.UserRepository;
+import BookMap.PentaRim.User.UserRequestDto;
 import BookMap.PentaRim.service.BookSaved;
 import BookMap.PentaRim.service.BookSearchService;
 import BookMap.PentaRim.service.TotalService;
@@ -13,15 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("https://8172-203-255-63-30.ngrok-free.app")
+@CrossOrigin("https://a934-203-255-63-30.ngrok-free.app")
 @Slf4j
 public class bookcontroller {
 
@@ -40,10 +36,7 @@ public class bookcontroller {
     }
 
 
-    @GetMapping("/test")
-    public String index(@AuthenticationPrincipal Jwt jwt){
-        return String.format("Hello, %s!", jwt.getSubject());
-    }
+
     /*
 
     @GetMapping("/api/profiles")
@@ -84,12 +77,25 @@ public class bookcontroller {
         return bookSaved.Reading(id, isbn, bookPersonalRequestDto);
     }
 
-    @GetMapping(value = "/book",produces = "application/json; charset=utf8")
-    public ResponseEntity<?> bookPersonaLoad(Authentication authentication){
+    @PostMapping("/test")
+    public String test(@RequestParam String text){
+        System.out.println(text);
+        return text;
+    }
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
-        User user = userRepository.findByUsername(username).orElseThrow(
+    //@PostMapping
+    @PostMapping("/usertest")
+    public boolean usertest(@RequestBody UserRequestDto userRequestDto){
+        System.out.println(userRepository.existsByNickname(userRequestDto.getNickname()));
+        return userRepository.existsByNickname(userRequestDto.getNickname());
+    }
+
+    @GetMapping(value = "/book/{id}",produces = "application/json; charset=utf8")
+    public ResponseEntity<?> bookPersonaLoad(@PathVariable Long id){
+
+        //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        //String username = userDetails.getUsername();
+        User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저가 없습니다.")
         );
 
@@ -145,6 +151,11 @@ public class bookcontroller {
     }
 
 
+    /**
+     *
+     * @param id
+     * @return 메인페이지 요소들
+     */
     @GetMapping("/main/{id}")
     public ResponseEntity<?> main(@PathVariable Long id){
         return new ResponseEntity<>(totalService.main(id), HttpStatus.OK);

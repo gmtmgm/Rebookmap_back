@@ -27,7 +27,6 @@ public class BookPersonalRequestDto {
     private Integer readingPage;
     private Integer totalPage;
     private Float grade;
-
     private LocalDateTime saved;
 
     @Builder

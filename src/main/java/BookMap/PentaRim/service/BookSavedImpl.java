@@ -286,4 +286,13 @@ public class BookSavedImpl implements BookSaved{
                 user, BookState.DONE, monthStart, monthEnd);
         return count;
     }
+
+    @Override
+    @Transactional
+    public boolean checkSavedOrNot(Long id, String isbn){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
+        return bookPersonalRepository.existsByUserAndBook_Isbn(user, isbn);
+    }
 }

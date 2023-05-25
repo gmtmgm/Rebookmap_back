@@ -11,15 +11,11 @@ import java.util.List;
 public interface TotalService {
     MainResponseDto main(Long id);
     List<BookShelfResponseDto> bookshelf(Long id);
-
     List<BookTopResponseDto> mostBooks();
-
     List<BookShelfResponseDto> readBooks(Long id);
-
     List<BookShelfResponseDto> readingBooks(Long id);
     List<BookShelfResponseDto> bookshelfState(Long id, BookState bookState);
     List<BookShelfResponseDto> wantBooks(Long id);
-
     ProfileResponseDto profile(Long id);
 
 
