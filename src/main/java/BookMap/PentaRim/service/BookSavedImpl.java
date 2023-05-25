@@ -2,6 +2,10 @@ package BookMap.PentaRim.service;
 
 import BookMap.PentaRim.Book.*;
 import BookMap.PentaRim.Book.Dto.*;
+import BookMap.PentaRim.Dto.BookPersonalStateResponseDto;
+import BookMap.PentaRim.Dto.BookPersonalDoneStateResponseDto;
+import BookMap.PentaRim.Dto.BookPersonalReadingStateResponseDto;
+import BookMap.PentaRim.Dto.BookPersonalWishStateResponseDto;
 import BookMap.PentaRim.Repository.*;
 import BookMap.PentaRim.User.User;
 import BookMap.PentaRim.User.UserRepository;
@@ -14,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -294,5 +299,36 @@ public class BookSavedImpl implements BookSaved{
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
         return bookPersonalRepository.existsByUserAndBook_Isbn(user, isbn);
+    }
+
+    @Override
+    @Transactional
+    public Optional<BookPersonalStateResponseDto> bookPersonalDetail(Long id, String isbn) {
+        if (checkSavedOrNot(id, isbn)) {
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
+            Book book = bookRepository.findByIsbn(isbn).orElseThrow(
+                    () -> new IllegalArgumentException("해당 책이 없습니다.")
+            );
+            BookPersonal bookPersonal = bookPersonalRepository.findByUserAndBook(user, book).orElseThrow(
+                    () -> new IllegalArgumentException("해당 저장된 책이 없습니다.")
+            );
+            BookResponseDto bookResponseDto = new BookResponseDto(book);
+
+            if (checkBookState(bookPersonal) == BookState.DONE) {
+                return Optional.of(new BookPersonalDoneStateResponseDto(bookPersonal, bookResponseDto));
+            } else if (checkBookState(bookPersonal) ==  BookState.READING) {
+                return Optional.of(new BookPersonalReadingStateResponseDto(bookPersonal, bookResponseDto));
+            } else{
+                return Optional.of(new BookPersonalWishStateResponseDto(bookPersonal, bookResponseDto));
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public BookState checkBookState(BookPersonal bookPersonal){
+        return bookPersonal.getBookState();
     }
 }

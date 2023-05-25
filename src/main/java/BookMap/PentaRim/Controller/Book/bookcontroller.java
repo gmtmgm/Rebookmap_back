@@ -5,7 +5,6 @@ import BookMap.PentaRim.User.User;
 import BookMap.PentaRim.User.UserRepository;
 import BookMap.PentaRim.User.UserRequestDto;
 import BookMap.PentaRim.service.BookSaved;
-import BookMap.PentaRim.service.BookSearchService;
 import BookMap.PentaRim.service.TotalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 public class bookcontroller {
 
 
-
+    /**
+     *authentication 테스트했던 것들
+     */
     @GetMapping("/user")
     public String getUser(Authentication authentication) {
 
@@ -185,6 +186,12 @@ public class bookcontroller {
         return new ResponseEntity<>(totalService.wantBooks(id), HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param id
+     * @param bookPersonalMonthRequestDto: year, month
+     * @return 통계별 완독 책
+     */
     @GetMapping("/summary/{id}")
     public ResponseEntity<?> bookPersonalMoth(@PathVariable Long id, @RequestBody BookPersonalMonthRequestDto bookPersonalMonthRequestDto){
         return new ResponseEntity<>(bookSaved.findByMonth(id,bookPersonalMonthRequestDto), HttpStatus.OK);
@@ -193,6 +200,11 @@ public class bookcontroller {
     @GetMapping("/profile/{id}")
     public ResponseEntity<?> profile(@PathVariable Long id){
         return new ResponseEntity<>(totalService.profile(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/bookdetail/{id}")
+    public ResponseEntity<?> bookdetail(@PathVariable Long id, @RequestParam String isbn){
+        return new ResponseEntity<>(bookSaved.bookPersonalDetail(id, isbn), HttpStatus.OK);
     }
 
 }

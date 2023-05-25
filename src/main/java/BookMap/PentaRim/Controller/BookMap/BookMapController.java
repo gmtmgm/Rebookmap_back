@@ -1,4 +1,4 @@
-package BookMap.PentaRim.Controller;
+package BookMap.PentaRim.Controller.BookMap;
 
 import BookMap.PentaRim.BookMap.Dto.*;
 import BookMap.PentaRim.Repository.BookListRepository;

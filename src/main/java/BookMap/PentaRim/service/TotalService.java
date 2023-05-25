@@ -17,7 +17,4 @@ public interface TotalService {
     List<BookShelfResponseDto> bookshelfState(Long id, BookState bookState);
     List<BookShelfResponseDto> wantBooks(Long id);
     ProfileResponseDto profile(Long id);
-
-
-
 }

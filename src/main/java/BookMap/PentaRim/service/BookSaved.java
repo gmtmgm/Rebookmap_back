@@ -1,8 +1,12 @@
 package BookMap.PentaRim.service;
 
+import BookMap.PentaRim.Book.BookPersonal;
+import BookMap.PentaRim.Book.BookState;
 import BookMap.PentaRim.Book.Dto.*;
+import BookMap.PentaRim.Dto.BookPersonalStateResponseDto;
 
 import java.util.List;
+import java.util.Optional;
 
 // 저장소와 연결하고 구현? 아니면 그냥 구현?
 public interface BookSaved {
@@ -31,5 +35,9 @@ public interface BookSaved {
     Integer findByMonthCount(Long id);
 
     boolean checkSavedOrNot(Long id, String isbn);
+
+    Optional<BookPersonalStateResponseDto> bookPersonalDetail(Long id, String isbn);
+
+    BookState checkBookState(BookPersonal bookPersonal);
 
 }
