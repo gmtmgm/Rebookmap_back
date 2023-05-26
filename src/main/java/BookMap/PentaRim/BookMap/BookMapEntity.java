@@ -1,7 +1,6 @@
 package BookMap.PentaRim.BookMap;
 
-import BookMap.PentaRim.User.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import BookMap.PentaRim.User.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

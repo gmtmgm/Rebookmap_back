@@ -2,12 +2,10 @@ package BookMap.PentaRim.BookMap.Dto;
 
 import BookMap.PentaRim.BookMap.BookMapEntity;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 @Getter
-@Setter
 public class BookMapResponseDto {
 
     private String bookMapTitle; //북맵이름
