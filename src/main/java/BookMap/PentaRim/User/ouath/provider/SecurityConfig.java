@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,15 +30,19 @@ public class SecurityConfig {
 
 
 
-    private final AuthenticationManager authenticationManager;
-
-
-
 
     @Autowired
     private CorsConfig corsConfig;
 
+    private final AuthenticationConfiguration authenticationConfiguration;
+
     private final UserRepository userRepository;
+
+    @Bean
+    AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
 
 
@@ -52,8 +57,8 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
 
-                .addFilter(new JwtAuthenFilter(authenticationManager))
-                .addFilter(new JwtAuthorFilter(authenticationManager, userRepository))
+                .addFilter(new JwtAuthenFilter(authenticationManager(authenticationConfiguration)))
+                .addFilter(new JwtAuthorFilter(authenticationManager(authenticationConfiguration), userRepository))
                 .authorizeHttpRequests()
                 .requestMatchers("/user/**").hasAuthority(Role.USER.name())
                 .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())

@@ -78,7 +78,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     @Override
     public List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId){ //책목록
         BookMapDetailEntity bookMapDetailEntity = bookMapDetailRepository.findByBookMapDetailId(bookMapDetailId);
-        List<BookListEntity> bookListEntity = bookListRepository.findByBookMapDetailEntityOrderByIndex(bookMapDetailEntity);
+        List<BookListEntity> bookListEntity = bookListRepository.findByBookMapDetailOrderByIndex(bookMapDetailEntity);
         List<BookListResponseDto> bookList = new ArrayList<>();
         for (BookListEntity book : bookListEntity){
             bookList.add(new BookListResponseDto(book));
