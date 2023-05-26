@@ -1,7 +1,7 @@
 package BookMap.PentaRim.Repository;
 
 import BookMap.PentaRim.BookMap.*;
-import BookMap.PentaRim.User.User;
+import BookMap.PentaRim.User.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

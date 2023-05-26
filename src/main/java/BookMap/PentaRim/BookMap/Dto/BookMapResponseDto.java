@@ -1,7 +1,7 @@
 package BookMap.PentaRim.BookMap.Dto;
 
 import BookMap.PentaRim.BookMap.BookMapEntity;
-import BookMap.PentaRim.User.User;
+import BookMap.PentaRim.User.model.User;
 import lombok.Getter;
 
 import java.util.HashSet;

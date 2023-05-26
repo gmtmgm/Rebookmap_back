@@ -45,6 +45,7 @@ public class BookMapRequestDto {
                 .user(user)
                 .bookMapTitle(bookMapTitle)
                 .bookMapContent(bookMapContent)
+                //.hashTag(hashTag)
                 .build();
     }
 

@@ -1,5 +1,6 @@
 package BookMap.PentaRim.User;
 ;
+import BookMap.PentaRim.User.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -15,6 +16,10 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     public CustomUserDetails(User user) {
         this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     private Map<String, Object> attributes;

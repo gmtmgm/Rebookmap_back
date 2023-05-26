@@ -1,6 +1,5 @@
 package BookMap.PentaRim.BookMap;
 
-import BookMap.PentaRim.User.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
 
 
 @Component

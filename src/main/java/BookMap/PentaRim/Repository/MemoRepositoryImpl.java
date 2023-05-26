@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MemoRepositoryImpl implements MemoRepository{
 
     private static Map<Long, Memo> store = new ConcurrentHashMap<>();
+
     @Override
     public void save(Memo memo) {
         store.put(memo.getMemoId(), memo);

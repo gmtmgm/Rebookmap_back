@@ -8,7 +8,13 @@ import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-    Optional<Book> findByIsbn(String isbn);
+
+    //보니까 isbn으로 찾기로했는데 이거 이래도되나 될듯?
+
+
+        Optional<Book> findByIsbn(String isbn);
+
+
 
     boolean existsByIsbn(String isbn);
 }

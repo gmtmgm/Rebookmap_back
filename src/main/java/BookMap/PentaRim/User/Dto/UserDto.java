@@ -1,17 +1,21 @@
-package BookMap.PentaRim.User;
+package BookMap.PentaRim.User.Dto;
 
 
 
+import BookMap.PentaRim.User.model.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Component;
 
 import static BookMap.PentaRim.User.Role.USER;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@Component
 public class UserDto {
 
 
@@ -44,6 +48,15 @@ public class UserDto {
         return User.builder()
                 .username(this.username)
                 .password(encodedPassword)
+                .nickname(this.nickname)
+                .role(USER)
+                .build();
+    }
+
+    public User toEntity(OAuth2User oAuth2User) {
+        return User.builder()
+                .username(this.username)
+                .password(this.password)
                 .nickname(this.nickname)
                 .role(USER)
                 .build();

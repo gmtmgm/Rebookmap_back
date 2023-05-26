@@ -6,7 +6,7 @@ import BookMap.PentaRim.Repository.BookMapDetailRepository;
 import BookMap.PentaRim.Repository.BookMapRepository;
 import BookMap.PentaRim.Repository.BookRepository;
 import BookMap.PentaRim.Repository.service.BookMapRepositoryService;
-import BookMap.PentaRim.User.UserRepository;
+import BookMap.PentaRim.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

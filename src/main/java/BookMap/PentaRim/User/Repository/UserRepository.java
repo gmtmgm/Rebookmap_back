@@ -1,6 +1,6 @@
-package BookMap.PentaRim.User;
+package BookMap.PentaRim.User.Repository;
 
-import lombok.Getter;
+import BookMap.PentaRim.User.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +14,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
     boolean existsByNickname(String nickname);
 
-    Optional<User> findByUsername(String username);
+    User findByUsername(String username);
+
+
+
 
 }

@@ -1,6 +1,6 @@
 package BookMap.PentaRim.Book;
 
-import BookMap.PentaRim.User.User;
+import BookMap.PentaRim.User.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Component;
