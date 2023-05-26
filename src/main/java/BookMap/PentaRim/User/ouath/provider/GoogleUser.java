@@ -30,4 +30,7 @@ public class GoogleUser implements OAuthUserInfo{
         return (String)attribute.get("name");
     }
 
+    @Override
+    public String getPicture() {return (String)attribute.get("picture");}
+
 }

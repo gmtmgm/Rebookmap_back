@@ -6,6 +6,7 @@ import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.Role;
 import BookMap.PentaRim.User.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class RestApiController {
@@ -35,10 +37,10 @@ public class RestApiController {
     @GetMapping("user")
     public String user(Authentication authentication) {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        System.out.println("principal : "+customUserDetails.getUser().getId());
-        System.out.println("principal : "+customUserDetails.getUser().getUsername());
-        System.out.println("principal : "+customUserDetails.getUser().getPassword());
-        System.out.println("principal : "+customUserDetails.getUser().getRole());
+        log.info("customUserDetails : "+customUserDetails.getUser().getId());
+        log.info("customUserDetails : "+customUserDetails.getUser().getUsername());
+        log.info("customUserDetails : "+customUserDetails.getUser().getPassword());
+        log.info("customUserDetails : "+customUserDetails.getUser().getRole());
         return "user";
     }
 

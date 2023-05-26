@@ -9,7 +9,6 @@ import BookMap.PentaRim.User.ouath.provider.GoogleUser;
 import BookMap.PentaRim.User.ouath.provider.OAuthUserInfo;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,6 +47,7 @@ public class JwtCreateController {
                     .provider(googleUser.getProvider())
                     .providerId(googleUser.getProviderId())
                     .role(Role.USER)
+                    .picture(googleUser.getPicture())
                     .build();
 
             userEntity = userRepository.save(userRequest);
