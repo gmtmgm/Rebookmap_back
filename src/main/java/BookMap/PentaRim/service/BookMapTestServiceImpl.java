@@ -8,7 +8,7 @@ import BookMap.PentaRim.BookMap.Dto.TagRequestDto;
 import BookMap.PentaRim.Repository.BookMapRepository;
 import BookMap.PentaRim.Repository.HashtagRepository;
 import BookMap.PentaRim.Repository.MapTagRepository;
-import BookMap.PentaRim.User.UserRepository;
+import BookMap.PentaRim.User.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

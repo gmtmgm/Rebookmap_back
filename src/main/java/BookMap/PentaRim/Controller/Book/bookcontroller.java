@@ -1,8 +1,8 @@
 package BookMap.PentaRim.Controller.Book;
 
 import BookMap.PentaRim.Book.Dto.*;
-import BookMap.PentaRim.User.User;
-import BookMap.PentaRim.User.UserRepository;
+import BookMap.PentaRim.User.model.User;
+import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.UserRequestDto;
 import BookMap.PentaRim.service.BookSaved;
 import BookMap.PentaRim.service.TotalService;
@@ -24,6 +24,7 @@ public class bookcontroller {
     /**
      *authentication 테스트했던 것들
      */
+    /*
     @GetMapping("/user")
     public String getUser(Authentication authentication) {
 
@@ -36,33 +37,9 @@ public class bookcontroller {
         return "";
     }
 
-
-
-    /*
-
-    @GetMapping("/api/profiles")
-    public User getUsers(@CookieValue(value = "AUTH", required = true) Cookie authCookie, HttpServletRequest httpServletRequest) {
-        HttpSession session = httpServletRequest.getSession();
-
-        hasUser(authCookie);
-
-        Member member = (Member) session.getAttribute("member");
-
-        return member;
-    }
-
      */
-    @GetMapping("/index")
-    public String index(
-            @SessionAttribute(
-                    value = "Session Key",
-                    required = false
-            ) Object sessionValue
-    ) {
-        log.info("sessionValue: {}", sessionValue);
 
-        return "ok";
-    }
+
 
     private final BookSaved bookSaved;
 

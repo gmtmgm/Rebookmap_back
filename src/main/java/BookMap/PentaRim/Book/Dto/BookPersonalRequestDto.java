@@ -3,7 +3,8 @@ package BookMap.PentaRim.Book.Dto;
 import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Book.BookPersonal;
 import BookMap.PentaRim.Book.BookState;
-import BookMap.PentaRim.User.User;
+import BookMap.PentaRim.User.model.User;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

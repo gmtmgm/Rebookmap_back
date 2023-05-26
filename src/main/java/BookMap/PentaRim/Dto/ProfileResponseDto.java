@@ -1,7 +1,7 @@
 package BookMap.PentaRim.Dto;
 
 import BookMap.PentaRim.Book.Dto.ProfileMemoResponseDto;
-import BookMap.PentaRim.User.User;
+import BookMap.PentaRim.User.model.User;
 import lombok.Getter;
 
 import java.util.List;
