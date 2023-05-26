@@ -5,12 +5,12 @@ import BookMap.PentaRim.Book.BookMemo;
 import BookMap.PentaRim.Book.BookPersonal;
 import BookMap.PentaRim.Book.BookState;
 import BookMap.PentaRim.Book.Dto.*;
-import BookMap.PentaRim.BookMap.BookMapTest;
-import BookMap.PentaRim.BookMap.Dto.BookMapTestResponseDto;
+import BookMap.PentaRim.BookMap.BookMapEntity;
+import BookMap.PentaRim.BookMap.Dto.BookMapResponseDto;
 import BookMap.PentaRim.Dto.BookShelfResponseDto;
 import BookMap.PentaRim.Dto.MainResponseDto;
 import BookMap.PentaRim.Dto.ProfileResponseDto;
-import BookMap.PentaRim.Repository.BookMapTestRepository;
+import BookMap.PentaRim.Repository.BookMapRepository;
 import BookMap.PentaRim.Repository.BookMemoRepository;
 import BookMap.PentaRim.Repository.BookPersonalRepository;
 import BookMap.PentaRim.User.User;
@@ -27,9 +27,9 @@ import java.util.List;
 public class TotalServiceImpl implements TotalService{
     final UserRepository userRepository;
     final BookPersonalRepository bookPersonalRepository;
-    final BookMapTestRepository bookMapTestRepository;
     final BookMemoRepository bookMemoRepository;
     final BookSaved bookSaved;
+    final BookMapRepository bookMapRepository;
 
     @Override
     @Transactional
@@ -46,10 +46,10 @@ public class TotalServiceImpl implements TotalService{
         for(Book book: bookList){
             bookImageDtos.add(new BookImageDto(book));
         }
-        List<BookMapTest> bookMapTests = bookMapTestRepository.findAllByUser(user);
-        List<BookMapTestResponseDto> bookMapResponseDtos = new ArrayList<>();
-        for(BookMapTest bookMapTest: bookMapTests) {
-            bookMapResponseDtos.add(new BookMapTestResponseDto(bookMapTest.getId()));
+        List<BookMapEntity> bookMap = bookMapRepository.findByUser(user);
+        List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
+        for(BookMapEntity bookMapEntity: bookMap) {
+            bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity));
         }
         List<BookTopResponseDto> bookTopResponseDtos = bookSaved.findByTop2();
         return new MainResponseDto(bookImageDtos, bookMapResponseDtos, bookTopResponseDtos);

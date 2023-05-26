@@ -1,11 +1,11 @@
 package BookMap.PentaRim.service;
 
-import BookMap.PentaRim.BookMap.BookMapTest;
+import BookMap.PentaRim.BookMap.BookMapEntity;
+import BookMap.PentaRim.BookMap.Dto.BookMapResponseDto;
 import BookMap.PentaRim.BookMap.HashTag;
 import BookMap.PentaRim.BookMap.MapHashTag;
-import BookMap.PentaRim.BookMap.Dto.BookMapTestResponseDto;
 import BookMap.PentaRim.BookMap.Dto.TagRequestDto;
-import BookMap.PentaRim.Repository.BookMapTestRepository;
+import BookMap.PentaRim.Repository.BookMapRepository;
 import BookMap.PentaRim.Repository.HashtagRepository;
 import BookMap.PentaRim.Repository.MapTagRepository;
 import BookMap.PentaRim.User.UserRepository;
@@ -20,25 +20,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookMapTestServiceImpl implements BookMapTestService{
     final MapTagRepository mapTagRepository;
-    final BookMapTestRepository bookMapTestRepository;
     final HashtagRepository hashtagRepository;
     final UserRepository userRepository;
+    final BookMapRepository bookMapRepository;
 
     //해시태그 변경은 다 삭제하고 다시 넣는 구조
     @Override
     @Transactional
     public void tagssave(Long id, TagRequestDto tagRequestDto){
-        BookMapTest bookMapTest = bookMapTestRepository.findById(id).orElseThrow(
+        BookMapEntity bookMap = bookMapRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 북맵이 없습니다."));
         List<String> tags = tagRequestDto.getTags();
         for(String tag: tags){
             if(hashtagRepository.existsByTag(tag)){
                 HashTag hashTag = hashtagRepository.findByTag(tag).orElseThrow(
                         () -> new IllegalArgumentException("해당 해시태그가 없습니다."));
-                mapTagRepository.save(new MapHashTag(hashTag, bookMapTest));
+                mapTagRepository.save(new MapHashTag(hashTag, bookMap));
             }else{
                 HashTag hashTag = new HashTag(tag);
-                mapTagRepository.save(new MapHashTag(hashTag, bookMapTest));
+                mapTagRepository.save(new MapHashTag(hashTag, bookMap));
             }
         }
     }
@@ -46,8 +46,6 @@ public class BookMapTestServiceImpl implements BookMapTestService{
     @Override
     @Transactional
     public void tagsUpdate(Long id, TagRequestDto tagRequestDto){
-        BookMapTest bookMapTest = bookMapTestRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 북맵이 없습니다."));
         tagsDelete(id);
         tagssave(id, tagRequestDto);
     }
@@ -55,10 +53,10 @@ public class BookMapTestServiceImpl implements BookMapTestService{
     @Override
     @Transactional
     public void tagsDelete(Long id){
-        BookMapTest bookMapTest = bookMapTestRepository.findById(id).orElseThrow(
+        BookMapEntity bookMap = bookMapRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 북맵이 없습니다."));
-        List<MapHashTag> mapHashTags = mapTagRepository.findAllByBookMapTest(bookMapTest);
-        mapTagRepository.deleteAllByBookMapTest(bookMapTest);
+        List<MapHashTag> mapHashTags = mapTagRepository.findAllByBookMap(bookMap);
+        mapTagRepository.deleteAllByBookMap(bookMap);
         List<HashTag> hashTags = new ArrayList<>();
         List<Long> hashTagIds = new ArrayList<>();
         for(MapHashTag mapHashTag: mapHashTags){
@@ -72,16 +70,49 @@ public class BookMapTestServiceImpl implements BookMapTestService{
     }
     @Override
     @Transactional
-    public List<BookMapTestResponseDto> findBookMapByTag(String tag){
+    public List<BookMapResponseDto> findBookMapByTag(String tag) {
+        /*
         List<MapHashTag> mapHashTags = mapTagRepository.findAllByHashTag_Tag(tag);
-        List<BookMapTest> bookMapTests = new ArrayList<>();
-        List<BookMapTestResponseDto> bookMapTestResponseDtos = new ArrayList<>();
+        List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
+        List<List<MapHashTag>>  mapHashTagList = new ArrayList<>();
+        List<List<HashTag>> hashTagList = new ArrayList<>();
+        for (MapHashTag mapHashTag : mapHashTags) {
+            mapHashTagList.add(mapTagRepository.findAllByBookMap(mapHashTag.getBookMap()));
+        }
+
+        for(List<MapHashTag> mapHashTagsList1: mapHashTagList){
+            List<HashTag> hashTags = new ArrayList<>();
+            for(MapHashTag mapHashTag: mapHashTagsList1){
+                hashTags.add(mapHashTag.getHashTag());
+;            }
+            hashTagList.add(hashTags);
+        }
         for(MapHashTag mapHashTag: mapHashTags){
-            bookMapTests.add(mapHashTag.getBookMapTest());
+            bookMapResponseDtos.add(new BookMapResponseDto(mapHashTag.getBookMap()));
         }
-        for(BookMapTest bookMapTest: bookMapTests){
-            bookMapTestResponseDtos.add(new BookMapTestResponseDto(bookMapTest.getId()));
+        for(BookMapResponseDto bookMapResponseDto: bookMapResponseDtos){
+            bookMapResponseDto.setHashTag(hashTagList.get(bookMapResponseDtos.indexOf(bookMapResponseDto)));
         }
-        return bookMapTestResponseDtos;
+
+
+         */
+        List<MapHashTag> mapHashTags = mapTagRepository.findAllByHashTag_Tag(tag);
+        List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
+        for(MapHashTag mapHashTag : mapHashTags){
+            List<MapHashTag> mapHashTagList = mapTagRepository.findAllByBookMap(mapHashTag.getBookMap());
+            List<HashTag> hashTags = new ArrayList<>();
+
+            for(MapHashTag mapHashTag1: mapHashTagList){
+                hashTags.add(mapHashTag1.getHashTag());
+            }
+            List<String> strings = new ArrayList<>();
+            for(HashTag hashTag: hashTags){
+                strings.add(hashTag.getTag());
+            }
+            bookMapResponseDtos.add(new BookMapResponseDto(mapHashTag.getBookMap(), strings));
+        }
+
+        //bookMapResponseDtos = null;
+        return bookMapResponseDtos;
     }
 }

@@ -1,5 +1,6 @@
 package BookMap.PentaRim.BookMap;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,28 +21,12 @@ public class HashTag {
     @Column(nullable = false)
     private String tag;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "hashTag")
-    private List<MapHashTag> bookMaps;
-/*
-   @OneToMany(mappedBy = "hashTag")
-   private List<MapHashTag> mapHashTags = new ArrayList<>();
-
-
- */
-
+    private List<MapHashTag> mapHashTags;
 
     public HashTag(String hashtag){
         this.tag = hashtag;
     }
-/*
-    public HashTag(Long id, String hashtag) {
-        this.id = id;
-        this.hashtag = hashtag;
-    }
-
-    public static HashTag of(Long id, String hashtag){
-        return new HashTag(id,hashtag);
-    }
-*/
 
 }

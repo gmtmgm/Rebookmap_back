@@ -23,4 +23,8 @@ public interface BookMapRepositoryService {
     void bookMapDelete(Long bookMapId);
     void bookMapDetailDelete(Long bookMapDetailId);
     void bookListDelete(Long bookListId);
+    void tagssave(Long id, TagRequestDto tagRequestDto);
+    void tagsUpdate(Long id, TagRequestDto tagRequestDto);
+    void tagsDelete(Long id);
+    List<BookMapResponseDto> findBookMapByTag(String tag);
 }

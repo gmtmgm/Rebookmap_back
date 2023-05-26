@@ -29,7 +29,6 @@ public class BookSavedImpl implements BookSaved{
     final BookPersonalRepository bookPersonalRepository;
     final BookMemoRepository bookMemoRepository;
     final BookSearchService bookSearchService;
-    final BookMapTestRepository bookMapTestRepository;
     @Override
     @Transactional
     public boolean Reading(Long id, String isbn, BookPersonalRequestDto bookPersonalRequestDto) {

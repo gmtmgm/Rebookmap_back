@@ -22,11 +22,11 @@ public class MapHashTag{
     private HashTag hashTag;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BOOKMAPTEST_ID")
-    private BookMapTest bookMapTest;
+    @JoinColumn(name = "BOOKMAP_ID")
+    private BookMapEntity bookMap;
 
-    public MapHashTag(HashTag hashTag, BookMapTest bookMapTest){
+    public MapHashTag(HashTag hashTag, BookMapEntity bookMap){
         this.hashTag = hashTag;
-        this.bookMapTest = bookMapTest;
+        this.bookMap = bookMap;
     }
 }
