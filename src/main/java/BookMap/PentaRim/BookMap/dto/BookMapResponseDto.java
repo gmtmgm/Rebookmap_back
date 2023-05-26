@@ -28,6 +28,8 @@ public class BookMapResponseDto {
         this.bookMapContent = bookMapEntity.getBookMapContent();
     }
 
+
+
 /*
     public void toBookMap(BookMap bookMap){
         bookMap.setBookMapId(bookMapId);
