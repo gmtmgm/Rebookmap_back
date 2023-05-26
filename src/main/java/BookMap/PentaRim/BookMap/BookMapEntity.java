@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -37,13 +36,13 @@ public class BookMapEntity {
     //@ElementCollection
     //private HashSet<String> hashTag;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "bookMap")
     private List<MapHashTag> mapHashTags;
-    /*
+
     @Column(name = "BOOKMAP_INDEX")
     private int index;
-     */
+
 
 
     @Builder
@@ -52,11 +51,13 @@ public class BookMapEntity {
         this.user = user;
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
+        //this.hashTag = hashTag;
     }
 
     public void update(String bookMapTitle, String bookMapContent){
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
+        //this.hashTag = hashTag;
     }
 
 

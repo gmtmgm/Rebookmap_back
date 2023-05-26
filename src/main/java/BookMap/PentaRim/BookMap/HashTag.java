@@ -21,7 +21,6 @@ public class HashTag {
     @Column(nullable = false)
     private String tag;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "hashTag")
     private List<MapHashTag> mapHashTags;
 
