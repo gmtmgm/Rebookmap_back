@@ -4,8 +4,8 @@ import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.BookMap.*;
 import BookMap.PentaRim.BookMap.Dto.*;
 import BookMap.PentaRim.Repository.*;
-import BookMap.PentaRim.User.User;
-import BookMap.PentaRim.User.UserRepository;
+import BookMap.PentaRim.User.model.User;
+import BookMap.PentaRim.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

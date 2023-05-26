@@ -3,13 +3,11 @@ package BookMap.PentaRim.Book.Dto;
 import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Book.BookPersonal;
 import BookMap.PentaRim.Book.BookState;
-import BookMap.PentaRim.User.User;
-import jakarta.persistence.Entity;
+import BookMap.PentaRim.User.model.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

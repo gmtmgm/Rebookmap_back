@@ -5,8 +5,8 @@ package BookMap.PentaRim;
 
 
 import BookMap.PentaRim.User.CustomUserDetails;
-import BookMap.PentaRim.User.User;
-import BookMap.PentaRim.User.UserRepository;
+import BookMap.PentaRim.User.model.User;
+import BookMap.PentaRim.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

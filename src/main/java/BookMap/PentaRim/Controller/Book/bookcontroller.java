@@ -2,7 +2,7 @@ package BookMap.PentaRim.Controller.Book;
 
 import BookMap.PentaRim.Book.Dto.*;
 import BookMap.PentaRim.Repository.BookPersonalRepository;
-import BookMap.PentaRim.User.UserRepository;
+import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.service.BookSaved;
 import BookMap.PentaRim.service.BookSearchService;
 import lombok.RequiredArgsConstructor;

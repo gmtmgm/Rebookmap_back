@@ -2,8 +2,7 @@ package BookMap.PentaRim.Book;
 
 import BookMap.PentaRim.Repository.BookPersonalRepository;
 import BookMap.PentaRim.Repository.BookRepository;
-import BookMap.PentaRim.User.User;
-import BookMap.PentaRim.User.UserRepository;
+import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.service.BookSearchService;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.Test;
@@ -11,12 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

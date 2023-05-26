@@ -1,6 +1,7 @@
 package BookMap.PentaRim.User;
 
-import jakarta.servlet.http.HttpSession;
+import BookMap.PentaRim.User.Repository.UserRepository;
+import BookMap.PentaRim.User.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

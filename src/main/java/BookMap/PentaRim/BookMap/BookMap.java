@@ -2,7 +2,7 @@ package BookMap.PentaRim.BookMap;
 
 
 import BookMap.PentaRim.Book.Book;
-import BookMap.PentaRim.User.User;
+import BookMap.PentaRim.User.model.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;

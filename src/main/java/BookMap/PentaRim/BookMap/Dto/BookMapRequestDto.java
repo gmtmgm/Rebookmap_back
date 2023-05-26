@@ -1,9 +1,7 @@
 package BookMap.PentaRim.BookMap.Dto;
 
-import BookMap.PentaRim.Book.Book;
-import BookMap.PentaRim.BookMap.*;
 import BookMap.PentaRim.BookMap.BookMapEntity;
-import BookMap.PentaRim.User.User;
+import BookMap.PentaRim.User.model.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +9,6 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.SimpleTimeZone;
 
 @Getter
 @Setter

@@ -1,6 +1,7 @@
-package BookMap.PentaRim.User;
+package BookMap.PentaRim.User.model;
 
 
+import BookMap.PentaRim.User.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
+@Data
 @Entity
 public class User extends TimeEntity {
 
@@ -17,7 +18,9 @@ public class User extends TimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String email;
+    private String picture;
+    private String book_state;
     private String username;
     private String password;
     private String nickname;

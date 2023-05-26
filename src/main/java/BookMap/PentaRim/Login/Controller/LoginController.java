@@ -1,12 +1,13 @@
-package BookMap.PentaRim;
 
-import BookMap.PentaRim.User.LoginRequest;
-import BookMap.PentaRim.User.User;
-import BookMap.PentaRim.User.UserDto;
+
+package BookMap.PentaRim.Login.Controller;
+
+import BookMap.PentaRim.User.Dto.LoginRequest;
+import BookMap.PentaRim.User.model.User;
+import BookMap.PentaRim.User.Dto.UserDto;
 import BookMap.PentaRim.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -14,9 +15,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/security-login")
 public class LoginController {
+
+
+
 
 
     private final UserService userService;
@@ -104,4 +108,12 @@ public class LoginController {
     }
 
 
+    @PostMapping("/test")
+    public String test(@RequestParam String text){
+        System.out.println(text);
+        return text;
+    }
+
 }
+
+

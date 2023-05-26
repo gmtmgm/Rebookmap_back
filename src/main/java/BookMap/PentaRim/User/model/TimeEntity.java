@@ -1,4 +1,4 @@
-package BookMap.PentaRim.User;
+package BookMap.PentaRim.User.model;
 
 
 import jakarta.persistence.*;
