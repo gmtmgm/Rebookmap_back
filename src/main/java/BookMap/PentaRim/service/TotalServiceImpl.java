@@ -107,8 +107,18 @@ public class TotalServiceImpl implements TotalService{
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
         List<BookPersonal> bookPersonalList = bookPersonalRepository.findBookPersonalsByUserAndBookStateOrderBySaved(user, bookState);
         List<BookShelfResponseDto> bookShelfResponseDtos = new ArrayList<>();
-        for(BookPersonal bookPersonal: bookPersonalList){
-            bookShelfResponseDtos.add(new BookShelfDoneDto(bookPersonal));
+        if (bookState == BookState.DONE){
+            for(BookPersonal bookPersonal: bookPersonalList){
+                bookShelfResponseDtos.add(new BookShelfDoneDto(bookPersonal));
+            }
+        } else if (bookState == BookState.READING) {
+            for(BookPersonal bookPersonal: bookPersonalList){
+                bookShelfResponseDtos.add(new BookShelfReadingDto(bookPersonal));
+            }
+        }else{
+            for(BookPersonal bookPersonal: bookPersonalList){
+                bookShelfResponseDtos.add(new BookShelfWishDto(bookPersonal));
+            }
         }
         return bookShelfResponseDtos;
     }

@@ -11,7 +11,7 @@ import java.util.Optional;
 // 저장소와 연결하고 구현? 아니면 그냥 구현?
 public interface BookSaved {
 
-    boolean Reading(Long id, String isbn, BookPersonalRequestDto bookPersonalRequestDto);
+    boolean booksave(Long id, String isbn, BookPersonalRequestDto bookPersonalRequestDto);
     void changeState(Long id, String isbn, BookPersonalUpdateStateDto bookPersonalUpdateStateDto);
 
     void changeAll(Long id, String isbn, BookPersonalUpdateRequestDto bookPersonalUpdateRequestDto);
@@ -37,7 +37,6 @@ public interface BookSaved {
     boolean checkSavedOrNot(Long id, String isbn);
 
     Optional<BookPersonalStateResponseDto> bookPersonalDetail(Long id, String isbn);
-
     BookState checkBookState(BookPersonal bookPersonal);
 
 }

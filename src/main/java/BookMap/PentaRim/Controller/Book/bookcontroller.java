@@ -50,10 +50,7 @@ public class bookcontroller {
     //DB 저장 확인용 controller 작성함
 
 
-    @PostMapping("/book/save/{id}")
-    public boolean bookSave(@PathVariable Long id, @RequestParam String isbn, @RequestBody BookPersonalRequestDto bookPersonalRequestDto){
-        return bookSaved.Reading(id, isbn, bookPersonalRequestDto);
-    }
+
 
     @PostMapping("/test")
     public String test(@RequestParam String text){
@@ -128,6 +125,7 @@ public class bookcontroller {
         return new ResponseEntity<>(bookSaved.findByTop10(),HttpStatus.OK);
     }
 
+    //여기서부터 페이지별 컨트롤러
 
     /**
      *
@@ -174,6 +172,11 @@ public class bookcontroller {
         return new ResponseEntity<>(bookSaved.findByMonth(id,bookPersonalMonthRequestDto), HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/profile/{id}")
     public ResponseEntity<?> profile(@PathVariable Long id){
         return new ResponseEntity<>(totalService.profile(id), HttpStatus.OK);
@@ -182,6 +185,12 @@ public class bookcontroller {
     @GetMapping("/bookdetail/{id}")
     public ResponseEntity<?> bookdetail(@PathVariable Long id, @RequestParam String isbn){
         return new ResponseEntity<>(bookSaved.bookPersonalDetail(id, isbn), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/book/save/{id}")
+    public boolean bookSave(@PathVariable Long id, @RequestParam String isbn, @RequestBody BookPersonalRequestDto bookPersonalRequestDto){
+        return bookSaved.booksave(id, isbn, bookPersonalRequestDto);
     }
 
 }

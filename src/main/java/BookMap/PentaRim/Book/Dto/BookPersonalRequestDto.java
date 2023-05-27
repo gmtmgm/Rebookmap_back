@@ -54,6 +54,7 @@ public class BookPersonalRequestDto {
                 .readingPage(readingPage)
                 .totalPage(totalPage)
                 .saved(saved)
+                .grade(grade)
                 .build();
     }
 

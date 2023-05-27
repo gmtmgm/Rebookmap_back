@@ -10,9 +10,7 @@ import java.time.LocalDate;
 @Getter
 public class BookPersonalResponseDto {
     private Long id;
-
     private Book book;
-
     private BookState bookState;
     private LocalDate startDate;
     private LocalDate endDate;

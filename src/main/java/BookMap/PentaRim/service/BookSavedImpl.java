@@ -31,7 +31,7 @@ public class BookSavedImpl implements BookSaved{
     final BookSearchService bookSearchService;
     @Override
     @Transactional
-    public boolean Reading(Long id, String isbn, BookPersonalRequestDto bookPersonalRequestDto) {
+    public boolean booksave(Long id, String isbn, BookPersonalRequestDto bookPersonalRequestDto) {
         Book book = bookSearchService.searchBooks(isbn);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new
@@ -159,6 +159,7 @@ public class BookSavedImpl implements BookSaved{
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 bookMemo가 없습니다."));
 
+        //업데이트하면 업데이트한 시간으로 saved가 바뀜
         bookMemo.update(bookMemoRequestDto.getContent(),
                 LocalDateTime.now(),
                 bookMemoRequestDto.getPage());
@@ -313,13 +314,17 @@ public class BookSavedImpl implements BookSaved{
                     () -> new IllegalArgumentException("해당 저장된 책이 없습니다.")
             );
             BookResponseDto bookResponseDto = new BookResponseDto(book);
-
+            List<BookMemo> bookMemoList = bookMemoRepository.findByBookPersonalOrderBySavedDesc(bookPersonal);
+            List<BookMemoResponseDto> bookMemoResponseDtoList = new ArrayList<>();
+            for(BookMemo bookMemo: bookMemoList){
+                bookMemoResponseDtoList.add(new BookMemoResponseDto(bookMemo));
+            }
             if (checkBookState(bookPersonal) == BookState.DONE) {
-                return Optional.of(new BookPersonalDoneStateResponseDto(bookPersonal, bookResponseDto));
+                return Optional.of(new BookPersonalDoneStateResponseDto(bookPersonal, bookResponseDto, bookMemoResponseDtoList));
             } else if (checkBookState(bookPersonal) ==  BookState.READING) {
-                return Optional.of(new BookPersonalReadingStateResponseDto(bookPersonal, bookResponseDto));
+                return Optional.of(new BookPersonalReadingStateResponseDto(bookPersonal, bookResponseDto, bookMemoResponseDtoList));
             } else{
-                return Optional.of(new BookPersonalWishStateResponseDto(bookPersonal, bookResponseDto));
+                return Optional.of(new BookPersonalWishStateResponseDto(bookPersonal, bookResponseDto, bookMemoResponseDtoList));
             }
         }
         return null;
