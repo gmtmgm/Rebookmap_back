@@ -32,9 +32,8 @@ public class JwtCreateController {
     @PostMapping("/oauth/jwt/google")
     public String jwtCreate(@RequestBody Map<String, Object> data) {
         log.info("jwtCreate 실행됨");
-        log.info((String) data.get("profileObj"));
         OAuthUserInfo googleUser =
-                new GoogleUser((Map<String, Object>)data.get("profileObj"));
+                new GoogleUser((Map<String, Object>)data);
 
         User userEntity =
                 userRepository.findByUsername(googleUser.getProvider()+"_"+googleUser.getProviderId());
@@ -47,6 +46,7 @@ public class JwtCreateController {
                     .provider(googleUser.getProvider())
                     .providerId(googleUser.getProviderId())
                     .role(Role.USER)
+                    .nickname(googleUser.getName())
                     .picture(googleUser.getPicture())
                     .build();
 

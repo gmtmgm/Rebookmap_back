@@ -36,6 +36,7 @@ public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
 
         // request에 있는 username과 password를 파싱해서 자바 Object로 받기
         ObjectMapper om = new ObjectMapper();
+
         LoginRequest loginRequest = null;
         try {
             loginRequest = om.readValue(request.getInputStream(), LoginRequest.class);
@@ -80,7 +81,7 @@ public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
         String jwtToken = JWT.create()
                 .withSubject(customUserDetails.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
-                .withClaim("id", customUserDetails.getName())
+                .withClaim("id", customUserDetails.getUser().getId())
                 .withClaim("username", customUserDetails.getUser().getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
