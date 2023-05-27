@@ -3,24 +3,17 @@ package BookMap.PentaRim.Book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Component
 @Getter
 @Setter
-@ToString
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})   //serialize 오류 해결 방법
 public class Book implements Serializable {
@@ -42,6 +35,7 @@ public class Book implements Serializable {
     private String image;
 
     private String description;
+
 
     public Book(){
     }

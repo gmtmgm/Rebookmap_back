@@ -1,5 +1,6 @@
 package BookMap.PentaRim.BookMap.Dto;
 
+
 import BookMap.PentaRim.BookMap.BookMapEntity;
 import BookMap.PentaRim.User.model.User;
 import lombok.Builder;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +20,7 @@ public class BookMapRequestDto {
     private User user;
     private String bookMapTitle; //북맵이름
     private String bookMapContent; //북맵설명
-    private HashSet<String> hashTag;
+    private List<String> hashTag;
 
 /*
     @Builder
@@ -32,7 +33,7 @@ public class BookMapRequestDto {
     }
  */
     @Builder
-    public BookMapRequestDto(User user, String bookMapTitle, String bookMapContent, HashSet<String> hashTag) {
+    public BookMapRequestDto(User user, String bookMapTitle, String bookMapContent, List<String> hashTag) {
         this.user = user;
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
@@ -44,7 +45,7 @@ public class BookMapRequestDto {
                 .user(user)
                 .bookMapTitle(bookMapTitle)
                 .bookMapContent(bookMapContent)
-                .hashTag(hashTag)
+                //.hashTag(hashTag)
                 .build();
     }
 

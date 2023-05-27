@@ -1,4 +1,4 @@
-package BookMap.PentaRim.Controller;
+package BookMap.PentaRim.Controller.BookMap;
 
 import BookMap.PentaRim.BookMap.Dto.*;
 import BookMap.PentaRim.Repository.BookListRepository;
@@ -59,4 +59,23 @@ public class BookMapController {
     }
     //@PostMapping("/bookMap/save/{bookMapId}/{}")
 
+    @PostMapping("/bookmap/hashtag/save/{id}")
+    public void savetags(@PathVariable Long id, @RequestBody TagRequestDto tagRequestDto){
+        bookMapRepositoryService.tagssave(id, tagRequestDto);
+    }
+
+    @PostMapping("/bookmap/hashtag/update/{id}")
+    public void updateTags(@PathVariable Long id, @RequestBody TagRequestDto tagRequestDto){
+        bookMapRepositoryService.tagsUpdate(id, tagRequestDto);
+    }
+
+    @DeleteMapping("/bookmap/hashtag/deleteall/{id}")
+    public void deleteAllTags(@PathVariable Long id){
+        bookMapRepositoryService.tagsDelete(id);
+    }
+
+    @GetMapping("/bookmap/hashtag")
+    public ResponseEntity<?> bookmap(@RequestParam String tag){
+        return new ResponseEntity<>(bookMapRepositoryService.findBookMapByTag(tag), HttpStatus.OK);
+    }
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
+import java.util.List;
 
 @Component
 @Getter
@@ -32,27 +32,31 @@ public class BookMapEntity {
     private String bookMapTitle;
     @Column
     private String bookMapContent;
-    @ElementCollection
-    private HashSet<String> hashTag;
-    /*
+    //@ElementCollection
+    //private HashSet<String> hashTag;
+
+
+    @OneToMany(mappedBy = "bookMap")
+    private List<MapHashTag> mapHashTags;
+
     @Column(name = "BOOKMAP_INDEX")
     private int index;
-     */
+
 
 
     @Builder
-    public BookMapEntity(Long bookMapId, User user, String bookMapTitle, String bookMapContent, HashSet<String> hashTag){
+    public BookMapEntity(Long bookMapId, User user, String bookMapTitle, String bookMapContent){
         this.bookMapId = bookMapId;
         this.user = user;
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
-        this.hashTag = hashTag;
+        //this.hashTag = hashTag;
     }
 
-    public void update(String bookMapTitle, String bookMapContent, HashSet<String> hashTag){
+    public void update(String bookMapTitle, String bookMapContent){
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
-        this.hashTag = hashTag;
+        //this.hashTag = hashTag;
     }
 
 
