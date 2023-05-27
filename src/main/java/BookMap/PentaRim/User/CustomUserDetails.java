@@ -10,9 +10,9 @@ import java.util.Collection;
 import java.util.Map;
 
 
-public class CustomUserDetails implements UserDetails, OAuth2User {
+public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private User user;
 
     public CustomUserDetails(User user) {
         this.user = user;
@@ -30,15 +30,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     }
 
 
-    @Override
-    public String getName() {
-        return null;
-    }
 
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
 
     @Override
     public String getPassword() { return user.getPassword(); }

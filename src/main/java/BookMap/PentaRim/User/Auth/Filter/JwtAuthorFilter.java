@@ -9,6 +9,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import java.io.IOException;
 
+@Slf4j
 public class JwtAuthorFilter extends BasicAuthenticationFilter {
 
     private final UserRepository userRepository;
@@ -32,6 +34,7 @@ public class JwtAuthorFilter extends BasicAuthenticationFilter {
 
         String header = request.getHeader(JwtProperties.HEADER_STRING);
         System.out.println("header Authorization : " + header);
+        log.info("header");
 
         if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
             chain.doFilter(request, response);
