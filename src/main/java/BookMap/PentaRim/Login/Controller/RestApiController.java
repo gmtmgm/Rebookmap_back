@@ -5,6 +5,8 @@ import BookMap.PentaRim.User.CustomUserDetails;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.Role;
 import BookMap.PentaRim.User.model.User;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -53,7 +55,7 @@ public class RestApiController {
 
     @PostMapping("join")
     public String join(@RequestBody User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getEmail()));
         user.setRole(Role.USER);
         userRepository.save(user);
         return "회원가입완료";

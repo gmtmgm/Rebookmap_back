@@ -24,11 +24,6 @@ public class CustomUserDetails implements UserDetails {
 
     private Map<String, Object> attributes;
 
-    public CustomUserDetails(User user, Map<String, Object> attributes) {
-        this.user = user;
-        this.attributes = attributes;
-    }
-
 
 
 

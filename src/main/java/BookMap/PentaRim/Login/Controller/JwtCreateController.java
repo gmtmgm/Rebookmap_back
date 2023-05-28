@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -59,6 +60,8 @@ public class JwtCreateController {
                 .withClaim("id", userEntity.getId())
                 .withClaim("username", userEntity.getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+
+        log.info(data.toString());
 
         return jwtToken;
     }
