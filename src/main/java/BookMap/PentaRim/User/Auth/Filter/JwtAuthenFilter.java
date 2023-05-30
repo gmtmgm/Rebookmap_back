@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,7 +21,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Objects;
 
-
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -32,7 +33,7 @@ public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
 
-        System.out.println("JwtAuthenticationFilter : 진입");
+        log.info("JwtAuthenticationFilter : 진입");
 
         // request에 있는 username과 password를 파싱해서 자바 Object로 받기
         ObjectMapper om = new ObjectMapper();
@@ -50,7 +51,9 @@ public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         Objects.requireNonNull(loginRequest).getUsername(),
-                        loginRequest.getPassword());
+                        loginRequest.getEmail());
+
+        log.info("authtoken : " + authenticationToken);
 
         System.out.println("JwtAuthenticationFilter : 토큰생성완료");
 
@@ -66,8 +69,12 @@ public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
         Authentication authentication =
                 authenticationManager.authenticate(authenticationToken);
 
+        log.info("authentication : " + authentication);
+
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         System.out.println("Authentication : "+customUserDetails.getUser().getUsername());
+
+        log.info("Authentication : " + customUserDetails.getUser().getUsername());
         return authentication;
     }
 

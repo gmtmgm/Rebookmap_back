@@ -33,8 +33,7 @@ public class JwtAuthorFilter extends BasicAuthenticationFilter {
             throws IOException, ServletException {
 
         String header = request.getHeader(JwtProperties.HEADER_STRING);
-        System.out.println("header Authorization : " + header);
-        log.info("header");
+        log.info("header: " + header);
 
         if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
             chain.doFilter(request, response);

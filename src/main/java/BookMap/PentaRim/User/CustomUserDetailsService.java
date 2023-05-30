@@ -22,7 +22,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("진입");
         User user = userRepository.findByUsername(username);
-        return new CustomUserDetails(user);
+
+        if(user == null) {
+            throw new UsernameNotFoundException("Can not find Username");
+        }
+        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        customUserDetails.isAccountNonExpired();
+        customUserDetails.isAccountNonLocked();
+        customUserDetails.isCredentialsNonExpired();
+        customUserDetails.isEnabled();
+        return customUserDetails;
     }
 
 }

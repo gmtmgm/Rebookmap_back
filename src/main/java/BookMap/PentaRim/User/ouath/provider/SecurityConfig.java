@@ -59,6 +59,8 @@ public class SecurityConfig {
 
 
 
+
+
     @Bean
     public SecurityFilterChain filterchain(HttpSecurity http) throws Exception {
         http
@@ -72,8 +74,8 @@ public class SecurityConfig {
                 .addFilter(new JwtAuthenFilter(authenticationManager(authenticationConfiguration)))
                 .addFilter(new JwtAuthorFilter(authenticationManager(authenticationConfiguration), userRepository))
                 .authorizeHttpRequests()
-                .requestMatchers("/user/**").hasAuthority(Role.USER.name())
-                .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
+                .requestMatchers("/user/**").permitAll()
+                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().permitAll();
 
         return http.build();
