@@ -34,6 +34,7 @@ public class Book implements Serializable {
 
     private String image;
 
+    @Column(length = 1000)
     private String description;
 
 

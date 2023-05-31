@@ -39,7 +39,7 @@ public class BookSavedImpl implements BookSaved{
 
         //OrElse로 변경 가능함!
         if(bookRepository.existsByIsbn(book.getIsbn())){  //책 존재할 경우 그냥 넘어감
-            Book alreadySavedBook = bookRepository.findByIsbn(isbn)
+            Book alreadySavedBook = bookRepository.findByIsbn(book.getIsbn())
                     .orElseThrow(() ->  new
                             IllegalArgumentException("해당 book이 없습니다."));
             bookPersonalRequestDto.setBook(alreadySavedBook);

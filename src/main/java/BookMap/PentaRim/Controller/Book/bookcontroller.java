@@ -1,10 +1,12 @@
 package BookMap.PentaRim.Controller.Book;
 
 import BookMap.PentaRim.Book.Dto.*;
+import BookMap.PentaRim.User.CustomUserDetails;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.UserRequestDto;
 import BookMap.PentaRim.service.BookSaved;
+import BookMap.PentaRim.service.BookSearchService;
 import BookMap.PentaRim.service.TotalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +51,7 @@ public class bookcontroller {
 
     //DB 저장 확인용 controller 작성함
 
-
+    private final BookSearchService bookSearchService;
 
 
     @PostMapping("/test")
@@ -133,9 +135,18 @@ public class bookcontroller {
      * @return 메인페이지 요소들
      */
     @GetMapping("/main/{id}")
-    public ResponseEntity<?> main(@PathVariable Long id){
+    public ResponseEntity<?> main_test(@PathVariable Long id){
         return new ResponseEntity<>(totalService.main(id), HttpStatus.OK);
     }
+    /*
+
+    @GetMapping("/main")
+    public ResponseEntity<?> main(Authentication authentication){
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return new ResponseEntity<>(totalService.main(customUserDetails.getUser().getId()), HttpStatus.OK);
+    }
+
+     */
 
     @GetMapping("/mostbooks")
     public ResponseEntity<?> mostBooks(){
@@ -192,5 +203,12 @@ public class bookcontroller {
     public boolean bookSave(@PathVariable Long id, @RequestParam String isbn, @RequestBody BookPersonalRequestDto bookPersonalRequestDto){
         return bookSaved.booksave(id, isbn, bookPersonalRequestDto);
     }
+
+
+    @GetMapping("/book/detailpage")
+    public ResponseEntity<?> detailPage(@RequestParam String isbn){
+        return new ResponseEntity<>(bookSearchService.searchBooks(isbn), HttpStatus.OK);
+    }
+
 
 }
