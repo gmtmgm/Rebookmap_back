@@ -14,6 +14,7 @@ import lombok.*;
 public class User extends TimeEntity {
 
     private String provider;
+    @Column(unique = true)
     private String providerId;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +22,7 @@ public class User extends TimeEntity {
     private String email;
     private String picture;
     private String book_state;
+    @Column(unique = true)
     private String username;
     private String password;
     private String nickname;

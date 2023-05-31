@@ -4,18 +4,14 @@ package BookMap.PentaRim.User.ouath.provider;
 
 import BookMap.PentaRim.User.Auth.Filter.JwtAuthenFilter;
 import BookMap.PentaRim.User.Auth.Filter.JwtAuthorFilter;
-import BookMap.PentaRim.User.CustomUserDetails;
 import BookMap.PentaRim.User.CustomUserDetailsService;
 import BookMap.PentaRim.User.Repository.UserRepository;
-import BookMap.PentaRim.User.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -74,7 +70,7 @@ public class SecurityConfig {
                 .addFilter(new JwtAuthenFilter(authenticationManager(authenticationConfiguration)))
                 .addFilter(new JwtAuthorFilter(authenticationManager(authenticationConfiguration), userRepository))
                 .authorizeHttpRequests()
-                .requestMatchers("/user/**").permitAll()
+                .requestMatchers("/user/**").hasAuthority("ROLE_USER")
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().permitAll();
 

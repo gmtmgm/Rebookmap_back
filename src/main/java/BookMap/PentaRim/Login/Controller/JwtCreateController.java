@@ -14,13 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 
 
 import java.util.Date;
 import java.util.Map;
+
+import static BookMap.PentaRim.User.Auth.Filter.JwtProperties.SECRET;
 
 @Slf4j
 @RestController
@@ -34,15 +35,16 @@ public class JwtCreateController {
     public String jwtCreate(@RequestBody Map<String, Object> data) {
         log.info("jwtCreate 실행됨");
         OAuthUserInfo googleUser =
-                new GoogleUser((Map<String, Object>)data);
+                new GoogleUser(data);
 
         User userEntity =
                 userRepository.findByUsername(googleUser.getProvider()+"_"+googleUser.getProviderId());
+        log.info("userEntity : " + userEntity);
 
         if(userEntity == null) {
-            User userRequest = User.builder()
+            User user = User.builder()
                     .username(googleUser.getProvider()+"_"+googleUser.getProviderId())
-                    .password(bCryptPasswordEncoder.encode("펜타림펜타림"))
+                    .password(bCryptPasswordEncoder.encode(SECRET))
                     .email(googleUser.getEmail())
                     .provider(googleUser.getProvider())
                     .providerId(googleUser.getProviderId())
@@ -51,7 +53,10 @@ public class JwtCreateController {
                     .picture(googleUser.getPicture())
                     .build();
 
-            userEntity = userRepository.save(userRequest);
+            log.info( "user : " + user);
+
+            userEntity = userRepository.save(user);
+
         }
 
         String jwtToken = JWT.create()
@@ -59,7 +64,7 @@ public class JwtCreateController {
                 .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
                 .withClaim("id", userEntity.getId())
                 .withClaim("username", userEntity.getUsername())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+                .sign(Algorithm.HMAC512(SECRET));
 
         log.info(data.toString());
 
