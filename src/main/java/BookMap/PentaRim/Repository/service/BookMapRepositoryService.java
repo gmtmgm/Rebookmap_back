@@ -14,7 +14,7 @@ public interface BookMapRepositoryService {
     BookMapRequestDto ToBookMapRequestDto(BookMap bookMap);
     LinkedHashMap<Long, BookMapDetailRequestDto> ToBookMapDetail(BookMap bookMap);
     LinkedHashMap<Long, BookListRequestDto> ToBookList(BookMap bookMap);
-    List<BookMapResponseDto1> findByUserId(Long userId);
+    List<BookMapResponseDto> findByUserId(Long userId);
     List<BookMapDetailResponseDto> findByBookMapId(Long bookMapId);
     List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId);
     //BookListResponseDto findByBookListId(Long bookListId);
@@ -30,7 +30,7 @@ public interface BookMapRepositoryService {
     void tagssave(Long id, TagRequestDto tagRequestDto);
     void tagsUpdate(Long id, TagRequestDto tagRequestDto);
     void tagsDelete(Long id);
-    List<BookMapResponseDto1> findBookMapByTag(String tag);
+    List<BookMapResponseDto> findBookMapByTag(String tag);
     BookMap updateBookMapAll(Long bookMapId, BookMapRequestDto bookMapRequestDto,
                           List<Long> bookMapDetailIds, List<BookMapDetailRequestDto> bookMapDetailRequestDtos,
                           List<Long> bookListIds, List<BookListRequestDto> bookListRequestDtos);

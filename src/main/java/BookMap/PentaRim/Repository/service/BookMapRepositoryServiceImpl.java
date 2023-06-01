@@ -95,7 +95,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
 
 
-    public List<BookMapResponseDto1> findByUserId(Long userId){
+    public List<BookMapResponseDto> findByUserId(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
@@ -104,9 +104,9 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         for(BookMapEntity bookMap: bookMapEntity){
             mapHashTags.add(mapTagRepository.findAllByBookMap(bookMap));
         }
-        List<BookMapResponseDto1> bookMapList = new ArrayList<>();
+        List<BookMapResponseDto> bookMapList = new ArrayList<>();
         for (BookMapEntity bookMap : bookMapEntity){
-            bookMapList.add(new BookMapResponseDto1(bookMap, null));
+            bookMapList.add(new BookMapResponseDto(bookMap, null));
         }
         return bookMapList;
     }
@@ -334,7 +334,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
     @Override
     @Transactional
-    public List<BookMapResponseDto1> findBookMapByTag(String tag) {
+    public List<BookMapResponseDto> findBookMapByTag(String tag) {
         /*
         List<MapHashTag> mapHashTags = mapTagRepository.findAllByHashTag_Tag(tag);
         List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
@@ -361,7 +361,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
          */
         List<MapHashTag> mapHashTags = mapTagRepository.findAllByHashTag_Tag(tag);
-        List<BookMapResponseDto1> bookMapResponseDto1s = new ArrayList<>();
+        List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
         for(MapHashTag mapHashTag : mapHashTags){
             List<MapHashTag> mapHashTagList = mapTagRepository.findAllByBookMap(mapHashTag.getBookMap());
             List<HashTag> hashTags = new ArrayList<>();
@@ -373,11 +373,11 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
             for(HashTag hashTag: hashTags){
                 strings.add(hashTag.getTag());
             }
-            bookMapResponseDto1s.add(new BookMapResponseDto1(mapHashTag.getBookMap(), strings));
+            bookMapResponseDtos.add(new BookMapResponseDto(mapHashTag.getBookMap(), strings));
         }
 
         //bookMapResponseDtos = null;
-        return bookMapResponseDto1s;
+        return bookMapResponseDtos;
     }
 
 }
