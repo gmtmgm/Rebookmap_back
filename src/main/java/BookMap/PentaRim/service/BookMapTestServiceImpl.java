@@ -1,7 +1,6 @@
 package BookMap.PentaRim.service;
 
 import BookMap.PentaRim.BookMap.BookMapEntity;
-import BookMap.PentaRim.BookMap.Dto.BookMapResponseDto;
 import BookMap.PentaRim.BookMap.HashTag;
 import BookMap.PentaRim.BookMap.MapHashTag;
 import BookMap.PentaRim.BookMap.Dto.TagRequestDto;
