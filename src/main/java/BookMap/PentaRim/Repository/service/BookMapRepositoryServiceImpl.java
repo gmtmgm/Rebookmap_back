@@ -12,7 +12,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -26,6 +27,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     final BookMapTestService bookMapTestService;
     final BookMapService bookMapService;
     final HashtagRepository hashtagRepository;
+
     final MapTagRepository mapTagRepository;
 
 
@@ -376,7 +378,5 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         //bookMapResponseDtos = null;
         return bookMapResponseDtos;
     }
-
-
 
 }

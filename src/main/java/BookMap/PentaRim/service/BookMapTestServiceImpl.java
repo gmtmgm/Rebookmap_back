@@ -1,7 +1,7 @@
 package BookMap.PentaRim.service;
 
 import BookMap.PentaRim.BookMap.BookMapEntity;
-import BookMap.PentaRim.BookMap.Dto.BookMapResponseDto;
+import BookMap.PentaRim.BookMap.Dto.BookMapResponseDto1;
 import BookMap.PentaRim.BookMap.HashTag;
 import BookMap.PentaRim.BookMap.MapHashTag;
 import BookMap.PentaRim.BookMap.Dto.TagRequestDto;
@@ -70,7 +70,7 @@ public class BookMapTestServiceImpl implements BookMapTestService{
     }
     @Override
     @Transactional
-    public List<BookMapResponseDto> findBookMapByTag(String tag) {
+    public List<BookMapResponseDto1> findBookMapByTag(String tag) {
         /*
         List<MapHashTag> mapHashTags = mapTagRepository.findAllByHashTag_Tag(tag);
         List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
@@ -97,7 +97,7 @@ public class BookMapTestServiceImpl implements BookMapTestService{
 
          */
         List<MapHashTag> mapHashTags = mapTagRepository.findAllByHashTag_Tag(tag);
-        List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
+        List<BookMapResponseDto1> bookMapResponseDtos = new ArrayList<>();
         for(MapHashTag mapHashTag : mapHashTags){
             List<MapHashTag> mapHashTagList = mapTagRepository.findAllByBookMap(mapHashTag.getBookMap());
             List<HashTag> hashTags = new ArrayList<>();
@@ -109,7 +109,7 @@ public class BookMapTestServiceImpl implements BookMapTestService{
             for(HashTag hashTag: hashTags){
                 strings.add(hashTag.getTag());
             }
-            bookMapResponseDtos.add(new BookMapResponseDto(mapHashTag.getBookMap(), strings));
+            bookMapResponseDtos.add(new BookMapResponseDto1(mapHashTag.getBookMap(), strings));
         }
 
         //bookMapResponseDtos = null;
