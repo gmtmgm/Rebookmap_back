@@ -12,21 +12,25 @@ public class BookMapServiceImpl implements BookMapService{
 
     public BookMapServiceImpl() {
     }
-    @Override
-    public BookMap createBookMap(Book book) { //새로 북맵을 만듦
-        BookMap bookMap = new BookMap();
-        addBook(addMap(bookMap), book);
-        return bookMap;
-    }
+//    @Override
+//    public BookMap createBookMap(Book book) { //새로 북맵을 만듦
+//        BookMap bookMap = new BookMap();
+//        addBook(addMap(bookMap), book);
+//        return bookMap;
+//    }
 
 
+//    @Override
+//    public void addBook(ArrayList<Book> map, Book book) { map.add(book); }
+//    @Override
+//    public ArrayList<Book> addMap(BookMap bookMap) {
+//        ArrayList<Book> map = new ArrayList<>();
+//        bookMap.addObj(map);
+//        return map;
+//    }
     @Override
-    public void addBook(ArrayList<Book> map, Book book) { map.add(book); }
-    @Override
-    public ArrayList<Book> addMap(BookMap bookMap) {
-        ArrayList<Book> map = new ArrayList<>();
-        bookMap.addObj(map);
-        return map;
+    public void addMap(BookMap bookMap, ArrayList<Book> map) {
+//        bookMap.addObj(map);
     }
 
     @Override
@@ -38,17 +42,17 @@ public class BookMapServiceImpl implements BookMapService{
         if (bookMap.getBookMapIndex().get(index).getMap() == null){
             // 책이 1개 이상 존재한다는 가정이므로 삭제하여 0개가 되었을때를 고려해야함 < 책 모두 삭제되면 책 줄도 삭제되도록 만들기 (미구현 상태)
         }
-        ArrayList<Book> map = bookMap.getBookMapIndex().get(index).getMap();
-        if (isMapNotFull(map)) {                    //5권 미만일때만 실행
-            if (!map.contains(book)) {              //동일한 책이 없을 경우 추가
-                bookMap.getBookMapIndex().get(index).getMap().add(book);
-            }
-            else {                                  //동일한 책이 같은 줄에 있을 경우 기존 위치에서 새로 입력한 위치(맨뒤)로 이동
-                changeMapIndex(map, map.indexOf(book), map.size()-1);
-            }
-        }
-        else
-            System.out.println("한 줄에 최대 5권까지 등록할 수 있습니다."); //임시, 가독성 고려
+//        ArrayList<Book> map = bookMap.getBookMapIndex().get(index).getMap();
+//        if (isMapNotFull(map)) {                    //5권 미만일때만 실행
+//            if (!map.contains(book)) {              //동일한 책이 없을 경우 추가
+//                bookMap.getBookMapIndex().get(index).getMap().add(book);
+//            }
+//            else {                                  //동일한 책이 같은 줄에 있을 경우 기존 위치에서 새로 입력한 위치(맨뒤)로 이동
+//                changeMapIndex(map, map.indexOf(book), map.size()-1);
+//            }
+//        }
+//        else
+//            System.out.println("한 줄에 최대 5권까지 등록할 수 있습니다."); //임시, 가독성 고려
     }
 
     @Override

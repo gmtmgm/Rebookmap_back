@@ -3,7 +3,6 @@ package BookMap.PentaRim.BookMap;
 import BookMap.PentaRim.Book.Book;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,16 +15,9 @@ import org.springframework.stereotype.Component;
 @Entity
 @Table(name = "BookList")
 @NoArgsConstructor
-@SequenceGenerator(
-        name = "BOOKLIST_INDEX_GEN"
-        , sequenceName = "BOOKLIST_INDEX"
-        , initialValue = 1
-        , allocationSize = 1
-)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BookListEntity {
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOOKLIST_ID")
     private Long bookListId;
@@ -38,10 +30,6 @@ public class BookListEntity {
     @JoinColumn(name = "BOOK_ID")
     private Book book;
 
-    @GeneratedValue(
-            strategy=GenerationType.SEQUENCE,
-            generator="BOOKLIST_INDEX_GEN"
-    )
     @Column(name = "BOOKLIST_INDEX")
     private int index;
 

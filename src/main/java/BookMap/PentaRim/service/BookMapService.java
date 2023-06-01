@@ -11,11 +11,12 @@ import java.util.ArrayList;
 
 public interface BookMapService {
 
-    BookMap createBookMap(Book book);
+//    BookMap createBookMap(Book book);
 
-    void addBook(ArrayList<Book> map, Book book);
+//    void addBook(ArrayList<Book> map, Book book);
 
-    ArrayList<Book> addMap(BookMap bookMap);
+//    ArrayList<Book> addMap(BookMap bookMap);
+    void addMap(BookMap bookMap, ArrayList<Book> map);
 
     void addMemo(BookMap bookMap, String memo);
 

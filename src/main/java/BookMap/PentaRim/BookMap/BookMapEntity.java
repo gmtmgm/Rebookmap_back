@@ -3,7 +3,6 @@ package BookMap.PentaRim.BookMap;
 import BookMap.PentaRim.User.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BookMapEntity {
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOOKMAP_ID")
     private Long bookMapId;
@@ -32,30 +30,33 @@ public class BookMapEntity {
     private String bookMapTitle;
     @Column
     private String bookMapContent;
-    //@ElementCollection
-    //private HashSet<String> hashTag;
-
+    @Column
+    private String bookMapImage; //대표 이미지 첫 책에서 받아오기
+    @Column
+    private boolean share = true;
 
     @OneToMany(mappedBy = "bookMap")
     private List<MapHashTag> mapHashTags;
 
-    @Column(name = "BOOKMAP_INDEX")
-    private int index;
 
 
 
     @Builder
-    public BookMapEntity(Long bookMapId, User user, String bookMapTitle, String bookMapContent){
+    public BookMapEntity(Long bookMapId, User user, String bookMapTitle, String bookMapContent, String bookMapImage, boolean share){
         this.bookMapId = bookMapId;
         this.user = user;
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
+        this.bookMapImage = bookMapImage;
+        this.share = isShare();
         //this.hashTag = hashTag;
     }
 
-    public void update(String bookMapTitle, String bookMapContent){
+    public void update(String bookMapTitle, String bookMapContent, String bookMapImage, boolean share){
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
+        this.bookMapImage = bookMapImage;
+        this.share = isShare();
         //this.hashTag = hashTag;
     }
 

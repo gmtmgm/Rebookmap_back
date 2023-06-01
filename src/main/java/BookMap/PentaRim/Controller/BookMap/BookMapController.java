@@ -1,16 +1,15 @@
 package BookMap.PentaRim.Controller.BookMap;
 
+import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.Dto.*;
-import BookMap.PentaRim.Repository.BookListRepository;
-import BookMap.PentaRim.Repository.BookMapDetailRepository;
 import BookMap.PentaRim.Repository.BookMapRepository;
-import BookMap.PentaRim.Repository.BookRepository;
 import BookMap.PentaRim.Repository.service.BookMapRepositoryService;
-import BookMap.PentaRim.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 
 @RestController
@@ -19,45 +18,62 @@ import org.springframework.web.bind.annotation.*;
 public class BookMapController {
 
     private final BookMapRepository bookMapRepository;
-    private final BookMapDetailRepository bookMapDetailRepository;
-    private final BookListRepository bookListRepository;
-    private final UserRepository userRepository;
-    private final BookRepository bookRepository;
     private final BookMapRepositoryService bookMapRepositoryService;
 
 
-    @GetMapping("/{userId}/bookMap")
+    @GetMapping("/bookmap/{userId}")
     public ResponseEntity<?> userBookMapLoad(@PathVariable Long userId){
         return new ResponseEntity<>(bookMapRepositoryService.findByUserId(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/bookMap/{bookMapId}")
-    public ResponseEntity<?> BookMapLoad(@PathVariable Long userId, @PathVariable Long bookMapId){
-        return new ResponseEntity<>(bookMapRepositoryService.findByBookMapId(bookMapId), HttpStatus.OK);
-    }
-
-    @GetMapping("/{userId}/bookMap/{bookMapId}/{bookMapDetailId}")
-    public ResponseEntity<?> BookMapDetailLoad(@PathVariable Long userId, @PathVariable Long bookMapId, @PathVariable Long bookMapDetailId){
-        return new ResponseEntity<>(bookMapRepositoryService.findByBookMapDetailId(bookMapDetailId), HttpStatus.OK);
-    }
-
-    @GetMapping("/{userId}/bookMap/{bookMapId}/{bookMapDetailId}/{bookListId}/")
-    public ResponseEntity<?> BookListLoad(@PathVariable Long userId, @PathVariable Long bookMapId, @PathVariable Long bookMapDetailId, @PathVariable Long bookListId){
-        String type = bookMapRepositoryService.BookMapDetailEntityToDto(bookMapDetailId).getType();
-        return new ResponseEntity<>(bookMapRepositoryService.findByBookListId(bookListId), HttpStatus.OK);
+//    @GetMapping("/bookmap/{bookMapId}")
+//    public ResponseEntity<?> BookMapLoad(@PathVariable Long bookMapId){
+//        return new ResponseEntity<>(bookMapRepositoryService.findByBookMapId(bookMapId), HttpStatus.OK);
+//    }
+    @GetMapping("/bookmap/{bookMapId}")
+    public BookMap bookMapLoad(@PathVariable Long bookMapId){
+        return bookMapRepositoryService.EntityToBookMap(bookMapId);
     }
 
 
-    @PostMapping("/bookMap/save/{bookMapId}")
-    public void bookMapSave(@PathVariable Long bookMapId, @RequestBody BookMapRequestDto bookMapRequestDto){
-        if(bookMapRepository.existsByBookMapId(bookMapId)){
-            //BookMap bookMap = bookMapRepositoryService.EntityToBookMap(bookMapId);
-        }
-        else{
-            bookMapRepository.save(bookMapRequestDto.toEntity());
-        }
+//    @GetMapping("/bookmap/{userId}/{bookMapId}/{bookMapDetailId}")
+//    public ResponseEntity<?> BookMapDetailLoad(@PathVariable Long userId, @PathVariable Long bookMapId, @PathVariable Long bookMapDetailId){
+//        return new ResponseEntity<>(bookMapRepositoryService.findByBookMapDetailId(bookMapDetailId), HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/bookmap/{userId}/{bookMapId}/{bookMapDetailId}/{bookListId}/")
+//    public ResponseEntity<?> BookListLoad(@PathVariable Long userId, @PathVariable Long bookMapId, @PathVariable Long bookMapDetailId, @PathVariable Long bookListId){
+//        String type = bookMapRepositoryService.BookMapDetailEntityToDto(bookMapDetailId).getType();
+//        return new ResponseEntity<>(bookMapRepositoryService.findByBookListId(bookListId), HttpStatus.OK);
+//    }
+
+
+
+    @PostMapping("/bookmap/save/{userId}")
+    public void bookMapSave(@PathVariable Long userId, @RequestBody BookMapSaveRequestDto bookMapSaveRequestDto){
+        bookMapRepositoryService.saveBookMap(userId, bookMapSaveRequestDto);
+        //아직 이 시점에서는 요구하는 값 없으므로 void로 두기
     }
-    //@PostMapping("/bookMap/save/{bookMapId}/{}")
+
+    @PostMapping("/bookmap/update/{bookMapId}")
+    public BookMap bookMapUpdate(@PathVariable Long bookMapId, @RequestBody BookMap bookMap){
+        BookMap newBookMap = bookMapRepositoryService.updateBookMapAll(bookMapId,
+                bookMapRepositoryService.ToBookMapRequestDto(bookMap),
+                new ArrayList<>(bookMapRepositoryService.ToBookMapDetail(bookMap).keySet()),
+                new ArrayList<>(bookMapRepositoryService.ToBookMapDetail(bookMap).values()),
+                new ArrayList<>(bookMapRepositoryService.ToBookList(bookMap).keySet()),
+                new ArrayList<>(bookMapRepositoryService.ToBookList(bookMap).values())
+        );
+        return newBookMap;
+    }
+
+
+
+    @DeleteMapping("/bookmap/delete/{bookMapId}")
+    public void deleteBookMap(@PathVariable Long bookMapId){ bookMapRepositoryService.bookMapDelete(bookMapId); }
+
+
+
 
     @PostMapping("/bookmap/hashtag/save/{id}")
     public void savetags(@PathVariable Long id, @RequestBody TagRequestDto tagRequestDto){

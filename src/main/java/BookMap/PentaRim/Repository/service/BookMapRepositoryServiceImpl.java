@@ -6,13 +6,13 @@ import BookMap.PentaRim.BookMap.Dto.*;
 import BookMap.PentaRim.Repository.*;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.Repository.UserRepository;
+import BookMap.PentaRim.service.BookMapService;
 import BookMap.PentaRim.service.BookMapTestService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -24,8 +24,8 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     final BookMapDetailRepository bookMapDetailRepository;
     final BookListRepository bookListRepository;
     final BookMapTestService bookMapTestService;
+    final BookMapService bookMapService;
     final HashtagRepository hashtagRepository;
-
     final MapTagRepository mapTagRepository;
 
 
@@ -37,27 +37,61 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("북맵 없음" + bookMapId));
-        List<BookMapDetailEntity> detailList = bookMapDetailRepository.findByBookMapEntity(bookMapEntity);
-//        for(BookMapDetailEntity detail: detailList){
-//            if (detail.getType() == "Book") {
-//                List<BookListEntity> bookList = bookListRepository.findByBookMapDetailEntity(detail);
-//                ArrayList<Book> map = new ArrayList<>();
-//                for (BookListEntity b: bookList){
-//                    Book book = b.getBook();
-//                    map.add(book);
-//                }
-//                bookMap.addObj(map);
-//            } else if (detail.getType() == "Memo") {
-//                String memo = detail.getMemo();
-//                bookMap.addObj(memo);
-//            } else {
-//                new IllegalArgumentException("타입 미지정" + detail.getBookMapDetailId());
-//            }
-//        }
+        List<BookMapDetailEntity> detailList = bookMapDetailRepository.findByBookMapEntityOrderByIndex(bookMapEntity);
+        for(BookMapDetailEntity detail: detailList){
+            if (detail.getType() == "Book") {
+                List<BookListEntity> bookList = bookListRepository.findByBookMapDetailOrderByIndex(detail);
+                LinkedHashMap<Long, Book> map = new LinkedHashMap<>();
+                for (BookListEntity book: bookList){
+                    map.put(book.getBookListId(), book.getBook());
+                }
+                bookMap.addObj(map);
+            } else if (detail.getType() == "Memo") {
+                String memo = detail.getMemo();
+                bookMap.addObj(memo);
+            } else {
+                new IllegalArgumentException("타입 미지정" + detail.getBookMapDetailId());
+            }
+        }
         return bookMap;
     }
 
+
     @Override
+    public BookMapRequestDto ToBookMapRequestDto(BookMap bookMap){
+        return (new BookMapRequestDto(bookMap.getBookMapTitle(), bookMap.getBookMapContent(),
+                bookMap.getBookMapImage(), bookMap.getHashTag(), bookMap.isShare()));
+    }
+
+    @Override
+    public LinkedHashMap<Long, BookMapDetailRequestDto> ToBookMapDetail(BookMap bookMap){
+        ArrayList<BookMap.BookMapDetail> details = bookMap.getBookMapIndex();
+        LinkedHashMap<Long, BookMapDetailRequestDto> map = new LinkedHashMap<>();
+        for (BookMap.BookMapDetail bookMapDetail : details){
+            map.put(bookMapDetail.getBookMapDetailId(), new BookMapDetailRequestDto(
+                    bookMapDetail.getType(), bookMapDetail.getMemo(), bookMapDetail.getIndex()));
+        }
+        return map;
+    }
+
+    @Override
+    public LinkedHashMap<Long, BookListRequestDto> ToBookList(BookMap bookMap){
+        ArrayList<BookMap.BookMapDetail> details = bookMap.getBookMapIndex();
+        LinkedHashMap<Long, BookListRequestDto> map = new LinkedHashMap<>();
+        for (BookMap.BookMapDetail bookMapDetail : details) {
+            if (bookMapDetail.getType() == "Book" || bookMapDetail.getMap() != null) {
+                LinkedHashMap<Long, Book> detailMap = bookMapDetail.getMap();
+                ArrayList<Long> idList= new ArrayList<>(detailMap.keySet());
+                for (Long id : idList){
+                    map.put(id, new BookListRequestDto(detailMap.get(id), idList.indexOf(id)));
+                }
+            }
+        }
+        return map;
+    }
+
+
+
     public List<BookMapResponseDto> findByUserId(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new
@@ -67,14 +101,6 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         for(BookMapEntity bookMap: bookMapEntity){
             mapHashTags.add(mapTagRepository.findAllByBookMap(bookMap));
         }
-
-        /*
-        List<List<HashTag>> hashTags = new ArrayList<>();
-        for(List<MapHashTag> tags: mapHashTags){
-                hashTags.add(hashtagRepository.findByMapHashTags(tags));
-        }
-
-         */
         List<BookMapResponseDto> bookMapList = new ArrayList<>();
         for (BookMapEntity bookMap : bookMapEntity){
             bookMapList.add(new BookMapResponseDto(bookMap, null));
@@ -115,20 +141,42 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         return new BookMapDetailResponseDto(bookMapDetailRepository.findByBookMapDetailId(bookMapDetailId));
     }
 
+
+
+
+    @Override
+    public void saveBookMap(Long userId, BookMapSaveRequestDto bookMapSaveRequestDto){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
+        bookMapSaveRequestDto.setUser(user);
+        bookMapRepository.save(bookMapSaveRequestDto.toEntity());
+    }
+
+
+
+
     @Override
     public void updateBookMap(Long bookMapId, BookMapRequestDto bookMapRequestDto){
         BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 bookMap이 없습니다. " + bookMapId));
         List<String> hashTags = new ArrayList<>();
-        for(String tag: bookMapRequestDto.getHashTag()){
-            hashTags.add(tag);
+
+        if (bookMapRequestDto.getHashTag() != null){
+            List<String> tags = bookMapRequestDto.getHashTag();
+            for(String tag: tags){
+                hashTags.add(tag);
+            }
         }
+
         TagRequestDto tagRequestDto = new TagRequestDto(hashTags);
         bookMapTestService.tagsUpdate(bookMapId, tagRequestDto);
         bookMapEntity.update(
                 bookMapRequestDto.getBookMapTitle(),
-                bookMapRequestDto.getBookMapContent());
+                bookMapRequestDto.getBookMapContent(),
+                bookMapRequestDto.getBookMapImage(),
+                bookMapRequestDto.isShare());
     }
 
     @Override
@@ -136,9 +184,16 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         BookMapDetailEntity bookMapDetailEntity = bookMapDetailRepository.findById(bookMapDetailId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 bookMapDetail이 없습니다. " + bookMapDetailId));
-        bookMapDetailEntity.update(
-                bookMapDetailRequestDto.getMemo(),
-                bookMapDetailRequestDto.getIndex());
+        if (bookMapDetailEntity.getType() == "Memo"){
+            bookMapDetailEntity.update(
+                    bookMapDetailRequestDto.getMemo(),
+                    bookMapDetailRequestDto.getIndex());
+        }
+        else {
+            bookMapDetailEntity.update(
+                    bookMapDetailRequestDto.getIndex());
+        }
+
     }
 
     @Override
@@ -152,19 +207,72 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
-    public void bookMapDelete(Long bookMapId){
+    public BookMap updateBookMapAll(Long bookMapId, BookMapRequestDto bookMapRequestDto,
+                                    List<Long> bookMapDetailIds, List<BookMapDetailRequestDto> bookMapDetailRequestDtos,
+                                    List<Long> bookListIds, List<BookListRequestDto> bookListRequestDtos){
+        BookMap bookMap = new BookMap();
+        bookMap.setBookMapId(bookMapId);
+        bookMap.setBookMapTitle(bookMapRequestDto.getBookMapTitle());
+        bookMap.setBookMapContent(bookMapRequestDto.getBookMapContent());
+        if (bookMapRequestDto.getHashTag() != null){
+            bookMap.setHashTag(bookMapRequestDto.getHashTag());
+        }
+        int index = 0;
+        for (BookMapDetailRequestDto bookMapDetailRequestDto : bookMapDetailRequestDtos){
+            bookMapDetailRequestDto.setIndex(index);
+            updateBookMapDetail(bookMapDetailIds.get(index), bookMapDetailRequestDto);
+            int i = 0;
+            if (bookMapDetailRequestDto.getType() == "Memo"){
+                bookMapService.addMemo(bookMap, bookMapDetailRequestDto.getMemo());
+            }
+            else if (bookMapDetailRequestDto.getType() == "Book"){
+                ArrayList<Book> bookList = new ArrayList<>();
+                for (BookListRequestDto bookListRequestDto : bookListRequestDtos){
+                    if (index == 0 || i == 0){
+                        bookMapRequestDto.setBookMapImage(bookListRequestDto.getBook().getImage());
+                    }
+                    bookListRequestDto.setIndex(i);
+                    updateBookList(bookListIds.get(i), bookListRequestDto);
+                    i++;
+                    bookList.add(bookListRequestDto.getBook());
+                }
+                bookMapService.addMap(bookMap, bookList);
+            }
+            index++;
+        }
+        updateBookMap(bookMapId, bookMapRequestDto);
+        return bookMap;
+    }
+
+
+
+
+    @Override
+    public void bookMapDelete(Long bookMapId){ //상위 객체를 삭제하면 모두 삭제되도록
         BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 bookMap이 없습니다." + bookMapId));
+        for (BookMapDetailEntity bookMapDetailEntity : bookMapDetailRepository.findByBookMapEntity(bookMapEntity)){
+            for (BookListEntity bookListEntity : bookListRepository.findByBookMapDetail(bookMapDetailEntity)){
+                bookListRepository.delete(bookListEntity);
+            }
+            bookMapDetailRepository.delete(bookMapDetailEntity);
+        }
         bookMapRepository.delete(bookMapEntity);
     }
 
-    @Override
+    @Override //구현은 해놨는데 생각해보면 update로 해결할수있을듯...
     public void bookMapDetailDelete(Long bookMapDetailId){
         BookMapDetailEntity bookMapDetailEntity = bookMapDetailRepository.findById(bookMapDetailId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 bookMapDetail이 없습니다. " + bookMapDetailId));
+        if (bookMapDetailEntity.getType() == "Book"){
+            for (BookListEntity bookListEntity : bookListRepository.findByBookMapDetail(bookMapDetailEntity)){
+                bookListRepository.delete(bookListEntity);
+            }
+        }
         bookMapDetailRepository.delete(bookMapDetailEntity);
+
     }
 
     @Override
@@ -174,6 +282,8 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                         IllegalArgumentException("해당 bookList가 없습니다." + bookListId));
         bookListRepository.delete(bookListEntity);
     }
+
+
 
     //해시태그 변경은 다 삭제하고 다시 넣는 구조
     @Override
@@ -266,5 +376,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         //bookMapResponseDtos = null;
         return bookMapResponseDtos;
     }
+
+
 
 }

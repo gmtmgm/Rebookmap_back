@@ -2,7 +2,6 @@ package BookMap.PentaRim.BookMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,16 +15,9 @@ import org.springframework.stereotype.Component;
 @Entity
 @Table(name = "BookMapDetail")
 @NoArgsConstructor
-@SequenceGenerator(
-        name = "BOOKMAPDETAIL_INDEX_GEN"
-        , sequenceName = "BOOKMAPDETAIL_INDEX"
-        , initialValue = 1
-        , allocationSize = 1
-)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BookMapDetailEntity {
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOOKMAPDETAIL_ID")
     private Long bookMapDetailId;
@@ -50,6 +42,10 @@ public class BookMapDetailEntity {
 
     public void update(String memo, int index){
         this.memo = memo;
+        this.index = index;
+    }
+
+    public void update(int index){
         this.index = index;
     }
 

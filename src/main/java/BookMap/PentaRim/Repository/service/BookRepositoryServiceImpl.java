@@ -16,10 +16,4 @@ public class BookRepositoryServiceImpl {
     public void join(Book book) {
         bookRepository.save(book);
     }
-    /*
-    public Book findBookMap(String isbn) {
-        return bookRepository.findByIsbn(isbn);
-    }
-
-     */
 }
