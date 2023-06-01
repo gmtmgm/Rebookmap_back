@@ -9,14 +9,14 @@ import java.util.List;
 
 @Getter
 @Setter
-public class BookMapResponseDto {
+public class BookMapResponseDto1 {
 
     private String bookMapTitle; //북맵이름
     private String bookMapContent; //북맵설명
     private List<String> hashTag;
 
 
-    public BookMapResponseDto(BookMapEntity bookMapEntity, List<String> hashTag) {
+    public BookMapResponseDto1(BookMapEntity bookMapEntity, List<String> hashTag) {
         this.bookMapTitle = bookMapEntity.getBookMapTitle();
         this.bookMapContent = bookMapEntity.getBookMapContent();
         //if (bookMapEntity.getMapHashTags()!= null) { this.hashTag = hashTag; }
@@ -24,7 +24,7 @@ public class BookMapResponseDto {
     }
 
 
-    public BookMapResponseDto(BookMapEntity bookMapEntity){
+    public BookMapResponseDto1(BookMapEntity bookMapEntity){
         this.bookMapTitle = bookMapEntity.getBookMapTitle();
         this.bookMapContent = bookMapEntity.getBookMapContent();
     }

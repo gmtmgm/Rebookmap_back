@@ -6,7 +6,6 @@ import BookMap.PentaRim.BookMap.Dto.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public interface BookMapRepositoryService {
@@ -15,7 +14,7 @@ public interface BookMapRepositoryService {
     BookMapRequestDto ToBookMapRequestDto(BookMap bookMap);
     LinkedHashMap<Long, BookMapDetailRequestDto> ToBookMapDetail(BookMap bookMap);
     LinkedHashMap<Long, BookListRequestDto> ToBookList(BookMap bookMap);
-    List<BookMapResponseDto> findByUserId(Long userId);
+    List<BookMapResponseDto1> findByUserId(Long userId);
     List<BookMapDetailResponseDto> findByBookMapId(Long bookMapId);
     List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId);
     //BookListResponseDto findByBookListId(Long bookListId);
@@ -31,7 +30,7 @@ public interface BookMapRepositoryService {
     void tagssave(Long id, TagRequestDto tagRequestDto);
     void tagsUpdate(Long id, TagRequestDto tagRequestDto);
     void tagsDelete(Long id);
-    List<BookMapResponseDto> findBookMapByTag(String tag);
+    List<BookMapResponseDto1> findBookMapByTag(String tag);
     BookMap updateBookMapAll(Long bookMapId, BookMapRequestDto bookMapRequestDto,
                           List<Long> bookMapDetailIds, List<BookMapDetailRequestDto> bookMapDetailRequestDtos,
                           List<Long> bookListIds, List<BookListRequestDto> bookListRequestDtos);
