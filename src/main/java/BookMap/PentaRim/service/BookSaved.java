@@ -12,14 +12,17 @@ import java.util.Optional;
 public interface BookSaved {
 
     boolean booksave(Long id, String isbn, BookPersonalRequestDto bookPersonalRequestDto);
+
     void changeState(Long id, String isbn, BookPersonalUpdateStateDto bookPersonalUpdateStateDto);
 
     void changeAll(Long id, String isbn, BookPersonalUpdateRequestDto bookPersonalUpdateRequestDto);
 
     void deleteBook(Long id, String isbn);
+
     List<BookPersonalResponseDto> findByUser(Long id);
 
     void bookMemoSave(Long id, String isbn, BookMemoRequestDto bookMemoRequestDto);
+
     void bookMemoUpdate(Long id, BookMemoRequestDto bookMemoRequestDto);
 
     void bookMemoDelete(Long id);
@@ -37,6 +40,7 @@ public interface BookSaved {
     boolean checkSavedOrNot(Long id, String isbn);
 
     Optional<BookPersonalStateResponseDto> bookPersonalDetail(Long id, String isbn);
+
     BookState checkBookState(BookPersonal bookPersonal);
 
 }

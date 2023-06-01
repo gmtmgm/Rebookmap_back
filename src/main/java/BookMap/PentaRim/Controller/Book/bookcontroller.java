@@ -1,7 +1,6 @@
 package BookMap.PentaRim.Controller.Book;
 
 import BookMap.PentaRim.Book.Dto.*;
-import BookMap.PentaRim.User.CustomUserDetails;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.UserRequestDto;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,43 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class bookcontroller {
 
-
-    /**
-     *authentication 테스트했던 것들
-     */
-    /*
-    @GetMapping("/user")
-    public String getUser(Authentication authentication) {
-
-        //HttpSession session = request.getSession();
-        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        //String username = (String) httpSession.getAttribute("username");
-        //OAuth2User oAuth2User = customOAuth2UserService.loadUser(oAuth2UserRequest);
-
-        return "";
-    }
-
-     */
-
-
-
     private final BookSaved bookSaved;
-
     private final UserRepository userRepository;
-
     private final TotalService totalService;
 
     //DB 저장 확인용 controller 작성함
-
     private final BookSearchService bookSearchService;
-
-
-    @PostMapping("/test")
-    public String test(@RequestParam String text){
-        System.out.println(text);
-        return text;
-    }
 
     //@PostMapping
     @PostMapping("/usertest")
@@ -205,10 +172,13 @@ public class bookcontroller {
     }
 
 
+    /*
     @GetMapping("/book/detailpage")
     public ResponseEntity<?> detailPage(@RequestParam String isbn){
         return new ResponseEntity<>(bookSearchService.searchBooks(isbn), HttpStatus.OK);
     }
+
+     */
 
 
 }

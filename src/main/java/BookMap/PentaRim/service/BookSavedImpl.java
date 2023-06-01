@@ -298,16 +298,30 @@ public class BookSavedImpl implements BookSaved{
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
-        return bookPersonalRepository.existsByUserAndBook_Isbn(user, isbn);
+        String isbnFirst = new String();
+        if(isbn.contains(" ")){
+            String[] stringList = isbn.split(" ");
+            isbnFirst = stringList[0];
+        }else{
+            isbnFirst = isbn;
+        }
+        return bookPersonalRepository.existsByUserAndBook_Isbn(user, isbnFirst);
     }
 
     @Override
     @Transactional
     public Optional<BookPersonalStateResponseDto> bookPersonalDetail(Long id, String isbn) {
+        String isbnFirst = new String();
+        if(isbn.contains(" ")){
+            String[] stringList = isbn.split(" ");
+            isbnFirst = stringList[0];
+        }else{
+            isbnFirst = isbn;
+        }
         if (checkSavedOrNot(id, isbn)) {
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
-            Book book = bookRepository.findByIsbn(isbn).orElseThrow(
+            Book book = bookRepository.findByIsbn(isbnFirst).orElseThrow(
                     () -> new IllegalArgumentException("해당 책이 없습니다.")
             );
             BookPersonal bookPersonal = bookPersonalRepository.findByUserAndBook(user, book).orElseThrow(
@@ -327,7 +341,8 @@ public class BookSavedImpl implements BookSaved{
                 return Optional.of(new BookPersonalWishStateResponseDto(bookPersonal, bookResponseDto, bookMemoResponseDtoList));
             }
         }
-        return null;
+
+        return Optional.of(new SearchBookResponseDto(bookSearchService.searchBooks(isbn)));
     }
 
 

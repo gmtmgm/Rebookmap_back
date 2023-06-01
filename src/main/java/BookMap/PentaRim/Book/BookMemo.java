@@ -25,7 +25,6 @@ public class BookMemo {
     @Column
     private String content;
     @Column
-
     private LocalDateTime saved;
     @Column
     private Integer page;
