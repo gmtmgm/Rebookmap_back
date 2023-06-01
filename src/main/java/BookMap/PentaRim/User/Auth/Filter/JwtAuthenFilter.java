@@ -35,7 +35,7 @@ public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
 
         log.info("JwtAuthenticationFilter : 진입");
 
-        // request에 있는 username과 password를 파싱해서 자바 Object로 받기
+        // request에 있는 username과 email을 파싱해서 자바 Object로 받기
         ObjectMapper om = new ObjectMapper();
 
         LoginRequest loginRequest = null;
