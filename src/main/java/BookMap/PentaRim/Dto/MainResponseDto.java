@@ -2,6 +2,7 @@ package BookMap.PentaRim.Dto;
 
 import BookMap.PentaRim.Book.Dto.BookImageDto;
 import BookMap.PentaRim.Book.Dto.BookTopResponseDto;
+import BookMap.PentaRim.BookMap.Dto.BookMapResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 

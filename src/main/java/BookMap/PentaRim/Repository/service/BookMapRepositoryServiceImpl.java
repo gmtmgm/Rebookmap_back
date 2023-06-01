@@ -58,26 +58,20 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
 
     @Override
-    public List<BookMapResponseDto> findByUserId(Long userId){
+    public List<BookMapResponseDto1> findByUserId(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
         List<BookMapEntity> bookMapEntity = bookMapRepository.findByUser(user); //예외처리 안하기!!
-        List<List<MapHashTag>> mapHashTags = new ArrayList<>();
-        for(BookMapEntity bookMap: bookMapEntity){
-            mapHashTags.add(mapTagRepository.findAllByBookMap(bookMap));
-        }
 
-        /*
-        List<List<HashTag>> hashTags = new ArrayList<>();
-        for(List<MapHashTag> tags: mapHashTags){
-                hashTags.add(hashtagRepository.findByMapHashTags(tags));
-        }
-
-         */
-        List<BookMapResponseDto> bookMapList = new ArrayList<>();
+        List<BookMapResponseDto1> bookMapList = new ArrayList<>();
         for (BookMapEntity bookMap : bookMapEntity){
-            bookMapList.add(new BookMapResponseDto(bookMap, null));
+            List<MapHashTag> mapHashTagList = mapTagRepository.findAllByBookMap(bookMap);
+            List<String> hashTagString = new ArrayList<>();
+            for(MapHashTag mapHashTag: mapHashTagList){
+                hashTagString.add(mapHashTag.getHashTag().getTag());
+            }
+            bookMapList.add(new BookMapResponseDto1(bookMap, hashTagString));
         }
         return bookMapList;
     }
@@ -221,7 +215,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     }
     @Override
     @Transactional
-    public List<BookMapResponseDto> findBookMapByTag(String tag) {
+    public List<BookMapResponseDto1> findBookMapByTag(String tag) {
         /*
         List<MapHashTag> mapHashTags = mapTagRepository.findAllByHashTag_Tag(tag);
         List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
@@ -248,7 +242,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
          */
         List<MapHashTag> mapHashTags = mapTagRepository.findAllByHashTag_Tag(tag);
-        List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
+        List<BookMapResponseDto1> bookMapResponseDto1s = new ArrayList<>();
         for(MapHashTag mapHashTag : mapHashTags){
             List<MapHashTag> mapHashTagList = mapTagRepository.findAllByBookMap(mapHashTag.getBookMap());
             List<HashTag> hashTags = new ArrayList<>();
@@ -260,11 +254,11 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
             for(HashTag hashTag: hashTags){
                 strings.add(hashTag.getTag());
             }
-            bookMapResponseDtos.add(new BookMapResponseDto(mapHashTag.getBookMap(), strings));
+            bookMapResponseDto1s.add(new BookMapResponseDto1(mapHashTag.getBookMap(), strings));
         }
 
         //bookMapResponseDtos = null;
-        return bookMapResponseDtos;
+        return bookMapResponseDto1s;
     }
 
 }

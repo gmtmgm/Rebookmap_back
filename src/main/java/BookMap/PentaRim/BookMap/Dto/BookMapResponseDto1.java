@@ -1,35 +1,25 @@
 package BookMap.PentaRim.BookMap.Dto;
 
 import BookMap.PentaRim.BookMap.BookMapEntity;
+import BookMap.PentaRim.User.model.User;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.util.List;
+import java.util.HashSet;
 
 @Getter
-@Setter
 public class BookMapResponseDto {
-
+    private User user;
     private String bookMapTitle; //북맵이름
     private String bookMapContent; //북맵설명
-    private List<String> hashTag;
+    private HashSet<String> hashTag;
 
 
-    public BookMapResponseDto(BookMapEntity bookMapEntity, List<String> hashTag) {
+    public BookMapResponseDto(BookMapEntity bookMapEntity) {
+        this.user = bookMapEntity.getUser();
         this.bookMapTitle = bookMapEntity.getBookMapTitle();
         this.bookMapContent = bookMapEntity.getBookMapContent();
-        //if (bookMapEntity.getMapHashTags()!= null) { this.hashTag = hashTag; }
-        this.hashTag = hashTag;
+        if (bookMapEntity.getHashTag() != null) { this.hashTag = bookMapEntity.getHashTag(); }
     }
-
-
-    public BookMapResponseDto(BookMapEntity bookMapEntity){
-        this.bookMapTitle = bookMapEntity.getBookMapTitle();
-        this.bookMapContent = bookMapEntity.getBookMapContent();
-    }
-
-
-
 /*
     public void toBookMap(BookMap bookMap){
         bookMap.setBookMapId(bookMapId);

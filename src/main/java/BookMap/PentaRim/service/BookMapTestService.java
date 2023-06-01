@@ -1,5 +1,6 @@
 package BookMap.PentaRim.service;
 
+import BookMap.PentaRim.BookMap.Dto.BookMapResponseDto;
 import BookMap.PentaRim.BookMap.Dto.TagRequestDto;
 
 import java.util.List;
