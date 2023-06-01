@@ -11,7 +11,7 @@ public interface BookMapRepositoryService {
 
     BookMap EntityToBookMap(Long bookMapId);
 
-    List<BookMapResponseDto> findByUserId(Long userId);
+    List<BookMapResponseDto1> findByUserId(Long userId);
     List<BookMapDetailResponseDto> findByBookMapId(Long bookMapId);
     List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId);
     //BookListResponseDto findByBookListId(Long bookListId);
@@ -26,5 +26,5 @@ public interface BookMapRepositoryService {
     void tagssave(Long id, TagRequestDto tagRequestDto);
     void tagsUpdate(Long id, TagRequestDto tagRequestDto);
     void tagsDelete(Long id);
-    List<BookMapResponseDto> findBookMapByTag(String tag);
+    List<BookMapResponseDto1> findBookMapByTag(String tag);
 }
