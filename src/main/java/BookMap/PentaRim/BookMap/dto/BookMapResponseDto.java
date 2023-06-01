@@ -14,7 +14,6 @@ public class BookMapResponseDto {
     private String bookMapContent; //북맵설명
     private String bookMapImage;
     private boolean share;
-    //private List<String> hashTag;
 
 
     public BookMapResponseDto(BookMapEntity bookMapEntity, List<String> hashTag) {
