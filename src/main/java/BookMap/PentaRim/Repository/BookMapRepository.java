@@ -10,9 +10,8 @@ import java.util.List;
 
 @Repository
 public interface BookMapRepository extends JpaRepository<BookMapEntity,Long> {
-    boolean existsByBookMapId(Long bookMapId);
-    List<BookMapEntity> findByUserOrderByBookMapSaveTime(User user);
-    BookMapEntity findByBookMapId(Long bookMapId);
-    List<BookMapEntity> findAllByMapHashTags(Long bookMapId);
 
+    List<BookMapEntity> findByUserOrderByBookMapSaveTime(User user);
+    List<BookMapEntity> findAllByMapHashTags(Long bookMapId);
+    List<BookMapEntity> findAllByBookMapTitleContaining(String bookMapTitle);
 }

@@ -49,7 +49,7 @@ public class BookMapEntity {
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
         this.bookMapImage = bookMapImage;
-        this.share = isShare();
+        this.share = share;
         this.bookMapSaveTime = bookMapSaveTime;
         //this.hashTag = hashTag;
     }
@@ -58,7 +58,7 @@ public class BookMapEntity {
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
         this.bookMapImage = bookMapImage;
-        this.share = isShare();
+        this.share = share;
         //this.hashTag = hashTag;
     }
 

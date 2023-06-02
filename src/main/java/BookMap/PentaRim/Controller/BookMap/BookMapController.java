@@ -21,7 +21,7 @@ public class BookMapController {
 
     @GetMapping("/bookmap/{userId}")
     public ResponseEntity<?> userBookMapLoad(@PathVariable Long userId){
-        return new ResponseEntity<>(bookMapRepositoryService.findByUserId(userId), HttpStatus.OK);
+        return new ResponseEntity<>(bookMapRepositoryService.findBookMapsByUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping("/bookmap/view/{bookMapId}")
