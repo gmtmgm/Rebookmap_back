@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -26,6 +27,7 @@ public class BookMap implements Serializable {
     private List<String> hashTag; //북맵 하나에 해쉬태그여러개를 붙이는 형식
     //private int index;
     private boolean share = true; //북맵 잠금 여부
+    private LocalDateTime bookMapSaveTime; // 저장 시간
 
     @Component
     @Getter

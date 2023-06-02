@@ -1,6 +1,5 @@
 package BookMap.PentaRim.Repository.service;
 
-import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.Dto.*;
 
@@ -15,18 +14,18 @@ public interface BookMapRepositoryService {
     LinkedHashMap<Long, BookMapDetailRequestDto> ToBookMapDetail(BookMap bookMap);
     LinkedHashMap<Long, BookListRequestDto> ToBookList(BookMap bookMap);
     List<BookMapResponseDto> findByUserId(Long userId);
-    List<BookMapDetailResponseDto> findByBookMapId(Long bookMapId);
-    List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId);
-    //BookListResponseDto findByBookListId(Long bookListId);
-    Book findByBookListId(Long bookListId);
-    BookMapDetailResponseDto BookMapDetailEntityToDto(Long bookMapDetailId);
+//    List<BookMapDetailResponseDto> findByBookMapId(Long bookMapId);
+//    List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId);
+//    BookListResponseDto findByBookListId(Long bookListId);
+//    Book findByBookListId(Long bookListId);
+//    BookMapDetailResponseDto BookMapDetailEntityToDto(Long bookMapDetailId);
     void saveBookMap(Long userId, BookMapSaveRequestDto bookMapSaveRequestDto);
     void updateBookMap(Long bookMapId, BookMapRequestDto bookMapRequestDto);
     void updateBookMapDetail(Long bookMapDetailId, BookMapDetailRequestDto bookMapDetailRequestDto);
     void updateBookList(Long bookListId, BookListRequestDto bookListRequestDto);
     void bookMapDelete(Long bookMapId);
-    void bookMapDetailDelete(Long bookMapDetailId);
-    void bookListDelete(Long bookListId);
+//    void bookMapDetailDelete(Long bookMapDetailId);
+//    void bookListDelete(Long bookListId);
     void tagssave(Long id, TagRequestDto tagRequestDto);
     void tagsUpdate(Long id, TagRequestDto tagRequestDto);
     void tagsDelete(Long id);

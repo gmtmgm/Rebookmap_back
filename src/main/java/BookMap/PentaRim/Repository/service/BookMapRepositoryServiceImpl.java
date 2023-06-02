@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,10 +37,10 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     @Override
     public BookMap EntityToBookMap(Long bookMapId) { //저장소 > BookMap 객체
         BookMap bookMap = new BookMap();
-        bookMap.setBookMapId(bookMapId);
         BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("북맵 없음" + bookMapId));
+
         List<BookMapDetailEntity> detailList = bookMapDetailRepository.findByBookMapEntityOrderByIndex(bookMapEntity);
         for(BookMapDetailEntity detail: detailList){
             if (detail.getType() == "Book") {
@@ -99,7 +100,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
-        List<BookMapEntity> bookMapEntity = bookMapRepository.findByUser(user); //예외처리 안하기!!
+        List<BookMapEntity> bookMapEntity = bookMapRepository.findByUserOrderByBookMapSaveTime(user); //예외처리 안하기!!
         List<List<MapHashTag>> mapHashTags = new ArrayList<>();
         for(BookMapEntity bookMap: bookMapEntity){
             mapHashTags.add(mapTagRepository.findAllByBookMap(bookMap));
@@ -111,38 +112,38 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         return bookMapList;
     }
 
-    @Override
-    public List<BookMapDetailResponseDto> findByBookMapId(Long bookMapId){ //예외처리 다 빼기!!
-        BookMapEntity bookMapEntity = bookMapRepository.findByBookMapId(bookMapId);
-        List<BookMapDetailEntity> bookMapDetailEntiy = bookMapDetailRepository.findByBookMapEntityOrderByIndex(bookMapEntity);
-        List<BookMapDetailResponseDto> bookMapDetailList = new ArrayList<>();
-        for (BookMapDetailEntity bookMapDetail : bookMapDetailEntiy){
-            bookMapDetailList.add(new BookMapDetailResponseDto(bookMapDetail));
-        }
-        return bookMapDetailList;
-    }
+//    @Override
+//    public List<BookMapDetailResponseDto> findByBookMapId(Long bookMapId){ //예외처리 다 빼기!!
+//        BookMapEntity bookMapEntity = bookMapRepository.findByBookMapId(bookMapId);
+//        List<BookMapDetailEntity> bookMapDetailEntiy = bookMapDetailRepository.findByBookMapEntityOrderByIndex(bookMapEntity);
+//        List<BookMapDetailResponseDto> bookMapDetailList = new ArrayList<>();
+//        for (BookMapDetailEntity bookMapDetail : bookMapDetailEntiy){
+//            bookMapDetailList.add(new BookMapDetailResponseDto(bookMapDetail));
+//        }
+//        return bookMapDetailList;
+//    }
 
-    @Override
-    public List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId){ //책목록
-        BookMapDetailEntity bookMapDetailEntity = bookMapDetailRepository.findByBookMapDetailId(bookMapDetailId);
-        List<BookListEntity> bookListEntity = bookListRepository.findByBookMapDetailOrderByIndex(bookMapDetailEntity);
-        List<BookListResponseDto> bookList = new ArrayList<>();
-        for (BookListEntity book : bookListEntity){
-            bookList.add(new BookListResponseDto(book));
-        }
-        return bookList;
-    }
+//    @Override
+//    public List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId){ //책목록
+//        BookMapDetailEntity bookMapDetailEntity = bookMapDetailRepository.findByBookMapDetailId(bookMapDetailId);
+//        List<BookListEntity> bookListEntity = bookListRepository.findByBookMapDetailOrderByIndex(bookMapDetailEntity);
+//        List<BookListResponseDto> bookList = new ArrayList<>();
+//        for (BookListEntity book : bookListEntity){
+//            bookList.add(new BookListResponseDto(book));
+//        }
+//        return bookList;
+//    }
 
-    @Override
-    public Book findByBookListId(Long bookListId){
-        BookListEntity bookListEntity = bookListRepository.findByBookListId(bookListId);
-        return bookListEntity.getBook();
-    }
+//    @Override
+//    public Book findByBookListId(Long bookListId){
+//        BookListEntity bookListEntity = bookListRepository.findByBookListId(bookListId);
+//        return bookListEntity.getBook();
+//    }
 
-    @Override
-    public BookMapDetailResponseDto BookMapDetailEntityToDto(Long bookMapDetailId){
-        return new BookMapDetailResponseDto(bookMapDetailRepository.findByBookMapDetailId(bookMapDetailId));
-    }
+//    @Override
+//    public BookMapDetailResponseDto BookMapDetailEntityToDto(Long bookMapDetailId){
+//        return new BookMapDetailResponseDto(bookMapDetailRepository.findByBookMapDetailId(bookMapDetailId));
+//    }
 
 
 
@@ -153,6 +154,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
         bookMapSaveRequestDto.setUser(user);
+        bookMapSaveRequestDto.setBookMapSaveTime(LocalDateTime.now());
         bookMapRepository.save(bookMapSaveRequestDto.toEntity());
     }
 
@@ -264,27 +266,27 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         bookMapRepository.delete(bookMapEntity);
     }
 
-    @Override //구현은 해놨는데 생각해보면 update로 해결할수있을듯...
-    public void bookMapDetailDelete(Long bookMapDetailId){
-        BookMapDetailEntity bookMapDetailEntity = bookMapDetailRepository.findById(bookMapDetailId)
-                .orElseThrow(() -> new
-                        IllegalArgumentException("해당 bookMapDetail이 없습니다. " + bookMapDetailId));
-        if (bookMapDetailEntity.getType() == "Book"){
-            for (BookListEntity bookListEntity : bookListRepository.findByBookMapDetail(bookMapDetailEntity)){
-                bookListRepository.delete(bookListEntity);
-            }
-        }
-        bookMapDetailRepository.delete(bookMapDetailEntity);
-
-    }
-
-    @Override
-    public void bookListDelete(Long bookListId){
-        BookListEntity bookListEntity = bookListRepository.findById(bookListId)
-                .orElseThrow(() -> new
-                        IllegalArgumentException("해당 bookList가 없습니다." + bookListId));
-        bookListRepository.delete(bookListEntity);
-    }
+//    @Override //구현은 해놨는데 생각해보면 update로 해결할수있을듯...
+//    public void bookMapDetailDelete(Long bookMapDetailId){
+//        BookMapDetailEntity bookMapDetailEntity = bookMapDetailRepository.findById(bookMapDetailId)
+//                .orElseThrow(() -> new
+//                        IllegalArgumentException("해당 bookMapDetail이 없습니다. " + bookMapDetailId));
+//        if (bookMapDetailEntity.getType() == "Book"){
+//            for (BookListEntity bookListEntity : bookListRepository.findByBookMapDetail(bookMapDetailEntity)){
+//                bookListRepository.delete(bookListEntity);
+//            }
+//        }
+//        bookMapDetailRepository.delete(bookMapDetailEntity);
+//
+//    }
+//
+//    @Override
+//    public void bookListDelete(Long bookListId){
+//        BookListEntity bookListEntity = bookListRepository.findById(bookListId)
+//                .orElseThrow(() -> new
+//                        IllegalArgumentException("해당 bookList가 없습니다." + bookListId));
+//        bookListRepository.delete(bookListEntity);
+//    }
 
 
 
