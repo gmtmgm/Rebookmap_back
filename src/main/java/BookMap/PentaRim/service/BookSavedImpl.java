@@ -314,11 +314,15 @@ public class BookSavedImpl implements BookSaved{
         String isbnFirst = new String();
         if(isbn.contains(" ")){
             String[] stringList = isbn.split(" ");
-            isbnFirst = stringList[0];
+            if(stringList[0].isEmpty()){
+                isbnFirst = stringList[1];
+            }else{
+                isbnFirst = stringList[0];
+            }
         }else{
             isbnFirst = isbn;
         }
-        if (checkSavedOrNot(id, isbn)) {
+        if (checkSavedOrNot(id, isbnFirst)) {
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
             Book book = bookRepository.findByIsbn(isbnFirst).orElseThrow(
