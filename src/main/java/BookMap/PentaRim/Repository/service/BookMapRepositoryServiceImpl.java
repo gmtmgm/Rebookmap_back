@@ -37,6 +37,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     @Override
     public BookMap EntityToBookMap(Long bookMapId) { //저장소 > BookMap 객체
         BookMap bookMap = new BookMap();
+        bookMap.setBookMapId(bookMapId);
         BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("북맵 없음" + bookMapId));
@@ -101,13 +102,15 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
         List<BookMapEntity> bookMapEntity = bookMapRepository.findByUserOrderByBookMapSaveTime(user); //예외처리 안하기!!
-        List<List<MapHashTag>> mapHashTags = new ArrayList<>();
-        for(BookMapEntity bookMap: bookMapEntity){
-            mapHashTags.add(mapTagRepository.findAllByBookMap(bookMap));
-        }
+
         List<BookMapResponseDto> bookMapList = new ArrayList<>();
         for (BookMapEntity bookMap : bookMapEntity){
-            bookMapList.add(new BookMapResponseDto(bookMap, null));
+            List<MapHashTag> mapHashTags = mapTagRepository.findAllByBookMap(bookMap);
+            List<String> hashTags = new ArrayList<>();
+            for(MapHashTag mapHashTag: mapHashTags){
+                hashTags.add(mapHashTag.getHashTag().getTag());
+            }
+            bookMapList.add(new BookMapResponseDto(bookMap, hashTags));
         }
         return bookMapList;
     }
