@@ -29,9 +29,11 @@ public class BookSearchService {
         try {
             if(keyword.contains(" ")){
                 String[] isbn = keyword.split(" ");
-                keyword = isbn[0];
-            }else{
-
+                if(isbn[0].isEmpty()){
+                    keyword = isbn[1];
+                }else{
+                    keyword = isbn[0];
+                }
             }
 
             ClientHttpRequestFactory factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
