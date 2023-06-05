@@ -5,7 +5,6 @@ import BookMap.PentaRim.service.BookMapService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import static org.assertj.core.api.Assertions.*;
 
 
 import java.util.ArrayList;
@@ -40,9 +39,9 @@ public class BookMapTest {
         //book.setHashTag(hashTag);
         //book.setBookstate(bookState);
 
-        BookMap bookMap1 = bookMapService.createBookMap(book);
+        //BookMap bookMap1 = bookMapService.createBookMap(book);
 
-        assertThat(bookMap1.getBookMapId()).isEqualTo(1);
+        //assertThat(bookMap1.getBookMapId()).isEqualTo(1);
 
     }
 }

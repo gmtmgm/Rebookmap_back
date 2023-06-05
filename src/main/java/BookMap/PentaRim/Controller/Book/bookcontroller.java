@@ -1,6 +1,7 @@
 package BookMap.PentaRim.Controller.Book;
 
 import BookMap.PentaRim.Book.Dto.*;
+import BookMap.PentaRim.User.CustomUserDetails;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.UserRequestDto;
@@ -11,12 +12,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("https://a934-203-255-63-30.ngrok-free.app")
 @Slf4j
 public class bookcontroller {
 
@@ -101,19 +103,24 @@ public class bookcontroller {
      * @param id
      * @return 메인페이지 요소들
      */
+
     @GetMapping("/main/{id}")
     public ResponseEntity<?> main_test(@PathVariable Long id){
         return new ResponseEntity<>(totalService.main(id), HttpStatus.OK);
     }
-    /*
+
+
+
 
     @GetMapping("/main")
-    public ResponseEntity<?> main(Authentication authentication){
+    public ResponseEntity<?> main(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         return new ResponseEntity<>(totalService.main(customUserDetails.getUser().getId()), HttpStatus.OK);
     }
 
-     */
+
+
 
     @GetMapping("/mostbooks")
     public ResponseEntity<?> mostBooks(){
@@ -177,7 +184,6 @@ public class bookcontroller {
     public ResponseEntity<?> detailPage(@RequestParam String isbn){
         return new ResponseEntity<>(bookSearchService.searchBooks(isbn), HttpStatus.OK);
     }
-
      */
 
 

@@ -23,10 +23,8 @@ public class SearchBookTest {
         //isbn으로 검색하면 한 개만 나옵니다.
         assertThat(book.getIsbn()).isEqualTo("8996991341"); //저장은 10과 13이 string으로 "156151 156154"으로 저장됩니다.
 
-        //프린트하려고 Book 객체에다가 @Tostring으로 넣어놨습니다.(나중에 수정하셔도 됩니다!)
-        System.out.println(book);
 
-        //실행: Book(title=미움받을 용기, author=[기시미 이치로, 고가 후미타케], publisher=인플루엔셜, hashTag=null, publishedDay=Mon Nov 17 00:00:00 KST 2014,
+        //프린트 실행: Book(title=미움받을 용기, author=[기시미 이치로, 고가 후미타케], publisher=인플루엔셜, hashTag=null, publishedDay=Mon Nov 17 00:00:00 KST 2014,
         // isbn=8996991341 9788996991342, image=https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1467038%3Ftimestamp%3D20230128141840)
 
         //참고
