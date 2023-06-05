@@ -2,6 +2,10 @@ package BookMap.PentaRim.BookMap.Test;
 
 import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.BookMap.BookMap;
+import BookMap.PentaRim.BookMap.BookMapEntity;
+import BookMap.PentaRim.BookMap.Dto.BookMapScrapRequestDto;
+import BookMap.PentaRim.Repository.BookMapRepository;
+import BookMap.PentaRim.Repository.service.BookMapRepositoryService;
 import BookMap.PentaRim.service.BookSaved;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookMapUpdateTest {
     final BookSaved bookSaved;
+    final BookMapRepositoryService bookMapRepositoryService;
+    final BookMapRepository bookMapRepository;
 
     public BookMap bookMapTest(Long bookMapId){
         BookMap bookMap = new BookMap();
@@ -34,9 +40,16 @@ public class BookMapUpdateTest {
             }
             map.add(book);
         }
-        bookMap.addObj(map);
-        bookMap.addObj("BookMap 메모 테스트");
+        bookMap.addObj(map, 1L);
+        bookMap.addObj("BookMap 메모 테스트", 2L);
 
         return bookMap;
+    }
+
+    public void scrapTest(){
+        BookMapEntity bookMap = bookMapRepository.findById(1L).orElseThrow();
+        BookMapScrapRequestDto bookMapScrapRequestDto = new BookMapScrapRequestDto();
+        bookMapScrapRequestDto.setBookMap(bookMap);
+        bookMapRepositoryService.saveBookMapScrap(1L, bookMapScrapRequestDto);
     }
 }
