@@ -1,5 +1,6 @@
 package BookMap.PentaRim.Controller.BookMap;
 
+import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.Dto.*;
 import BookMap.PentaRim.Repository.service.BookMapRepositoryService;
@@ -50,15 +51,20 @@ public class BookMapController {
     }
 
     @PostMapping("/bookmap/update/{bookMapId}")
-    public BookMap bookMapUpdate(@PathVariable Long bookMapId, @RequestBody BookMap bookMap){
-        BookMap newBookMap = bookMapRepositoryService.updateBookMapAll(bookMapId,
-                bookMapRepositoryService.ToBookMapRequestDto(bookMap),
-                new ArrayList<>(bookMapRepositoryService.ToBookMapDetail(bookMap).keySet()),
-                new ArrayList<>(bookMapRepositoryService.ToBookMapDetail(bookMap).values()),
-                new ArrayList<>(bookMapRepositoryService.ToBookList(bookMap).keySet()),
-                new ArrayList<>(bookMapRepositoryService.ToBookList(bookMap).values())
-        );
-        return newBookMap;
+    public BookMap bookMapUpdate(@PathVariable Long bookMapId, @RequestBody BookMap bookMap) {
+
+//        BookMap newBookMap = bookMapRepositoryService.updateBookMapAll(bookMapId,
+//                bookMapRepositoryService.ToBookMapRequestDto(bookMap),
+////                new ArrayList<>(bookMapRepositoryService.ToBookMapDetail(bookMap).keySet()),
+////                new ArrayList<>(bookMapRepositoryService.ToBookMapDetail(bookMap).values()),
+////                new ArrayList<>(bookMapRepositoryService.ToBookList(bookMap).keySet()),
+////                new ArrayList<>(bookMapRepositoryService.ToBookList(bookMap).values()
+//                bookMapRepositoryService.ToBookMapDetail(bookMap),
+//                bookMapRepositoryService.ToBookList(bookMap)
+//        );
+//        return newBookMap;
+        bookMapRepositoryService.updateBookMapAll(bookMapId, bookMap);
+        return bookMap;
     }
 
 
@@ -69,20 +75,20 @@ public class BookMapController {
 
 
 
-    @PostMapping("/bookmap/hashtag/save/{id}")
-    public void savetags(@PathVariable Long id, @RequestBody TagRequestDto tagRequestDto){
-        bookMapRepositoryService.tagssave(id, tagRequestDto);
-    }
+//    @PostMapping("/bookmap/hashtag/save/{id}")
+//    public void savetags(@PathVariable Long id, @RequestBody TagRequestDto tagRequestDto){
+//        bookMapRepositoryService.tagssave(id, tagRequestDto);
+//    }
 
-    @PostMapping("/bookmap/hashtag/update/{id}")
-    public void updateTags(@PathVariable Long id, @RequestBody TagRequestDto tagRequestDto){
-        bookMapRepositoryService.tagsUpdate(id, tagRequestDto);
-    }
+//    @PostMapping("/bookmap/hashtag/update/{id}")
+//    public void updateTags(@PathVariable Long id, @RequestBody TagRequestDto tagRequestDto){
+//        bookMapRepositoryService.tagsUpdate(id, tagRequestDto);
+//    }
 
-    @DeleteMapping("/bookmap/hashtag/deleteall/{id}")
-    public void deleteAllTags(@PathVariable Long id){
-        bookMapRepositoryService.tagsDelete(id);
-    }
+//    @DeleteMapping("/bookmap/hashtag/deleteall/{id}")
+//    public void deleteAllTags(@PathVariable Long id){
+//        bookMapRepositoryService.tagsDelete(id);
+//    }
 
     //해쉬태그를 따로 로딩하는 형식이 아니여서 북맵 로딩에 합쳐야 할듯
 

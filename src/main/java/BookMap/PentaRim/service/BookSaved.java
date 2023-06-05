@@ -1,5 +1,6 @@
 package BookMap.PentaRim.service;
 
+import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Book.BookPersonal;
 import BookMap.PentaRim.Book.BookState;
 import BookMap.PentaRim.Book.Dto.*;
@@ -12,6 +13,7 @@ import java.util.Optional;
 public interface BookSaved {
 
     boolean booksave(Long id, String isbn, BookPersonalRequestDto bookPersonalRequestDto);
+    Book saveBookToRepo(String isbn);
 
     void changeState(Long id, String isbn, BookPersonalUpdateStateDto bookPersonalUpdateStateDto);
 

@@ -1,5 +1,6 @@
 package BookMap.PentaRim.BookMap.Dto;
 
+import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.BookMapEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +35,14 @@ public class BookMapResponseDto {
         this.bookMapContent = bookMapEntity.getBookMapContent();
         this.bookMapImage = bookMapEntity.getBookMapImage();
         this.share = bookMapEntity.isShare();
+    }
+
+    public void toBookMap(BookMap bookMap){
+        bookMap.setBookMapTitle(this.bookMapTitle);
+        bookMap.setBookMapContent(this.bookMapContent);
+        bookMap.setBookMapImage(this.bookMapImage);
+        bookMap.setHashTag(this.hashTag);
+        bookMap.setShare(this.share);
     }
 
 

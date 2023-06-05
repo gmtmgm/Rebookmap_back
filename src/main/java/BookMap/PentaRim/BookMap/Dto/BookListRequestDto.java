@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class BookListRequestDto {
 
-//    private BookMapDetailEntity bookMapDetail;
+    private BookMapDetailEntity bookMapDetail;
     private Book book;
     private int index;
 
@@ -28,7 +28,7 @@ public class BookListRequestDto {
 
     public BookListEntity toEntity(){
         return BookListEntity.builder()
-//                .bookMapDetail(bookMapDetail)
+                .bookMapDetail(bookMapDetail)
                 .book(book)
                 .index(index)
                 .build();

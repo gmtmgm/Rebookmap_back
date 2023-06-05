@@ -29,24 +29,27 @@ public class BookSavedImpl implements BookSaved{
     final BookPersonalRepository bookPersonalRepository;
     final BookMemoRepository bookMemoRepository;
     final BookSearchService bookSearchService;
+
     @Override
     @Transactional
     public boolean booksave(Long id, String isbn, BookPersonalRequestDto bookPersonalRequestDto) {
-        Book book = bookSearchService.searchBooks(isbn);
+//        Book book = bookSearchService.searchBooks(isbn);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
 
-        //OrElse로 변경 가능함!
-        if(bookRepository.existsByIsbn(book.getIsbn())){  //책 존재할 경우 그냥 넘어감
-            Book alreadySavedBook = bookRepository.findByIsbn(book.getIsbn())
-                    .orElseThrow(() ->  new
-                            IllegalArgumentException("해당 book이 없습니다."));
-            bookPersonalRequestDto.setBook(alreadySavedBook);
-        }else{
-            bookRepository.save(book);  //존재하지 않을경우 book DB에 저장
-            bookPersonalRequestDto.setBook(book);
-        }
+//        //OrElse로 변경 가능함!
+//        if(bookRepository.existsByIsbn(book.getIsbn())){  //책 존재할 경우 그냥 넘어감
+//            Book alreadySavedBook = bookRepository.findByIsbn(book.getIsbn())
+//                    .orElseThrow(() ->  new
+//                            IllegalArgumentException("해당 book이 없습니다."));
+//            bookPersonalRequestDto.setBook(alreadySavedBook);
+//        }else{
+//            bookRepository.save(book);  //존재하지 않을경우 book DB에 저장
+//            bookPersonalRequestDto.setBook(book);
+//        }
+        Book book = saveBookToRepo(isbn);
+        bookPersonalRequestDto.setBook(book);
 
         if(bookPersonalRepository.existsByBookAndUser(bookPersonalRequestDto.getBook(),user)){
             return false;
@@ -56,6 +59,20 @@ public class BookSavedImpl implements BookSaved{
             bookPersonalRepository.save(bookPersonalRequestDto.toEntity());
             return true;
         }
+    }
+
+    @Override
+    @Transactional
+    public Book saveBookToRepo(String isbn){
+        Book book = bookSearchService.searchBooks(isbn);
+        if(bookRepository.existsByIsbn(book.getIsbn())){
+            book = bookRepository.findByIsbn(book.getIsbn())
+                    .orElseThrow(() ->  new
+                            IllegalArgumentException("해당 book이 없습니다."));
+        } else{
+            bookRepository.save(book);
+        }
+        return book;
     }
 
     @Override
