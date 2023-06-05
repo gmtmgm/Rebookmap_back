@@ -46,7 +46,7 @@ public class TotalServiceImpl implements TotalService{
         for(Book book: bookList){
             bookImageDtos.add(new BookImageDto(book));
         }
-        List<BookMapEntity> bookMap = bookMapRepository.findByUser(user);
+        List<BookMapEntity> bookMap = bookMapRepository.findByUserOrderByBookMapSaveTime(user);
         List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
         for(BookMapEntity bookMapEntity: bookMap) {
             bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity));

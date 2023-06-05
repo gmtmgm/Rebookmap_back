@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -19,12 +21,14 @@ public class BookMapSaveRequestDto {
     private String bookMapTitle; //북맵이름
     private String bookMapContent; //북맵설명
     private User user;
+    private LocalDateTime bookMapSaveTime;
 
     @Builder
-    public BookMapSaveRequestDto(String bookMapTitle, String bookMapContent, User user) {
+    public BookMapSaveRequestDto(String bookMapTitle, String bookMapContent, User user, LocalDateTime bookMapSaveTime) {
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
         this.user = user;
+        this.bookMapSaveTime = bookMapSaveTime;
     }
 
     public BookMapEntity toEntity() {
@@ -32,6 +36,7 @@ public class BookMapSaveRequestDto {
                 .bookMapTitle(bookMapTitle)
                 .bookMapContent(bookMapContent)
                 .user(user)
+                .bookMapSaveTime(bookMapSaveTime)
                 .build();
     }
 

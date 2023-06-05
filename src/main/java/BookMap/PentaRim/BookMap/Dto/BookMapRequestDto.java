@@ -36,6 +36,7 @@ public class BookMapRequestDto {
         return BookMapEntity.builder()
                 .bookMapTitle(bookMapTitle)
                 .bookMapContent(bookMapContent)
+                .bookMapImage(bookMapImage)
                 .share(share)
                 .build();
     }

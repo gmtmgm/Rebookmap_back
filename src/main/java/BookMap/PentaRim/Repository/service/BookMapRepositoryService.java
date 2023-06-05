@@ -1,7 +1,7 @@
 package BookMap.PentaRim.Repository.service;
 
-import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.BookMap.BookMap;
+import BookMap.PentaRim.BookMap.BookMapEntity;
 import BookMap.PentaRim.BookMap.Dto.*;
 
 import java.util.LinkedHashMap;
@@ -14,24 +14,27 @@ public interface BookMapRepositoryService {
     BookMapRequestDto ToBookMapRequestDto(BookMap bookMap);
     LinkedHashMap<Long, BookMapDetailRequestDto> ToBookMapDetail(BookMap bookMap);
     LinkedHashMap<Long, BookListRequestDto> ToBookList(BookMap bookMap);
-    List<BookMapResponseDto> findByUserId(Long userId);
-    List<BookMapDetailResponseDto> findByBookMapId(Long bookMapId);
-    List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId);
-    //BookListResponseDto findByBookListId(Long bookListId);
-    Book findByBookListId(Long bookListId);
-    BookMapDetailResponseDto BookMapDetailEntityToDto(Long bookMapDetailId);
+    List<String> findHashTagByBookMap(BookMapEntity bookMapEntity);
+    List<BookMapResponseDto> findBookMapsByUserId(Long userId);
+//    List<BookMapDetailResponseDto> findByBookMapId(Long bookMapId);
+//    List<BookListResponseDto> findByBookMapDetailId(Long bookMapDetailId);
+//    BookListResponseDto findByBookListId(Long bookListId);
+//    Book findByBookListId(Long bookListId);
+//    BookMapDetailResponseDto BookMapDetailEntityToDto(Long bookMapDetailId);
     void saveBookMap(Long userId, BookMapSaveRequestDto bookMapSaveRequestDto);
     void updateBookMap(Long bookMapId, BookMapRequestDto bookMapRequestDto);
     void updateBookMapDetail(Long bookMapDetailId, BookMapDetailRequestDto bookMapDetailRequestDto);
     void updateBookList(Long bookListId, BookListRequestDto bookListRequestDto);
+    BookMap updateBookMapAll(Long bookMapId, BookMapRequestDto bookMapRequestDto,
+                             List<Long> bookMapDetailIds, List<BookMapDetailRequestDto> bookMapDetailRequestDtos,
+                             List<Long> bookListIds, List<BookListRequestDto> bookListRequestDtos);
     void bookMapDelete(Long bookMapId);
-    void bookMapDetailDelete(Long bookMapDetailId);
-    void bookListDelete(Long bookListId);
+//    void bookMapDetailDelete(Long bookMapDetailId);
+//    void bookListDelete(Long bookListId);
     void tagssave(Long id, TagRequestDto tagRequestDto);
     void tagsUpdate(Long id, TagRequestDto tagRequestDto);
     void tagsDelete(Long id);
     List<BookMapResponseDto> findBookMapByTag(String tag);
-    BookMap updateBookMapAll(Long bookMapId, BookMapRequestDto bookMapRequestDto,
-                          List<Long> bookMapDetailIds, List<BookMapDetailRequestDto> bookMapDetailRequestDtos,
-                          List<Long> bookListIds, List<BookListRequestDto> bookListRequestDtos);
+    List<BookMapResponseDto> searchBookMap(String text);
+
 }

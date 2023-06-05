@@ -2,7 +2,6 @@ package BookMap.PentaRim.Controller.BookMap;
 
 import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.Dto.*;
-import BookMap.PentaRim.Repository.BookMapRepository;
 import BookMap.PentaRim.Repository.service.BookMapRepositoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,20 +16,15 @@ import java.util.ArrayList;
 @CrossOrigin("https://8172-203-255-63-30.ngrok-free.app")
 public class BookMapController {
 
-    private final BookMapRepository bookMapRepository;
     private final BookMapRepositoryService bookMapRepositoryService;
 
 
     @GetMapping("/bookmap/{userId}")
     public ResponseEntity<?> userBookMapLoad(@PathVariable Long userId){
-        return new ResponseEntity<>(bookMapRepositoryService.findByUserId(userId), HttpStatus.OK);
+        return new ResponseEntity<>(bookMapRepositoryService.findBookMapsByUserId(userId), HttpStatus.OK);
     }
 
-//    @GetMapping("/bookmap/{bookMapId}")
-//    public ResponseEntity<?> BookMapLoad(@PathVariable Long bookMapId){
-//        return new ResponseEntity<>(bookMapRepositoryService.findByBookMapId(bookMapId), HttpStatus.OK);
-//    }
-    @GetMapping("/bookmap/{bookMapId}")
+    @GetMapping("/bookmap/view/{bookMapId}")
     public BookMap bookMapLoad(@PathVariable Long bookMapId){
         return bookMapRepositoryService.EntityToBookMap(bookMapId);
     }
@@ -89,6 +83,8 @@ public class BookMapController {
     public void deleteAllTags(@PathVariable Long id){
         bookMapRepositoryService.tagsDelete(id);
     }
+
+    //해쉬태그를 따로 로딩하는 형식이 아니여서 북맵 로딩에 합쳐야 할듯
 
     @GetMapping("/bookmap/hashtag")
     public ResponseEntity<?> bookmap(@RequestParam String tag){

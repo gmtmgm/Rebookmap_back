@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -34,21 +35,22 @@ public class BookMapEntity {
     private String bookMapImage; //대표 이미지 첫 책에서 받아오기
     @Column
     private boolean share = true;
-
+    @Column
+    private LocalDateTime bookMapSaveTime;
     @OneToMany(mappedBy = "bookMap")
     private List<MapHashTag> mapHashTags;
 
 
 
-
     @Builder
-    public BookMapEntity(Long bookMapId, User user, String bookMapTitle, String bookMapContent, String bookMapImage, boolean share){
+    public BookMapEntity(Long bookMapId, User user, String bookMapTitle, String bookMapContent, String bookMapImage, boolean share, LocalDateTime bookMapSaveTime){
         this.bookMapId = bookMapId;
         this.user = user;
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
         this.bookMapImage = bookMapImage;
-        this.share = isShare();
+        this.share = share;
+        this.bookMapSaveTime = bookMapSaveTime;
         //this.hashTag = hashTag;
     }
 
@@ -56,7 +58,7 @@ public class BookMapEntity {
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
         this.bookMapImage = bookMapImage;
-        this.share = isShare();
+        this.share = share;
         //this.hashTag = hashTag;
     }
 
