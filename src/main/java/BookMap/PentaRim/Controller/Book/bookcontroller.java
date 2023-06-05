@@ -110,8 +110,6 @@ public class bookcontroller {
     }
 
 
-
-
     @GetMapping("/main")
     public ResponseEntity<?> main(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -131,6 +129,13 @@ public class bookcontroller {
     @GetMapping("/bookshelf/allbooks/{id}")
     public ResponseEntity<?> bookshelf(@PathVariable Long id){
         return new ResponseEntity<>(totalService.bookshelf(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/bookshelf/allbooks")
+    public ResponseEntity<?> bookshelf(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return new ResponseEntity<>(totalService.bookshelf(customUserDetails.getUser().getId()), HttpStatus.OK);
     }
 
     @GetMapping("/bookshelf/readbooks/{id}")

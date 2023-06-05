@@ -129,12 +129,18 @@ public class TotalServiceImpl implements TotalService{
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
+        String status;
+        if(user.getBook_state() == null){
+            status = "";
+        }else{
+            status = user.getBook_state();
+        }
         Integer count = bookSaved.findByMonthCount(id);
         List<BookMemo> bookMemoList = bookMemoRepository.findByBookPersonal_UserOrderBySavedDesc(user);
         List<ProfileMemoResponseDto> profileMemoResponseDtoList = new ArrayList<>();
         for(BookMemo bookMemo: bookMemoList){
             profileMemoResponseDtoList.add(new ProfileMemoResponseDto(bookMemo));
         }
-        return new ProfileResponseDto(user, count, profileMemoResponseDtoList);
+        return new ProfileResponseDto(user, count, status, profileMemoResponseDtoList);
     }
 }

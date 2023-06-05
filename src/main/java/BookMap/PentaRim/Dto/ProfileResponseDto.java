@@ -10,13 +10,14 @@ import java.util.List;
 public class ProfileResponseDto {
     private Long id;
     private String nickName;
-    //private String state;
+    private String status;
     private Integer readBooksCount;
     private List<ProfileMemoResponseDto> profileMemoResponseDtos;
 
-    public ProfileResponseDto(User user, Integer readBooksCount, List<ProfileMemoResponseDto> profileMemoResponseDtos){
+    public ProfileResponseDto(User user, Integer readBooksCount, String status, List<ProfileMemoResponseDto> profileMemoResponseDtos){
         this.id = user.getId();
         this.nickName = user.getNickname();
+        this.status = status;
         this.readBooksCount = readBooksCount;
         this.profileMemoResponseDtos = profileMemoResponseDtos;
     }
