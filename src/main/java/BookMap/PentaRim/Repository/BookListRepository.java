@@ -12,4 +12,5 @@ public interface BookListRepository extends JpaRepository<BookListEntity,Long> {
     List<BookListEntity> findByBookMapDetailOrderByIndex(BookMapDetailEntity bookMapDetailEntity);
     BookListEntity findByBookListId(Long bookListId);
     List<BookListEntity> findByBookMapDetail(BookMapDetailEntity bookMapDetailEntity);
+    boolean existsByBookListId(Long bookListId);
 }

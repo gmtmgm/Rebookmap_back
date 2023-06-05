@@ -1,6 +1,7 @@
 package BookMap.PentaRim.BookMap.Dto;
 
 import BookMap.PentaRim.BookMap.BookMapDetailEntity;
+import BookMap.PentaRim.BookMap.BookMapEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class BookMapDetailRequestDto {
 
-//    private BookMapEntity bookMapEntity;
+    private BookMapEntity bookMapEntity;
     private String type;
     private String memo;
     private int index;
@@ -37,7 +38,7 @@ public class BookMapDetailRequestDto {
 
     public BookMapDetailEntity toEntity(){
         return BookMapDetailEntity.builder()
-//                .bookMapEntity(bookMapEntity)
+                .bookMapEntity(bookMapEntity)
                 .type(type)
                 .memo(memo)
                 .index(index)

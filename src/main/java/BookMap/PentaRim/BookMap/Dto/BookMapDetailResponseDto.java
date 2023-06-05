@@ -1,6 +1,7 @@
 package BookMap.PentaRim.BookMap.Dto;
 
 
+import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.BookMapDetailEntity;
 import BookMap.PentaRim.BookMap.BookMapEntity;
 import lombok.Getter;
@@ -21,12 +22,5 @@ public class BookMapDetailResponseDto {
         if (type == "Memo") { this.memo = bookMapDetailEntity.getMemo(); }
         this.index = bookMapDetailEntity.getIndex();
     }
-/*
-    public void toBookMapDetail(BookMap.BookMapDetail bookMapDetail){
-        bookMapDetail.setBookMapDetailId(bookMapDetailId);
-        bookMapDetail.setType(type);
-        bookMapDetail.setIndex(index);
-        if (type == "Memo") { bookMapDetail.setMemo(memo); }
-    }
- */
+
 }

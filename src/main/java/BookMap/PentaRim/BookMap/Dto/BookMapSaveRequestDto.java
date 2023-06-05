@@ -22,13 +22,15 @@ public class BookMapSaveRequestDto {
     private String bookMapContent; //북맵설명
     private User user;
     private LocalDateTime bookMapSaveTime;
+    private boolean share;
 
     @Builder
-    public BookMapSaveRequestDto(String bookMapTitle, String bookMapContent, User user, LocalDateTime bookMapSaveTime) {
+    public BookMapSaveRequestDto(String bookMapTitle, String bookMapContent, User user, LocalDateTime bookMapSaveTime, boolean share) {
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
         this.user = user;
         this.bookMapSaveTime = bookMapSaveTime;
+        this.share = share;
     }
 
     public BookMapEntity toEntity() {
@@ -37,6 +39,7 @@ public class BookMapSaveRequestDto {
                 .bookMapContent(bookMapContent)
                 .user(user)
                 .bookMapSaveTime(bookMapSaveTime)
+                .share(share)
                 .build();
     }
 

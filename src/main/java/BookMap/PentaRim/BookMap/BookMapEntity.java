@@ -34,7 +34,7 @@ public class BookMapEntity {
     @Column
     private String bookMapImage; //대표 이미지 첫 책에서 받아오기
     @Column
-    private boolean share = true;
+    private boolean share;
     @Column
     private LocalDateTime bookMapSaveTime;
     @OneToMany(mappedBy = "bookMap")

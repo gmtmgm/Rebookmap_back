@@ -11,4 +11,5 @@ public interface BookMapDetailRepository extends JpaRepository<BookMapDetailEnti
     List<BookMapDetailEntity> findByBookMapEntityOrderByIndex(BookMapEntity bookMapEntity);
     BookMapDetailEntity findByBookMapDetailId(Long bookMapDetailId);
     List<BookMapDetailEntity> findByBookMapEntity(BookMapEntity bookMapEntity);
+    boolean existsByBookMapDetailId(Long bookMapDetailId);
 }
