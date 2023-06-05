@@ -15,6 +15,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -54,8 +57,10 @@ public class BookSearchService {
             SearchListBooks searchListBooks = resultResponseEntity.getBody();
             SearchListBooks.Item searchBook = searchListBooks.getBooks().get(0);
             String author = String.join(", ",searchBook.getAuthor());
+            Instant instant = searchBook.getPublishedDay().toInstant();
+            LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
 
-            Book book = new Book(searchBook.getTitle(),author, searchBook.getPublisher(),keyword ,searchBook.getImage(), searchBook.getPublishedDay(), searchBook.getDescription());
+            Book book = new Book(searchBook.getTitle(),author, searchBook.getPublisher(),keyword ,searchBook.getImage(), localDate, searchBook.getDescription());
 
             return book;  //isbn으로 검색시 고유의 id이므로 하나의 책밖에 안뜸, isbn은 10나 13자리중 먼저 뜨는 걸로 찾음
 

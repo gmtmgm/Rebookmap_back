@@ -4,13 +4,13 @@ import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Dto.BookPersonalStateResponseDto;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.LocalDate;
 @Getter
 public class SearchBookResponseDto implements BookPersonalStateResponseDto {
     private String title;
     private String author;
     private String publisher;
-    private Date publishedDay;
+    private LocalDate publishedDay;
     private String isbn;
     private String image;
     private String description;

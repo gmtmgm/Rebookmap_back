@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Component
@@ -28,7 +29,7 @@ public class Book implements Serializable {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date publishedDay;
+    private LocalDate publishedDay;
     @Column(unique = true)
     private String isbn;
 
@@ -40,7 +41,7 @@ public class Book implements Serializable {
 
     public Book(){
     }
-    public Book(String title, String author, String publisher, String isbn, String image, Date publishedDay, String description){
+    public Book(String title, String author, String publisher, String isbn, String image, LocalDate publishedDay, String description){
         this.isbn = isbn;
         this.author = author;
         this.publisher = publisher;

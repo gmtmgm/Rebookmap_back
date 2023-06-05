@@ -4,7 +4,7 @@ package BookMap.PentaRim.Book.Dto;
 import BookMap.PentaRim.Book.Book;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 public class BookResponseDto {
@@ -12,7 +12,7 @@ public class BookResponseDto {
     private String title;
     private String author;
     private String publisher;
-    private Date publishedDay;
+    private LocalDate publishedDay;
     private String isbn;
     private String image;
     private String description;
