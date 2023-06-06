@@ -32,31 +32,45 @@ public class BookMapController {
         return bookMapRepositoryService.EntityToBookMap(bookMapId);
     }
 
+    @GetMapping("/bookmap/search/{text}") //검색 페이지
+    public ResponseEntity<?> bookMapSearchLoad(@PathVariable String text){
+        return new ResponseEntity<>(bookMapRepositoryService.searchBookMap(text), HttpStatus.OK);
+    }
+
 
 
     @PostMapping("/bookmap/save/{userId}") //특정 유저의 북맵 저장
-    public void bookMapSave(@PathVariable Long userId, @RequestBody BookMapSaveRequestDto bookMapSaveRequestDto){
-        bookMapRepositoryService.saveBookMap(userId, bookMapSaveRequestDto);
-        //아직 이 시점에서는 요구하는 값 없으므로 void로 두기
+    public Long bookMapSave(@PathVariable Long userId, @RequestBody BookMapSaveRequestDto bookMapSaveRequestDto){
+        return bookMapRepositoryService.saveBookMap(userId, bookMapSaveRequestDto);
+    }
+
+    @PostMapping("/bookmap/scrap/save/{userId}") //특정 유저의 북맵 스크랩 저장
+    public boolean userBookMapScrapSave(@PathVariable Long userId, @RequestBody BookMapScrapRequestDto bookMapScrapRequestDto){
+        return bookMapRepositoryService.saveBookMapScrap(userId, bookMapScrapRequestDto);
+    }
+
+    @PostMapping("bookmap/tomy/save/{userId}/{bookMapId}") //다른 유저의 북맵을 내걸로 저장
+    public void bookMapSaveToMy(@PathVariable Long userId, @PathVariable Long bookMapId){
+        bookMapRepositoryService.saveToMyBookMap(userId, bookMapId);
     }
 
     @PostMapping("/bookmap/update/{bookMapId}") //특정 북맵의 북맵 수정
     public BookMap bookMapUpdate(@PathVariable Long bookMapId, @RequestBody BookMap bookMap) {
         bookMapRepositoryService.updateBookMapAll(bookMapId, bookMap);
         return bookMap;
-    }
+    } //내용 확인용으로 리턴값 넣은거라 나중에 고치기
 
-    @PostMapping("/bookmap/scrap/save/{userId}") //특정 유저의 북맵 스크랩 저장
-    public void userBookMapScrapSave(@PathVariable Long userId, @RequestBody BookMapScrapRequestDto bookMapScrapRequestDto){
-        bookMapRepositoryService.saveBookMapScrap(userId, bookMapScrapRequestDto);
-    }
+
+
 
     @DeleteMapping("/bookmap/delete/{bookMapId}") //특정 북맵 삭제
     public void deleteBookMap(@PathVariable Long bookMapId){ bookMapRepositoryService.bookMapDelete(bookMapId); }
 
+    @DeleteMapping("/bookmap/scrap/delete/{bookMapScrapId}") //특정 스크랩 삭제
+    public void deleteBookMapScrap(@PathVariable Long bookMapScrapId){ bookMapRepositoryService.bookMapScrapDelete(bookMapScrapId); }
 
-    @GetMapping("/bookmap/hashtag")
-    public ResponseEntity<?> bookmap(@RequestParam String tag){
-        return new ResponseEntity<>(bookMapRepositoryService.findBookMapByTag(tag), HttpStatus.OK);
-    }
+//    @GetMapping("/bookmap/hashtag")
+//    public ResponseEntity<?> bookmap(@RequestParam String tag){
+//        return new ResponseEntity<>(bookMapRepositoryService.findBookMapByTag(tag), HttpStatus.OK);
+//    }
 }

@@ -16,14 +16,16 @@ public interface BookMapRepositoryService {
     List<BookMapResponseDto> findBookMapsByUserId(Long userId);
     List<BookMapResponseDto> findBookMapScrapsByUserId(Long userId);
 
-    void saveBookMap(Long userId, BookMapSaveRequestDto bookMapSaveRequestDto);
-    void saveBookMapScrap(Long userId, BookMapScrapRequestDto bookMapScrapRequestDto);
+    Long saveBookMap(Long userId, BookMapSaveRequestDto bookMapSaveRequestDto);
+    boolean saveBookMapScrap(Long userId, BookMapScrapRequestDto bookMapScrapRequestDto);
+    void saveToMyBookMap(Long userId, Long bookMapId);
 
     void updateBookMap(BookMapEntity bookMapEntity, BookMapRequestDto bookMapRequestDto);
     BookMap updateBookMapAll(Long bookMapId, BookMap bookMap);
 
     void bookMapDelete(Long bookMapId);
     void bookMapDetailDelete(Long bookMapId);
+    void bookMapScrapDelete(Long bookMapScrapId);
 
     void tagssave(BookMapEntity bookMapEntity, TagRequestDto tagRequestDto);
     void tagsUpdate(BookMapEntity bookMapEntity, TagRequestDto tagRequestDto);

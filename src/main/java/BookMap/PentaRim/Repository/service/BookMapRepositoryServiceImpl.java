@@ -1,6 +1,7 @@
 package BookMap.PentaRim.Repository.service;
 
 import BookMap.PentaRim.Book.Book;
+import BookMap.PentaRim.Book.Dto.BookImageDto;
 import BookMap.PentaRim.BookMap.*;
 import BookMap.PentaRim.BookMap.Dto.*;
 import BookMap.PentaRim.Repository.*;
@@ -41,17 +42,21 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 .orElseThrow(() -> new
                         IllegalArgumentException("북맵 없음" + bookMapId));
         BookMapResponseDto bookMapResponseDto = new BookMapResponseDto(bookMapEntity);
-        bookMapResponseDto.setHashTag(findHashTagByBookMap(bookMapEntity));
+        List<String> hashTag = findHashTagByBookMap(bookMapEntity);
+        for(String tag : hashTag){
+            hashTag.set(hashTag.indexOf(tag), "#" + tag);
+        }
+        bookMapResponseDto.setHashTag(hashTag);
         bookMapResponseDto.toBookMap(bookMap);
         List<BookMapDetailEntity> detailList = bookMapDetailRepository.findByBookMapEntityOrderByIndex(bookMapEntity);
-//        List<BookMapDetailResponseDto> detailResponseDtos = new ArrayList<>();
         for(BookMapDetailEntity detail: detailList){
 
             if ("Book".equals(detail.getType())) {
                 List<BookListEntity> bookList = bookListRepository.findByBookMapDetailOrderByIndex(detail);
-                ArrayList<Book> map = new ArrayList<>();
+//                ArrayList<Book> map = new ArrayList<>();
+                ArrayList<BookImageDto> map = new ArrayList<>();
                 for (BookListEntity book: bookList){
-                    map.add(book.getBook());
+                    map.add(new BookImageDto(book.getBook()));
                 }
                 bookMap.addObj(map, detail.getBookMapDetailId());
             } else if ("Memo".equals(detail.getType())) {
@@ -117,14 +122,15 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
     @Override
     @Transactional
-    public void saveBookMap(Long userId, BookMapSaveRequestDto bookMapSaveRequestDto){
+    public Long saveBookMap(Long userId, BookMapSaveRequestDto bookMapSaveRequestDto){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
         bookMapSaveRequestDto.setUser(user);
         bookMapSaveRequestDto.setBookMapSaveTime(LocalDateTime.now());
         bookMapSaveRequestDto.setShare(true);
-        bookMapRepository.save(bookMapSaveRequestDto.toEntity());
+        Long bookMapId = bookMapRepository.save(bookMapSaveRequestDto.toEntity()).getBookMapId();
+        return bookMapId;
     }
 
     public void saveBookMapDetail(BookMapEntity bookMapEntity, BookMapDetailRequestDto bookMapDetailRequestDto){
@@ -139,13 +145,39 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
     @Override
     @Transactional
-    public void saveBookMapScrap(Long userId, BookMapScrapRequestDto bookMapScrapRequestDto){
+    public boolean saveBookMapScrap(Long userId, BookMapScrapRequestDto bookMapScrapRequestDto){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
-        bookMapScrapRequestDto.setUser(user);
-        bookMapScrapRequestDto.setBookMapSaveTime(LocalDateTime.now());
-        bookMapScrapRepository.save(bookMapScrapRequestDto.toEntity());
+        BookMapEntity bookMap = bookMapScrapRequestDto.getBookMap();
+        boolean success = true;
+        if (!bookMapScrapRepository.existsByUserAndBookMap(user, bookMap)) {
+            bookMapScrapRequestDto.setUser(user);
+            bookMapScrapRequestDto.setBookMapSaveTime(LocalDateTime.now());
+            bookMapScrapRepository.save(bookMapScrapRequestDto.toEntity());
+        }
+        else { success = false; }
+        return success;
+    }
+
+    @Override
+    @Transactional
+    public void saveToMyBookMap(Long userId, Long bookMapId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
+        BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("북맵 없음" + bookMapId));
+        BookMapSaveRequestDto bookMapSaveRequestDto = new BookMapSaveRequestDto(
+                bookMapEntity.getBookMapTitle(),
+                bookMapEntity.getBookMapContent(),
+                bookMapEntity.getUser(),
+                LocalDateTime.now(),
+                true
+        );
+        Long newBookMapId = saveBookMap(userId, bookMapSaveRequestDto);
+        updateBookMapAll(newBookMapId, EntityToBookMap(bookMapEntity.getBookMapId()));
     }
 
 
@@ -187,11 +219,14 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
             saveBookMapDetail(bookMapEntity, new BookMapDetailRequestDto(
                     bookMapDetail.getType(), bookMapDetail.getMemo(), bookMapDetails.indexOf(bookMapDetail)));
             if ("Book".equals(bookMapDetail.getType())){
-                ArrayList<Book> map = bookMapDetail.getMap();
+//                ArrayList<Book> map = bookMapDetail.getMap();
+                ArrayList<BookImageDto> map = bookMapDetail.getMap();
                 ArrayList<BookListRequestDto> bookListRequestDtos = new ArrayList<>();
-                for (Book book : map) {
-                    bookSaved.saveBookToRepo(book.getIsbn());
-                    bookListRequestDtos.add(new BookListRequestDto(book, map.indexOf(book)));
+//                for (Book book : map) {
+                for (BookImageDto book : map) {
+//                    bookSaved.saveBookToRepo(book.getIsbn());
+//                    bookListRequestDtos.add(new BookListRequestDto(book, map.indexOf(book)));
+                    bookListRequestDtos.add(new BookListRequestDto(bookSaved.saveBookToRepo(book.getIsbn()), map.indexOf(book)));
                 }
                 listOfBookList.add(bookListRequestDtos);
             }
@@ -207,7 +242,6 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 i++;
             }
         }
-
         return bookMap;
     }
 
@@ -219,11 +253,17 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 bookMap이 없습니다." + bookMapId));
         tagsDelete(bookMapEntity);
-        for (BookMapDetailEntity bookMapDetailEntity : bookMapDetailRepository.findByBookMapEntity(bookMapEntity)){
-            for (BookListEntity bookListEntity : bookListRepository.findByBookMapDetail(bookMapDetailEntity)){
+        List<BookMapDetailEntity> bookMapDetailEntities = bookMapDetailRepository.findByBookMapEntity(bookMapEntity);
+        for (BookMapDetailEntity bookMapDetailEntity : bookMapDetailEntities){
+            List<BookListEntity> bookListEntities = bookListRepository.findByBookMapDetail(bookMapDetailEntity);
+            for (BookListEntity bookListEntity : bookListEntities){
                 bookListRepository.delete(bookListEntity);
             }
             bookMapDetailRepository.delete(bookMapDetailEntity);
+        }
+        List<BookMapScrapEntity> bookMapScrapEntities = bookMapScrapRepository.findAllByBookMap(bookMapEntity);
+        for (BookMapScrapEntity bookMapScrap : bookMapScrapEntities){
+            bookMapScrapRepository.delete(bookMapScrap);
         }
         bookMapRepository.delete(bookMapEntity);
     }
@@ -240,6 +280,15 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
             }
             bookMapDetailRepository.delete(bookMapDetailEntity);
         }
+    }
+
+    @Override
+    @Transactional
+    public void bookMapScrapDelete(Long bookMapScrapId){
+        BookMapScrapEntity bookMapScrap = bookMapScrapRepository.findById(bookMapScrapId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 bookMapScrap이 없습니다." + bookMapScrapId));
+        bookMapScrapRepository.delete(bookMapScrap);
     }
 
     @Override
@@ -311,7 +360,9 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         List<BookMapEntity> bookMapResponseDtosTitle = bookMapRepository.findAllByBookMapTitleContaining(text);
         List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
         for (BookMapEntity bookMapEntity : bookMapResponseDtosTitle){
-            bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity));
+            if (bookMapEntity.isShare()) {
+                bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity));
+            }
         }
         result.addAll(bookMapResponseDtos);
         return result;

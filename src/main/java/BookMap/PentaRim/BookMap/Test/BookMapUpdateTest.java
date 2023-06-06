@@ -40,7 +40,7 @@ public class BookMapUpdateTest {
             }
             map.add(book);
         }
-        bookMap.addObj(map, 1L);
+//        bookMap.addObj(map, 1L);
         bookMap.addObj("BookMap 메모 테스트", 2L);
 
         return bookMap;
