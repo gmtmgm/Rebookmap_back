@@ -222,15 +222,6 @@ public class bookcontroller {
         bookSaved.bookMemoSave(id, isbn, bookMemoRequestDto);
     }
 
-    @PostMapping("/bookmemo/update/{bookMemoId}")
-    public void bookMemoUpdate1(@PathVariable Long bookMemoId, @RequestBody BookMemoRequestDto bookMemoRequestDto){
-        bookSaved.bookMemoUpdate(bookMemoId, bookMemoRequestDto);
-    }
-
-    @DeleteMapping("/bookmemo/delete/{bookMemoId}")
-    public void deletememo1(@PathVariable Long bookMemoId){
-        bookSaved.bookMemoDelete(bookMemoId);
-    }
 
     @GetMapping("/bookmemo/{id}")
     public ResponseEntity<?> bookMemoLoad(@PathVariable Long id, @RequestParam String isbn){
