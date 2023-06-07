@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class BookMapResponseDto {
-
+    private Long bookMapId;
     private String bookMapTitle; //북맵이름
     private String bookMapContent; //북맵설명
     private String bookMapImage;
@@ -21,6 +21,7 @@ public class BookMapResponseDto {
 
 
     public BookMapResponseDto(BookMapEntity bookMapEntity, List<String> hashTag) {
+        this.bookMapId = bookMapEntity.getBookMapId();
         this.bookMapTitle = bookMapEntity.getBookMapTitle();
         this.bookMapContent = bookMapEntity.getBookMapContent();
         this.bookMapImage = bookMapEntity.getBookMapImage();
@@ -31,6 +32,7 @@ public class BookMapResponseDto {
 
 
     public BookMapResponseDto(BookMapEntity bookMapEntity){
+        this.bookMapId = bookMapEntity.getBookMapId();
         this.bookMapTitle = bookMapEntity.getBookMapTitle();
         this.bookMapContent = bookMapEntity.getBookMapContent();
         this.bookMapImage = bookMapEntity.getBookMapImage();
