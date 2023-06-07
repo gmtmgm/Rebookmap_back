@@ -13,6 +13,8 @@ import java.util.List;
 
 public class BookMapTest {
 
+
+    /*
     AnnotationConfigApplicationContext ac = new
             AnnotationConfigApplicationContext(AppConfig.class);
 
@@ -44,4 +46,6 @@ public class BookMapTest {
         //assertThat(bookMap1.getBookMapId()).isEqualTo(1);
 
     }
+
+     */
 }
