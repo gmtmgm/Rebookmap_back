@@ -1,6 +1,5 @@
 package BookMap.PentaRim.Repository.service;
 
-import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Book.Dto.BookImageDto;
 import BookMap.PentaRim.BookMap.*;
 import BookMap.PentaRim.BookMap.Dto.*;
@@ -53,7 +52,6 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
             if ("Book".equals(detail.getType())) {
                 List<BookListEntity> bookList = bookListRepository.findByBookMapDetailOrderByIndex(detail);
-//                ArrayList<Book> map = new ArrayList<>();
                 ArrayList<BookImageDto> map = new ArrayList<>();
                 for (BookListEntity book: bookList){
                     map.add(new BookImageDto(book.getBook()));
@@ -170,9 +168,9 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 .orElseThrow(() -> new
                         IllegalArgumentException("북맵 없음" + bookMapId));
         BookMapSaveRequestDto bookMapSaveRequestDto = new BookMapSaveRequestDto(
-                bookMapEntity.getBookMapTitle(),
+                bookMapEntity.getBookMapTitle() + "의 사본",
                 bookMapEntity.getBookMapContent(),
-                bookMapEntity.getUser(),
+                user,
                 LocalDateTime.now(),
                 true
         );
