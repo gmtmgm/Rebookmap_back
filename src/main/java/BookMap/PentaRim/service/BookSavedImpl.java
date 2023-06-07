@@ -223,10 +223,7 @@ public class BookSavedImpl implements BookSaved{
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
         LocalDate monthStart = LocalDate.of(bookPersonalMonthRequestDto.getYear(),
                 bookPersonalMonthRequestDto.getMonth(), 1);
-        //LocalDate monthStart = LocalDate.of(localDate.getYear(), localDate.getMonth(), 1);
         LocalDate monthEnd = monthStart.plusDays(monthStart.lengthOfMonth()-1);
-        //System.out.println(monthStart);
-        //System.out.println(monthEnd);
         List<BookPersonal> bookPersonalList = bookPersonalRepository.findAllByUserAndEndDateBetween(user, monthStart, monthEnd);
         List<BookPersonalMonthResponseDto> bookPersonalMonthResponseDtos = new ArrayList<>();
         Integer totalBooks = 0;
@@ -362,9 +359,6 @@ public class BookSavedImpl implements BookSaved{
                 return Optional.of(new BookPersonalWishStateResponseDto(bookPersonal, bookResponseDto, bookMemoResponseDtoList));
             }
         }
-
-        //Book book = bookSearchService.searchBooks(isbn);
-
         return Optional.of(new SearchBookResponseDto(bookSearchService.searchBooks(isbn)));
     }
 
