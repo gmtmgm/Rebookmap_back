@@ -2,8 +2,10 @@ package BookMap.PentaRim.Book.Dto;
 
 import BookMap.PentaRim.Book.Book;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class BookImageDto {
     private Long id;
     private String isbn;

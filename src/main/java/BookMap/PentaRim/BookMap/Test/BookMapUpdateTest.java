@@ -1,6 +1,7 @@
 package BookMap.PentaRim.BookMap.Test;
 
 import BookMap.PentaRim.Book.Book;
+import BookMap.PentaRim.Book.Dto.BookImageDto;
 import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.BookMapEntity;
 import BookMap.PentaRim.BookMap.Dto.BookMapScrapRequestDto;
@@ -29,19 +30,34 @@ public class BookMapUpdateTest {
         hashTag.add("태그");
         hashTag.add("태그 확인");
         bookMap.setHashTag(hashTag);
-        ArrayList<Book> map = new ArrayList<>();
+        ArrayList<BookImageDto> map = new ArrayList<>();
         List<String> isbns = new ArrayList<>();
         isbns.add("8996991341");
         isbns.add("9791190090261");
         for(String isbn : isbns){
             Book book = bookSaved.saveBookToRepo(isbn);
+            BookImageDto bookImageDto = new BookImageDto(book);
             if (isbns.indexOf(isbn) == 0){
                 bookMap.setBookMapImage(book.getImage());
             }
-            map.add(book);
+            map.add(bookImageDto);
         }
-//        bookMap.addObj(map, 1L);
+
+        ArrayList<BookImageDto> map2 = new ArrayList<>();
+        List<String> isbns2 = new ArrayList<>();
+        isbns2.add("9791168473690");
+        isbns2.add("9788901272580");
+
+        for(String isbn : isbns2){
+            Book book = bookSaved.saveBookToRepo(isbn);
+            BookImageDto bookImageDto = new BookImageDto(book);
+            map2.add(bookImageDto);
+        }
+
+        bookMap.addObj(map, 1L);
         bookMap.addObj("BookMap 메모 테스트", 2L);
+        bookMap.addObj(map2, 3L);
+        bookMap.addObj("네번ㅉ 줄ㄹ", 4L);
 
         return bookMap;
     }
