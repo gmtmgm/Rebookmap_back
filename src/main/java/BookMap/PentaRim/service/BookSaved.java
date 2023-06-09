@@ -31,7 +31,7 @@ public interface BookSaved {
 
     List<BookMemoResponseDto> findByUserAndBook(Long id, String isbn);
 
-    BookPersonalMonthStatisticsResponseDto findByMonth(Long id, String year, String month);
+    BookPersonalMonthStatisticsResponseDto findByYear(Long id, String year);
 
     List<BookTopResponseDto> findByTop2();
 

@@ -169,8 +169,8 @@ public class bookcontroller {
      * @return 통계별 완독 책
      */
     @GetMapping("/summary/{id}")
-    public ResponseEntity<?> bookPersonalMoth(@PathVariable Long id, @RequestParam String year, @RequestParam String month){
-        return new ResponseEntity<>(bookSaved.findByMonth(id, year, month), HttpStatus.OK);
+    public ResponseEntity<?> bookPersonalMoth(@PathVariable Long id, @RequestParam String year){
+        return new ResponseEntity<>(bookSaved.findByYear(id, year), HttpStatus.OK);
     }
 
     /**
@@ -199,10 +199,10 @@ public class bookcontroller {
         totalService.profileUpdate(customUserDetails.getUser().getId(), profileUpdateRequestDto);
     }
 
-
-
-
-
+    @GetMapping("/book/savedornot/{id}")
+    public boolean savedOrNot(@PathVariable Long id, @RequestParam String isbn){
+        return bookSaved.checkSavedOrNot(id, isbn);
+    }
     //연습용
 
     @GetMapping(value = "/book/{id}",produces = "application/json; charset=utf8")
