@@ -1,6 +1,7 @@
 package BookMap.PentaRim.Controller.Book;
 
 import BookMap.PentaRim.Book.Dto.*;
+import BookMap.PentaRim.Dto.ProfileUpdateRequestDto;
 import BookMap.PentaRim.User.CustomUserDetails;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.Repository.UserRepository;
@@ -164,12 +165,12 @@ public class bookcontroller {
     /**
      *
      * @param id
-     * @param bookPersonalMonthRequestDto: year, month
+     * @param year, month
      * @return 통계별 완독 책
      */
     @GetMapping("/summary/{id}")
-    public ResponseEntity<?> bookPersonalMoth(@PathVariable Long id, @RequestBody BookPersonalMonthRequestDto bookPersonalMonthRequestDto){
-        return new ResponseEntity<>(bookSaved.findByMonth(id,bookPersonalMonthRequestDto), HttpStatus.OK);
+    public ResponseEntity<?> bookPersonalMoth(@PathVariable Long id, @RequestParam String year, @RequestParam String month){
+        return new ResponseEntity<>(bookSaved.findByMonth(id, year, month), HttpStatus.OK);
     }
 
     /**
@@ -190,6 +191,17 @@ public class bookcontroller {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         return new ResponseEntity<>(totalService.profile(customUserDetails.getUser().getId()), HttpStatus.OK);
     }
+
+    @PostMapping("/profile/update")
+    public void profileUpdate(@RequestBody ProfileUpdateRequestDto profileUpdateRequestDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        totalService.profileUpdate(customUserDetails.getUser().getId(), profileUpdateRequestDto);
+    }
+
+
+
+
 
     //연습용
 
@@ -286,4 +298,8 @@ public class bookcontroller {
         return new ResponseEntity<>(bookSaved.findByTop2(),HttpStatus.OK);
     }
 
+    @PostMapping("/profile/update/{id}")
+    public void profileUpdate1(@PathVariable Long id, @RequestBody ProfileUpdateRequestDto profileUpdateRequestDto){
+        totalService.profileUpdate(id, profileUpdateRequestDto);
+    }
 }

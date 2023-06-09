@@ -216,13 +216,15 @@ public class BookSavedImpl implements BookSaved{
     //수정 필요, endDate로만 만들어서 완독 책만 보내주기
     @Override
     @Transactional
-    public BookPersonalMonthStatisticsResponseDto findByMonth(Long id, BookPersonalMonthRequestDto bookPersonalMonthRequestDto){
+    public BookPersonalMonthStatisticsResponseDto findByMonth(Long id, String year, String month){
+        Integer intYear = Integer.parseInt(year);
+        Integer intMonth = Integer.parseInt(month);
         //현재는 달별 조회인데 달이 넘어가는 책들은 어떻게 해야할지 모르겠다아....
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
-        LocalDate monthStart = LocalDate.of(bookPersonalMonthRequestDto.getYear(),
-                bookPersonalMonthRequestDto.getMonth(), 1);
+        LocalDate monthStart = LocalDate.of(intYear,
+                intMonth, 1);
         LocalDate monthEnd = monthStart.plusDays(monthStart.lengthOfMonth()-1);
         List<BookPersonal> bookPersonalList = bookPersonalRepository.findAllByUserAndEndDateBetween(user, monthStart, monthEnd);
         List<BookPersonalMonthResponseDto> bookPersonalMonthResponseDtos = new ArrayList<>();

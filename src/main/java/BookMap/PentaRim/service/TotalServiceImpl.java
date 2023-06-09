@@ -10,6 +10,7 @@ import BookMap.PentaRim.BookMap.Dto.BookMapResponseDto;
 import BookMap.PentaRim.Dto.BookShelfResponseDto;
 import BookMap.PentaRim.Dto.MainResponseDto;
 import BookMap.PentaRim.Dto.ProfileResponseDto;
+import BookMap.PentaRim.Dto.ProfileUpdateRequestDto;
 import BookMap.PentaRim.Repository.BookMapRepository;
 import BookMap.PentaRim.Repository.BookMemoRepository;
 import BookMap.PentaRim.Repository.BookPersonalRepository;
@@ -142,5 +143,15 @@ public class TotalServiceImpl implements TotalService{
             profileMemoResponseDtoList.add(new ProfileMemoResponseDto(bookMemo));
         }
         return new ProfileResponseDto(user, count, status, profileMemoResponseDtoList);
+    }
+
+    @Override
+    @Transactional
+    public void profileUpdate(Long id, ProfileUpdateRequestDto profileUpdateRequestDto){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
+        user.setNickname(profileUpdateRequestDto.getNickName());
+        user.setBook_state(profileUpdateRequestDto.getStatus());
     }
 }
