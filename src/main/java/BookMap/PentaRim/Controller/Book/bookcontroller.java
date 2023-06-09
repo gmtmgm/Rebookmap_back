@@ -200,8 +200,8 @@ public class bookcontroller {
     }
 
     @GetMapping("/book/savedornot/{id}")
-    public boolean savedOrNot(@PathVariable Long id, @RequestParam String isbn){
-        return bookSaved.checkSavedOrNot(id, isbn);
+    public ResponseEntity<?> savedOrNot(@PathVariable Long id, @RequestParam String isbn){
+        return new ResponseEntity<>(bookSaved.checkSavedOrNot(id, isbn), HttpStatus.OK);
     }
     //연습용
 

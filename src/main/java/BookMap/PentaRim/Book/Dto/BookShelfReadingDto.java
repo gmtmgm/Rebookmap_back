@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Getter
 public class BookShelfReadingDto implements BookShelfResponseDto {
     private Long id;
+    private String isbn;
     private BookState bookState;
     private String title;
     private String author;
@@ -21,6 +22,7 @@ public class BookShelfReadingDto implements BookShelfResponseDto {
 
     public BookShelfReadingDto(BookPersonal bookPersonal){
         this.id = bookPersonal.getId();
+        this.isbn = bookPersonal.getBook().getIsbn();
         this.bookState = bookPersonal.getBookState();
         this.title = bookPersonal.getBook().getTitle();
         this.author = bookPersonal.getBook().getAuthor();
