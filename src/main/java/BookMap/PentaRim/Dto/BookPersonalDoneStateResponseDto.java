@@ -17,6 +17,7 @@ public class BookPersonalDoneStateResponseDto implements BookPersonalStateRespon
     private Float grade;
     private LocalDate startDate;
     private LocalDate endDate;
+    private Integer totalPage;
     private List<BookMemoResponseDto> bookMemoResponseDtos;
 
     public BookPersonalDoneStateResponseDto(BookPersonal bookPersonal, BookResponseDto bookResponseDto,
@@ -27,6 +28,7 @@ public class BookPersonalDoneStateResponseDto implements BookPersonalStateRespon
         this.grade = bookPersonal.getGrade();
         this.startDate = bookPersonal.getStartDate();
         this.endDate = bookPersonal.getEndDate();
+        this.totalPage = bookPersonal.getTotalPage();
         this.bookMemoResponseDtos = bookMemoResponseDtos;
     }
 }
