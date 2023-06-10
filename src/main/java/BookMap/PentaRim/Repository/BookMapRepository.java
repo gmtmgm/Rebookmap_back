@@ -12,6 +12,7 @@ import java.util.List;
 public interface BookMapRepository extends JpaRepository<BookMapEntity,Long> {
 
     List<BookMapEntity> findByUserOrderByBookMapSaveTime(User user);
+    List<BookMapEntity> findTop3ByUserOrderByBookMapSaveTime(User user);
     List<BookMapEntity> findAllByMapHashTags(Long bookMapId);
     List<BookMapEntity> findAllByBookMapTitleContaining(String bookMapTitle);
 }
