@@ -169,8 +169,15 @@ public class bookcontroller {
      * @return 통계별 완독 책
      */
     @GetMapping("/summary/{id}")
-    public ResponseEntity<?> bookPersonalMoth(@PathVariable Long id, @RequestParam String year){
+    public ResponseEntity<?> bookPersonalMonth(@PathVariable Long id, @RequestParam String year){
         return new ResponseEntity<>(bookSaved.findByYear(id, year), HttpStatus.OK);
+    }
+
+    @GetMapping("/summary")
+    public ResponseEntity<?> bookPersonalMonth(@RequestParam String year){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return new ResponseEntity<>(bookSaved.findByYear(customUserDetails.getUser().getId(), year), HttpStatus.OK);
     }
 
     /**
