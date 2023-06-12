@@ -66,7 +66,7 @@ public class bookcontroller {
         bookSaved.deleteBook(customUserDetails.getUser().getId(), isbn);
     }
 
-    @GetMapping("/bookdetail")  //상세 조회
+    @GetMapping("/book/detail")  //상세 조회
     public ResponseEntity<?> bookdetail(@RequestParam String isbn){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -206,9 +206,13 @@ public class bookcontroller {
         totalService.profileUpdate(customUserDetails.getUser().getId(), profileUpdateRequestDto);
     }
 
-    @GetMapping("/book/savedornot/{id}")
-    public ResponseEntity<?> savedOrNot(@PathVariable Long id, @RequestParam String isbn){
-        return new ResponseEntity<>(bookSaved.checkSavedOrNot(id, isbn), HttpStatus.OK);
+
+
+    @GetMapping("/book/savedornot")
+    public ResponseEntity<?> savedOrNot(@RequestParam String isbn){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return new ResponseEntity<>(bookSaved.checkSavedOrNot(customUserDetails.getUser().getId(), isbn), HttpStatus.OK);
     }
     //연습용
 
@@ -308,5 +312,10 @@ public class bookcontroller {
     @PostMapping("/profile/update/{id}")
     public void profileUpdate1(@PathVariable Long id, @RequestBody ProfileUpdateRequestDto profileUpdateRequestDto){
         totalService.profileUpdate(id, profileUpdateRequestDto);
+    }
+
+    @GetMapping("/book/savedornot/{id}")
+    public ResponseEntity<?> savedOrNot1(@PathVariable Long id, @RequestParam String isbn){
+        return new ResponseEntity<>(bookSaved.checkSavedOrNot(id, isbn), HttpStatus.OK);
     }
 }
