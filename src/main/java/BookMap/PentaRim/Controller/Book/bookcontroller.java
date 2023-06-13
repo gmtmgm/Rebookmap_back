@@ -160,6 +160,14 @@ public class bookcontroller {
         return new ResponseEntity<>(bookSaved.findByTop10(),HttpStatus.OK);
     }
 
+    @GetMapping("/bookmemo/all")
+    public ResponseEntity<?> bookMemoAll(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return new ResponseEntity<>(totalService.findMemoByUser(customUserDetails.getUser().getId()), HttpStatus.OK);
+    }
+
+
     //월별 완독 책
 
     /**
@@ -250,6 +258,12 @@ public class bookcontroller {
     public ResponseEntity<?> bookMemoLoad(@PathVariable Long id, @RequestParam String isbn){
         return new ResponseEntity<>(bookSaved.findByUserAndBook(id, isbn), HttpStatus.OK);
     }
+
+    @GetMapping("/bookmemo/all/{id}")
+    public ResponseEntity<?> bookMemoAll1(@PathVariable Long id){
+        return new ResponseEntity<>(totalService.findMemoByUser(id), HttpStatus.OK);
+    }
+
 
 
     /**

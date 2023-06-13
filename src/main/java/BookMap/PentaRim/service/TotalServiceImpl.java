@@ -137,7 +137,7 @@ public class TotalServiceImpl implements TotalService{
             status = user.getBook_state();
         }
         Integer count = bookSaved.findByMonthCount(id);
-        List<BookMemo> bookMemoList = bookMemoRepository.findByBookPersonal_UserOrderBySavedDesc(user);
+        List<BookMemo> bookMemoList = bookMemoRepository.findTop2ByBookPersonal_UserOrderBySavedDesc(user);
         List<ProfileMemoResponseDto> profileMemoResponseDtoList = new ArrayList<>();
         for(BookMemo bookMemo: bookMemoList){
             profileMemoResponseDtoList.add(new ProfileMemoResponseDto(bookMemo));
@@ -153,5 +153,20 @@ public class TotalServiceImpl implements TotalService{
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
         user.setNickname(profileUpdateRequestDto.getNickName());
         user.setBook_state(profileUpdateRequestDto.getStatus());
+    }
+
+    @Override
+    @Transactional
+    public List<ProfileMemoResponseDto> findMemoByUser(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
+        List<BookPersonal> bookPersonalList = bookPersonalRepository.findByUser(user);
+        List<BookMemo> bookMemoList = bookMemoRepository.findTop2ByBookPersonal_UserOrderBySavedDesc(user);
+        List<ProfileMemoResponseDto> bookMemoResponseDtoList = new ArrayList<>();
+        for(BookMemo bookMemo: bookMemoList){
+            bookMemoResponseDtoList.add(new ProfileMemoResponseDto(bookMemo));
+        }
+        return bookMemoResponseDtoList;
     }
 }

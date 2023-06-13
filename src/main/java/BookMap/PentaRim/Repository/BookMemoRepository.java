@@ -12,5 +12,7 @@ import java.util.List;
 public interface BookMemoRepository extends JpaRepository<BookMemo, Long>{
     List<BookMemo> findByBookPersonalOrderBySavedDesc(BookPersonal bookPersonal);
     void deleteAllByBookPersonal(BookPersonal bookPersonal);
+    List<BookMemo> findTop2ByBookPersonal_UserOrderBySavedDesc(User user);
     List<BookMemo> findByBookPersonal_UserOrderBySavedDesc(User user);
+
 }
