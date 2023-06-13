@@ -17,7 +17,7 @@ public interface BookMapRepositoryService {
     List<BookMapResponseDto> findBookMapScrapsByUserId(Long userId);
 
     Long saveBookMap(Long userId, BookMapSaveRequestDto bookMapSaveRequestDto);
-    boolean saveBookMapScrap(Long userId, BookMapScrapRequestDto bookMapScrapRequestDto);
+    boolean saveBookMapScrap(Long userId, Long bookMapId);
     void saveToMyBookMap(Long userId, Long bookMapId);
 
     void updateBookMap(BookMapEntity bookMapEntity, BookMapRequestDto bookMapRequestDto);

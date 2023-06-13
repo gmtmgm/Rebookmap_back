@@ -66,6 +66,6 @@ public class BookMapUpdateTest {
         BookMapEntity bookMap = bookMapRepository.findById(1L).orElseThrow();
         BookMapScrapRequestDto bookMapScrapRequestDto = new BookMapScrapRequestDto();
         bookMapScrapRequestDto.setBookMap(bookMap);
-        bookMapRepositoryService.saveBookMapScrap(1L, bookMapScrapRequestDto);
+        bookMapRepositoryService.saveBookMapScrap(1L, bookMap.getBookMapId());
     }
 }

@@ -146,14 +146,18 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
     @Override
     @Transactional
-    public boolean saveBookMapScrap(Long userId, BookMapScrapRequestDto bookMapScrapRequestDto){
+    public boolean saveBookMapScrap(Long userId, Long bookMapId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
-        BookMapEntity bookMap = bookMapScrapRequestDto.getBookMap();
+        BookMapEntity bookMap = bookMapRepository.findById(bookMapId).orElseThrow(
+                () ->  new IllegalArgumentException("해당 북맵이 없습니다.")
+        );
         String original = bookMap.getUser().getNickname() + " 님의 북맵\n" + bookMap.getBookMapTitle();
         bookMap.update(original);
         boolean success = true;
+        BookMapScrapRequestDto bookMapScrapRequestDto = new BookMapScrapRequestDto();
+        bookMapScrapRequestDto.setBookMap(bookMap);
         if (!bookMapScrapRepository.existsByUserAndBookMap(user, bookMap)) {
             bookMapScrapRequestDto.setUser(user);
             bookMapScrapRequestDto.setBookMapSaveTime(LocalDateTime.now());

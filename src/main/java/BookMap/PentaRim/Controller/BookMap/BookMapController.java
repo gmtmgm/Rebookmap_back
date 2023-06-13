@@ -57,11 +57,16 @@ public class BookMapController {
         return bookMapRepositoryService.saveBookMap(customUserDetails.getUser().getId(), bookMapSaveRequestDto);
     }
 
-    @PostMapping("/bookmap/scrap/save") //특정 유저의 북맵 스크랩 저장
-    public boolean userBookMapScrapSave(@RequestBody BookMapScrapRequestDto bookMapScrapRequestDto){
+    @PostMapping("/bookmap/scrap/save/{bookmapid}") //특정 유저의 북맵 스크랩 저장
+    public boolean userBookMapScrapSave(@PathVariable Long bookmapid){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        return bookMapRepositoryService.saveBookMapScrap(customUserDetails.getUser().getId(), bookMapScrapRequestDto);
+        return bookMapRepositoryService.saveBookMapScrap(customUserDetails.getUser().getId(), bookmapid);
+    }
+
+    @PostMapping("/bookmap/scrap/save/{id}/{bookmapid}") //특정 유저의 북맵 스크랩 저장
+    public boolean userBookMapScrapSave1(@PathVariable Long id,@PathVariable Long bookmapid){
+        return bookMapRepositoryService.saveBookMapScrap(id, bookmapid);
     }
 
     @PostMapping("bookmap/tomy/save/{bookMapId}") //다른 유저의 북맵을 내걸로 저장
