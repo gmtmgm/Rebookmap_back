@@ -52,8 +52,6 @@ public class BookMapController {
     public Long bookMapSave(@RequestBody BookMapSaveRequestDto bookMapSaveRequestDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        log.info(bookMapSaveRequestDto.getBookMapTitle());
-        log.info(bookMapSaveRequestDto.getBookMapContent());
         return bookMapRepositoryService.saveBookMap(customUserDetails.getUser().getId(), bookMapSaveRequestDto);
     }
 
@@ -100,8 +98,5 @@ public class BookMapController {
     @DeleteMapping("/bookmap/scrap/delete/{bookMapScrapId}") //특정 스크랩 삭제
     public void deleteBookMapScrap(@PathVariable Long bookMapScrapId){ bookMapRepositoryService.bookMapScrapDelete(bookMapScrapId); }
 
-//    @GetMapping("/bookmap/hashtag")
-//    public ResponseEntity<?> bookmap(@RequestParam String tag){
-//        return new ResponseEntity<>(bookMapRepositoryService.findBookMapByTag(tag), HttpStatus.OK);
-//    }
+
 }
