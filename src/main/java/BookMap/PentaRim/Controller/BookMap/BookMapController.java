@@ -56,6 +56,16 @@ public class BookMapController {
         log.info(bookMapSaveRequestDto.getBookMapContent());
         return bookMapRepositoryService.saveBookMap(customUserDetails.getUser().getId(), bookMapSaveRequestDto);
     }
+
+    @PostMapping("/bookmap/save/{id}") //특정 유저의 북맵 저장
+    public Long bookMapSave1(@PathVariable Long id, @RequestBody BookMapSaveRequestDto bookMapSaveRequestDto){
+        log.info(bookMapSaveRequestDto.getBookMapTitle());
+        log.info(bookMapSaveRequestDto.getBookMapContent());
+        return bookMapRepositoryService.saveBookMap(id, bookMapSaveRequestDto);
+    }
+
+
+
     @PostMapping("/bookmap/scrap/save/{bookmapid}") //특정 유저의 북맵 스크랩 저장
     public boolean userBookMapScrapSave(@PathVariable Long bookmapid){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
