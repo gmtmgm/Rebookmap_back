@@ -62,6 +62,9 @@ public class BookMapEntity {
         //this.hashTag = hashTag;
     }
 
+    public void update(String bookMapTitle){
+        this.bookMapTitle = bookMapTitle;
+    }
 
 
 

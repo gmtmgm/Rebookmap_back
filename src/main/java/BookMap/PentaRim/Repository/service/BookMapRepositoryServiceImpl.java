@@ -43,7 +43,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         BookMapResponseDto bookMapResponseDto = new BookMapResponseDto(bookMapEntity);
         List<String> hashTag = findHashTagByBookMap(bookMapEntity);
         for(String tag : hashTag){
-            hashTag.set(hashTag.indexOf(tag), "#" + tag);
+            tag.replaceAll("[#!,@%&^.?/$*()`~]", "");
         }
         bookMapResponseDto.setHashTag(hashTag);
         bookMapResponseDto.toBookMap(bookMap);
@@ -124,6 +124,9 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
+        if (bookMapSaveRequestDto.getBookMapTitle() == null){
+            bookMapSaveRequestDto.setBookMapTitle("새 북맵");
+        }
         bookMapSaveRequestDto.setUser(user);
         bookMapSaveRequestDto.setBookMapSaveTime(LocalDateTime.now());
         bookMapSaveRequestDto.setShare(true);
@@ -148,6 +151,8 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
         BookMapEntity bookMap = bookMapScrapRequestDto.getBookMap();
+        String original = bookMap.getUser().getNickname() + " 님의 북맵\n" + bookMap.getBookMapTitle();
+        bookMap.update(original);
         boolean success = true;
         if (!bookMapScrapRepository.existsByUserAndBookMap(user, bookMap)) {
             bookMapScrapRequestDto.setUser(user);
@@ -294,6 +299,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     public void tagssave(BookMapEntity bookMapEntity, TagRequestDto tagRequestDto){
         List<String> tags = tagRequestDto.getTags();
         for(String tag: tags){
+            tag = tag.replaceAll("#", "");
             if(hashtagRepository.existsByTag(tag)){
                 HashTag hashTag = hashtagRepository.findByTag(tag).orElseThrow(
                         () -> new IllegalArgumentException("해당 해시태그가 없습니다."));

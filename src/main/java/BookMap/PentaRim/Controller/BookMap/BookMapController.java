@@ -3,12 +3,17 @@ package BookMap.PentaRim.Controller.BookMap;
 import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.Dto.*;
 import BookMap.PentaRim.Repository.service.BookMapRepositoryService;
+import BookMap.PentaRim.User.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin("https://8172-203-255-63-30.ngrok-free.app")
@@ -17,14 +22,18 @@ public class BookMapController {
     private final BookMapRepositoryService bookMapRepositoryService;
 
 
-    @GetMapping("/bookmap/{userId}") //특정 유저의 북맵 목록
-    public ResponseEntity<?> userBookMapLoad(@PathVariable Long userId){
-        return new ResponseEntity<>(bookMapRepositoryService.findBookMapsByUserId(userId), HttpStatus.OK);
+    @GetMapping("/bookmap") //특정 유저의 북맵 목록
+    public ResponseEntity<?> userBookMapLoad(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return new ResponseEntity<>(bookMapRepositoryService.findBookMapsByUserId(customUserDetails.getUser().getId()), HttpStatus.OK);
     }
 
-    @GetMapping("/bookmap/scrap/{userId}") //특정 유저의 스크랩한 북맵 목록
-    public ResponseEntity<?> userBookMapScrapLoad(@PathVariable Long userId){
-        return new ResponseEntity<>(bookMapRepositoryService.findBookMapScrapsByUserId(userId), HttpStatus.OK);
+    @GetMapping("/bookmap/scrap") //특정 유저의 스크랩한 북맵 목록
+    public ResponseEntity<?> userBookMapScrapLoad(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return new ResponseEntity<>(bookMapRepositoryService.findBookMapScrapsByUserId(customUserDetails.getUser().getId()), HttpStatus.OK);
     }
 
     @GetMapping("/bookmap/view/{bookMapId}") //특정 북맵의 세부 정보
@@ -32,26 +41,34 @@ public class BookMapController {
         return bookMapRepositoryService.EntityToBookMap(bookMapId);
     }
 
-    @GetMapping("/bookmap/search/{text}") //검색 페이지
+    @GetMapping(value = "/bookmap/search/{text}", produces = "application/json; charset=utf8") //검색 페이지
     public ResponseEntity<?> bookMapSearchLoad(@PathVariable String text){
         return new ResponseEntity<>(bookMapRepositoryService.searchBookMap(text), HttpStatus.OK);
     }
 
 
 
-    @PostMapping("/bookmap/save/{userId}") //특정 유저의 북맵 저장
-    public Long bookMapSave(@PathVariable Long userId, @RequestBody BookMapSaveRequestDto bookMapSaveRequestDto){
-        return bookMapRepositoryService.saveBookMap(userId, bookMapSaveRequestDto);
+    @PostMapping("/bookmap/save") //특정 유저의 북맵 저장
+    public Long bookMapSave(@RequestBody BookMapSaveRequestDto bookMapSaveRequestDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        log.info(bookMapSaveRequestDto.getBookMapTitle());
+        log.info(bookMapSaveRequestDto.getBookMapContent());
+        return bookMapRepositoryService.saveBookMap(customUserDetails.getUser().getId(), bookMapSaveRequestDto);
     }
 
-    @PostMapping("/bookmap/scrap/save/{userId}") //특정 유저의 북맵 스크랩 저장
-    public boolean userBookMapScrapSave(@PathVariable Long userId, @RequestBody BookMapScrapRequestDto bookMapScrapRequestDto){
-        return bookMapRepositoryService.saveBookMapScrap(userId, bookMapScrapRequestDto);
+    @PostMapping("/bookmap/scrap/save") //특정 유저의 북맵 스크랩 저장
+    public boolean userBookMapScrapSave(@RequestBody BookMapScrapRequestDto bookMapScrapRequestDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return bookMapRepositoryService.saveBookMapScrap(customUserDetails.getUser().getId(), bookMapScrapRequestDto);
     }
 
-    @PostMapping("bookmap/tomy/save/{userId}/{bookMapId}") //다른 유저의 북맵을 내걸로 저장
-    public void bookMapSaveToMy(@PathVariable Long userId, @PathVariable Long bookMapId){
-        bookMapRepositoryService.saveToMyBookMap(userId, bookMapId);
+    @PostMapping("bookmap/tomy/save/{bookMapId}") //다른 유저의 북맵을 내걸로 저장
+    public void bookMapSaveToMy(@PathVariable Long bookMapId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        bookMapRepositoryService.saveToMyBookMap(customUserDetails.getUser().getId(), bookMapId);
     }
 
     @PostMapping("/bookmap/update/{bookMapId}") //특정 북맵의 북맵 수정
