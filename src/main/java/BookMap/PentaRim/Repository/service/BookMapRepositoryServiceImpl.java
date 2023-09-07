@@ -42,9 +42,6 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                         IllegalArgumentException("북맵 없음" + bookMapId));
         BookMapResponseDto bookMapResponseDto = new BookMapResponseDto(bookMapEntity);
         List<String> hashTag = findHashTagByBookMap(bookMapEntity);
-        for(String tag : hashTag){
-            tag.replaceAll("[#!,@%&^.?/$*()`~]", "");
-        }
         bookMapResponseDto.setHashTag(hashTag);
         bookMapResponseDto.toBookMap(bookMap);
         List<BookMapDetailEntity> detailList = bookMapDetailRepository.findByBookMapEntityOrderByIndex(bookMapEntity);
@@ -153,8 +150,8 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         BookMapEntity bookMap = bookMapRepository.findById(bookMapId).orElseThrow(
                 () ->  new IllegalArgumentException("해당 북맵이 없습니다.")
         );
-        String original = bookMap.getUser().getNickname() + " 님의 북맵\n" + bookMap.getBookMapTitle();
-        bookMap.update(original);
+//        String original = bookMap.getUser().getNickname() + " 님의 북맵\n" + bookMap.getBookMapTitle();
+//        bookMap.update(original);
         boolean success = true;
         BookMapScrapRequestDto bookMapScrapRequestDto = new BookMapScrapRequestDto();
         bookMapScrapRequestDto.setBookMap(bookMap);
@@ -299,7 +296,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     public void tagssave(BookMapEntity bookMapEntity, TagRequestDto tagRequestDto){
         List<String> tags = tagRequestDto.getTags();
         for(String tag: tags){
-            tag = tag.replaceAll("#", "");
+            tag = tag.replaceAll("[#!,@%&^.?/$*()`~]", "");
             if(hashtagRepository.existsByTag(tag)){
                 HashTag hashTag = hashtagRepository.findByTag(tag).orElseThrow(
                         () -> new IllegalArgumentException("해당 해시태그가 없습니다."));
