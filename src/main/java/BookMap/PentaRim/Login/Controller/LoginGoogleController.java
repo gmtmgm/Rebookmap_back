@@ -1,4 +1,5 @@
 package BookMap.PentaRim.Login.Controller;
+import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.Role;
 import BookMap.PentaRim.User.model.User;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -6,7 +7,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,12 +22,15 @@ import static BookMap.PentaRim.User.Auth.Filter.JwtProperties.SECRET;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class LoginGoogleController {
 
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @PostMapping("/login/google")
-    public static void loginGoogle(@RequestParam("idToken")String idTokenString) throws GeneralSecurityException, IOException {
+    public void loginGoogle(@RequestParam("idToken") String idTokenString) throws GeneralSecurityException, IOException {
 
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 // Specify the CLIENT_ID of the app that accesses the backend:
@@ -52,14 +58,35 @@ public class LoginGoogleController {
             String givenName = (String) payload.get("given_name");
 
 
-
             // Use or store profile information
 
 
-            // ...
+            User userEntity =
+                    userRepository.findByUsername("google" + "_" + email);
+            log.info("userEntity : " + userEntity);
 
-        } else {
-            System.out.println("Invalid ID token.");
+            if (userEntity == null) {
+                User user = User.builder()
+                        .username("google" + "_" + email)
+                        .password(bCryptPasswordEncoder.encode(SECRET))
+                        .email(email)
+                        .provider("google")
+                        .providerId(email)
+                        .role(Role.USER)
+                        .nickname(familyName + givenName)
+                        .picture(pictureUrl)
+                        .build();
+
+                log.info("user : " + user);
+
+                userRepository.save(user);
+
+
+                // ...
+
+            } else {
+                System.out.println("Invalid ID token.");
+            }
         }
     }
-    }
+}
