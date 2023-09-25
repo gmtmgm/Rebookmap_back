@@ -60,6 +60,7 @@ public class LoginGoogleController {
 
             // Use or store profile information
 
+            if(emailVerified) {
 
             User userEntity =
                     userRepository.findByUsername("google" + "_" + email);
@@ -73,19 +74,22 @@ public class LoginGoogleController {
                         .provider("google")
                         .providerId(email)
                         .role(Role.USER)
-                        .nickname(familyName + givenName)
+                        .nickname(name)
                         .picture(pictureUrl)
                         .build();
 
                 log.info("user : " + user);
 
                 userRepository.save(user);
+            } else {
+                log.info("Invalid email");
+            }
 
 
                 // ...
 
             } else {
-                System.out.println("Invalid ID token.");
+                log.info("Invalid ID token.");
             }
         }
     }
