@@ -67,8 +67,7 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
 
-                .addFilter(new JwtAuthenFilter(authenticationManager(authenticationConfiguration)))
-                .addFilter(new JwtAuthorFilter(authenticationManager(authenticationConfiguration), userRepository))
+
                 .authorizeHttpRequests()
                 .requestMatchers("/user/**").hasAuthority("ROLE_USER")
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
@@ -151,6 +150,9 @@ public class SecurityConfig {
                 .accessDeniedHandler(new AccessDeniedHandlerImpl());
 
         return http.build();
+
+        .addFilter(new JwtAuthenFilter(authenticationManager(authenticationConfiguration)))
+                .addFilter(new JwtAuthorFilter(authenticationManager(authenticationConfiguration), userRepository))
 
      */
 
