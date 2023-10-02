@@ -41,7 +41,115 @@ public class LoginGoogleController {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  /*
+
+
+
+    private GoogleIdToken.Payload decodeIdToken(String idTokenString) throws GeneralSecurityException, IOException {
+        HttpTransport transport = GoogleNetHttpTransport.newTrustedTransport();
+        GsonFactory gsonFactory = GsonFactory.getDefaultInstance();
+        GoogleIdTokenVerifier verifier =
+                new GoogleIdTokenVerifier.Builder(transport,gsonFactory)
+                        .setAudience(Collections.singletonList("205578501902-2g0aj7mkvmtbpqdcjqt86nhc64euj7l0.apps.googleusercontent.com"))
+                        .build();
+
+        GoogleIdToken idToken = verifier.verify(idTokenString);
+        return idToken.getPayload();
+    }
+
+
+    private void MemberLogin(GoogleIdToken.Payload payload,HttpServletRequest request) {
+
+        String email = payload.getEmail();
+        boolean emailVerified = payload.getEmailVerified();
+        String name = (String) payload.get("name");
+        String pictureUrl = (String) payload.get("picture");
+        String locale = (String) payload.get("locale");
+        String familyName = (String) payload.get("family_name");
+        String givenName = (String) payload.get("given_name");
+
+        if (emailVerified) {
+
+            User userEntity =
+                    userRepository.findByUsername("google" + "_" + email);
+            log.info("userEntity : " + userEntity);
+
+          if(userEntity == null) {
+              User user = User.builder()
+                      .username("google" + "_" + email)
+                      .email(email)
+                      .provider("google")
+                      .providerId(email)
+                      .role(Role.USER)
+                      .nickname(name)
+                      .picture(pictureUrl)
+                      .build();
+
+              log.info("user : " + user);
+
+              userRepository.save(user);
+
+              //로그인 성공 처리
+              //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
+              HttpSession session = request.getSession();
+              //세션에 로그인 회원 정보 보관
+              session.setAttribute(SessionConst.LOGIN_MEMBER, email);
+
+
+          }
+
+        } else {
+            log.info("Invalid email");
+            //로그인 성공 처리
+            //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
+            HttpSession session = request.getSession();
+            //세션에 로그인 회원 정보 보관
+            session.setAttribute(SessionConst.LOGIN_MEMBER, email);
+        }
+
+
+
+    }
+
+
+
+
+    @PostMapping("/login")
+    public void Login(@RequestBody @Valid HashMap<String, String> idToken, HttpServletRequest request) {
+        try{
+            GoogleIdToken.Payload idTokenString = decodeIdToken(idToken.values().toString());
+
+            MemberLogin(idTokenString, request);
+
+
+
+        }catch(GeneralSecurityException e){	//FileNotFoundException이 발생했다면
+            log.info("알 수 없는 보안 예외");
+
+
+        }catch(IOException e){ //IOException이 발생했다면
+            log.info("입출력 예외");
+
+
+        }
+
+
+
+    }
+
+    @GetMapping("/logout")
+    public void logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+    }
+
+
+    
+}
+
+/*
     @PostMapping("/login")
     private void loginGoogle(@RequestBody HashMap<String, String> idTokenString, HttpServletRequest request) throws GeneralSecurityException, IOException {
 
@@ -108,93 +216,3 @@ public class LoginGoogleController {
     }
 
    */
-
-
-    private GoogleIdToken.Payload decodeIdToken(String idTokenString) throws GeneralSecurityException, IOException {
-        HttpTransport transport = GoogleNetHttpTransport.newTrustedTransport();
-        GsonFactory gsonFactory = GsonFactory.getDefaultInstance();
-        GoogleIdTokenVerifier verifier =
-                new GoogleIdTokenVerifier.Builder(transport,gsonFactory)
-                        .setAudience(Collections.singletonList("205578501902-2g0aj7mkvmtbpqdcjqt86nhc64euj7l0.apps.googleusercontent.com"))
-                        .build();
-
-        GoogleIdToken idToken = verifier.verify(idTokenString);
-        return idToken.getPayload();
-    }
-
-    private void MemberLogin(GoogleIdToken.Payload payload ) {
-
-        String email = payload.getEmail();
-        boolean emailVerified = payload.getEmailVerified();
-        String name = (String) payload.get("name");
-        String pictureUrl = (String) payload.get("picture");
-        String locale = (String) payload.get("locale");
-        String familyName = (String) payload.get("family_name");
-        String givenName = (String) payload.get("given_name");
-
-        if (emailVerified) {
-
-            User userEntity =
-                    userRepository.findByUsername("google" + "_" + email);
-            log.info("userEntity : " + userEntity);
-
-          if(userEntity == null) {
-              User user = User.builder()
-                      .username("google" + "_" + email)
-                      .email(email)
-                      .provider("google")
-                      .providerId(email)
-                      .role(Role.USER)
-                      .nickname(name)
-                      .picture(pictureUrl)
-                      .build();
-
-              log.info("user : " + user);
-
-              userRepository.save(user);
-
-
-
-          }
-
-        } else {
-            log.info("Invalid email");
-        }
-
-
-
-    }
-
-    @PostMapping("/login")
-    public void Login(@RequestBody @Valid HashMap<String, String> idToken) {
-        try{
-            GoogleIdToken.Payload idTokenString = decodeIdToken(idToken.values().toString());
-
-            MemberLogin(idTokenString);
-
-
-
-        }catch(GeneralSecurityException e){	//FileNotFoundException이 발생했다면
-            log.info("알 수 없는 보안 예외");
-
-
-        }catch(IOException e){ //IOException이 발생했다면
-            log.info("입출력 예외");
-
-
-        }
-
-
-
-    }
-
-    @GetMapping("/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-       new SecurityContextLogoutHandler().logout(request, response,
-               SecurityContextHolder.getContext().getAuthentication());
-
-    }
-
-
-    
-}

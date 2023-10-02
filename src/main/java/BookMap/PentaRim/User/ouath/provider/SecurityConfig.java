@@ -1,3 +1,4 @@
+
 package BookMap.PentaRim.User.ouath.provider;
 
 
@@ -32,10 +33,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 @Getter
+
 public class SecurityConfig {
-
-
-
 
 
     @Autowired
@@ -49,7 +48,25 @@ public class SecurityConfig {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Bean
+    public SecurityFilterChain filterchain(HttpSecurity http) throws Exception {
+        http
+                .addFilter(corsConfig.corsFilter())
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .formLogin().disable()
+                .httpBasic().disable()
 
+
+                .authorizeHttpRequests()
+                .anyRequest().permitAll();
+
+        return http.build();
+    }
+}
+
+/*
 
 
     @Bean
@@ -70,24 +87,23 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterchain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests()
-                .requestMatchers("/login").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .defaultSuccessUrl("/main")
-                .and()
-                .logout()
-                .permitAll()
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-                .and()
-                .csrf().disable();
-
-        return http.build();
+       return http
+               .authorizeHttpRequests()
+               .requestMatchers("/login").permitAll()
+               .anyRequest().authenticated()
+               .and()
+               .formLogin()
+               .loginPage("/login")
+               .permitAll()
+               .defaultSuccessUrl("/main")
+               .permitAll()
+               .and()
+               .logout()
+               .logoutSuccessUrl("/login")
+               .invalidateHttpSession(true)
+               .and()
+               .csrf().disable()
+               .build();
     }
 
 
@@ -105,6 +121,10 @@ public class SecurityConfig {
 
 
 
+
+
+
+ */
 
 
 
