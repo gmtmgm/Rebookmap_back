@@ -6,17 +6,22 @@ import BookMap.PentaRim.User.Auth.Filter.JwtAuthenFilter;
 import BookMap.PentaRim.User.Auth.Filter.JwtAuthorFilter;
 import BookMap.PentaRim.User.CustomUserDetailsService;
 import BookMap.PentaRim.User.Repository.UserRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -26,6 +31,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@Getter
 public class SecurityConfig {
 
 
@@ -53,6 +59,11 @@ public class SecurityConfig {
     }
 
 
+    @Autowired
+    @Qualifier("customUserDetailsService")
+    public void setUserDetailsService(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
+    }
 
 
 
@@ -60,21 +71,39 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterchain(HttpSecurity http) throws Exception {
         http
-                .addFilter(corsConfig.corsFilter())
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .formLogin().disable()
-                .httpBasic().disable()
-
-
                 .authorizeHttpRequests()
-                .requestMatchers("/user/**").hasAuthority("ROLE_USER")
-                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                .anyRequest().permitAll();
+                .requestMatchers("/login").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/main")
+                .and()
+                .logout()
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+                .and()
+                .csrf().disable();
 
         return http.build();
     }
+
+
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new
+                DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
+        daoAuthenticationProvider.setUserDetailsService(customUserDetailsService);
+        return daoAuthenticationProvider;
+    }
+}
+
+
+
+
+
 
 
 
@@ -154,9 +183,35 @@ public class SecurityConfig {
         .addFilter(new JwtAuthenFilter(authenticationManager(authenticationConfiguration)))
                 .addFilter(new JwtAuthorFilter(authenticationManager(authenticationConfiguration), userRepository))
 
+
+
+
+
+
+
+          @Bean
+    public SecurityFilterChain filterchain(HttpSecurity http) throws Exception {
+        http
+                .addFilter(corsConfig.corsFilter())
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .formLogin().disable()
+                .httpBasic().disable()
+
+
+                .authorizeHttpRequests()
+                .requestMatchers("/user/**").hasAuthority("ROLE_USER")
+                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .anyRequest().permitAll();
+
+        return http.build();
+    }
+
      */
 
-    }
+
+
 
 
 

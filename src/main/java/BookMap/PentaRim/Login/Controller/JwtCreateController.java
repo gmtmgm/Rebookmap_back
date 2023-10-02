@@ -23,6 +23,8 @@ import java.util.Map;
 
 import static BookMap.PentaRim.User.Auth.Filter.JwtProperties.SECRET;
 
+
+/*
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -71,3 +73,6 @@ public class JwtCreateController {
         return jwtToken;
     }
 }
+
+
+ */

@@ -35,7 +35,7 @@ public class RestApiController {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         log.info("customUserDetails : "+customUserDetails.getUser().getId());
         log.info("customUserDetails : "+customUserDetails.getUser().getUsername());
-        log.info("customUserDetails : "+customUserDetails.getUser().getPassword());
+        log.info("customUserDetails : "+customUserDetails.getUser().getEmail());
         log.info("customUserDetails : "+customUserDetails.getUser().getRole());
         return "user";
     }
@@ -49,7 +49,7 @@ public class RestApiController {
 
     @PostMapping("join")
     public String join(@RequestBody User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getEmail()));
+
         user.setRole(Role.USER);
         userRepository.save(user);
         return "회원가입완료";

@@ -11,11 +11,16 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -117,7 +122,7 @@ public class LoginGoogleController {
         return idToken.getPayload();
     }
 
-    private void MemberLogin(GoogleIdToken.Payload payload , HttpServletRequest request) {
+    private void MemberLogin(GoogleIdToken.Payload payload ) {
 
         String email = payload.getEmail();
         boolean emailVerified = payload.getEmailVerified();
@@ -136,7 +141,6 @@ public class LoginGoogleController {
           if(userEntity == null) {
               User user = User.builder()
                       .username("google" + "_" + email)
-                      .password(bCryptPasswordEncoder.encode(SECRET))
                       .email(email)
                       .provider("google")
                       .providerId(email)
@@ -149,18 +153,7 @@ public class LoginGoogleController {
 
               userRepository.save(user);
 
-              //로그인 성공 처리
-              //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
-              HttpSession session = request.getSession();
-              //세션에 로그인 회원 정보 보관
-              session.setAttribute(SessionConst.LOGIN_MEMBER, user.getEmail());
 
-          } else {
-              //로그인 성공 처리
-              //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
-              HttpSession session = request.getSession();
-              //세션에 로그인 회원 정보 보관
-              session.setAttribute(SessionConst.LOGIN_MEMBER, userEntity.getEmail() );
 
           }
 
@@ -173,35 +166,33 @@ public class LoginGoogleController {
     }
 
     @PostMapping("/login")
-    public String Login(@RequestBody @Valid HashMap<String, String> idToken, HttpServletRequest request) {
+    public void Login(@RequestBody @Valid HashMap<String, String> idToken) {
         try{
             GoogleIdToken.Payload idTokenString = decodeIdToken(idToken.values().toString());
 
-            MemberLogin(idTokenString, request);
+            MemberLogin(idTokenString);
 
-            return "redirect:/main";
+
 
         }catch(GeneralSecurityException e){	//FileNotFoundException이 발생했다면
             log.info("알 수 없는 보안 예외");
 
-            return "redirect:/";
+
         }catch(IOException e){ //IOException이 발생했다면
             log.info("입출력 예외");
 
-            return "redirect:/";
+
         }
 
 
 
     }
 
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        return "redirect:/";
+    @GetMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+       new SecurityContextLogoutHandler().logout(request, response,
+               SecurityContextHolder.getContext().getAuthentication());
+
     }
 
 

@@ -33,7 +33,6 @@ public class User extends TimeEntity {
     @NotBlank
     @Column(unique = true)
     private String username;
-    private String password;
     private String nickname;
 
     private Role role;

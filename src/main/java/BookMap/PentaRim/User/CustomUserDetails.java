@@ -27,7 +27,7 @@ public class CustomUserDetails implements UserDetails {
 
 
     @Override
-    public String getPassword() { return user.getPassword(); }
+    public String getPassword() { return user.getEmail(); }
 
     @Override
     public String getUsername() { return user.getUsername();}
