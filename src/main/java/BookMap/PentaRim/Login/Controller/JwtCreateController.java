@@ -7,8 +7,6 @@ import BookMap.PentaRim.User.Role;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.ouath.provider.GoogleUser;
 import BookMap.PentaRim.User.ouath.provider.OAuthUserInfo;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

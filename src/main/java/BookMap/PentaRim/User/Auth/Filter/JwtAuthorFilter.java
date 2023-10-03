@@ -3,8 +3,6 @@ package BookMap.PentaRim.User.Auth.Filter;
 import BookMap.PentaRim.User.CustomUserDetails;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.Repository.UserRepository;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +17,9 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import java.io.IOException;
 
 @Slf4j
-public class JwtAuthorFilter extends BasicAuthenticationFilter {
+public class JwtAuthorFilter  {
+
+    /*
 
     private final UserRepository userRepository;
 
@@ -65,4 +65,6 @@ public class JwtAuthorFilter extends BasicAuthenticationFilter {
 
         chain.doFilter(request, response);
     }
+
+     */
 }

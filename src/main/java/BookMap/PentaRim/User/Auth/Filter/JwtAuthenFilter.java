@@ -2,8 +2,7 @@ package BookMap.PentaRim.User.Auth.Filter;
 
 import BookMap.PentaRim.User.CustomUserDetails;
 import BookMap.PentaRim.User.Dto.LoginRequest;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,6 +24,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
 
+    /*
     private final AuthenticationManager authenticationManager;
 
     // Authentication 객체 만들어서 리턴 => 의존 : AuthenticationManager
@@ -95,4 +95,7 @@ public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
     }
+
+     */
 }
+

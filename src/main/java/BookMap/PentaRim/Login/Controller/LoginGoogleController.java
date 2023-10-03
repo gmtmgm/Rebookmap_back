@@ -97,9 +97,13 @@ public class LoginGoogleController {
               //세션에 로그인 회원 정보 보관
               session.setAttribute(SessionConst.LOGIN_MEMBER, email);
 
+              /*
+
               user.setSession(session);
 
 
+
+               */
 
               userRepository.save(user);
 
@@ -121,9 +125,13 @@ public class LoginGoogleController {
               //세션에 로그인 회원 정보 보관
               session.setAttribute(SessionConst.LOGIN_MEMBER, email);
 
+              /*
+
               userEntity.setSession(session);
 
-              userRepository.save(userEntity);
+               */
+
+
 
               Cookie cookie = new Cookie("session", session.getId());
               response.addCookie(cookie);

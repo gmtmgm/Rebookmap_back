@@ -36,9 +36,7 @@ public class User extends TimeEntity {
     private String username;
     private String nickname;
 
-    @NotBlank
-    @Column(unique = true)
-    private HttpSession session;
+
 
     private Role role;
 }
