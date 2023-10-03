@@ -4,23 +4,16 @@ import BookMap.PentaRim.User.Role;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.ouath.provider.SessionConst;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
-import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,12 +45,16 @@ public class LoginGoogleController {
                         .setAudience(Collections.singletonList("205578501902-2g0aj7mkvmtbpqdcjqt86nhc64euj7l0.apps.googleusercontent.com"))
                         .build();
 
+
+
         GoogleIdToken idToken = verifier.verify(idTokenString);
         return idToken.getPayload();
     }
 
 
-    private void MemberLogin(GoogleIdToken.Payload payload,HttpServletRequest request) {
+
+
+    private void MemberLogin(GoogleIdToken.Payload payload, HttpServletRequest request) {
 
         String email = payload.getEmail();
         boolean emailVerified = payload.getEmailVerified();
@@ -88,11 +85,15 @@ public class LoginGoogleController {
 
               userRepository.save(user);
 
+
+
               //로그인 성공 처리
               //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
-              HttpSession session = request.getSession();
+              HttpSession session =request.getSession();
               //세션에 로그인 회원 정보 보관
               session.setAttribute(SessionConst.LOGIN_MEMBER, email);
+
+
 
 
           }
@@ -104,6 +105,8 @@ public class LoginGoogleController {
             HttpSession session = request.getSession();
             //세션에 로그인 회원 정보 보관
             session.setAttribute(SessionConst.LOGIN_MEMBER, email);
+
+
         }
 
 
@@ -113,8 +116,8 @@ public class LoginGoogleController {
 
 
 
-    @PostMapping("/login")
-    public void Login( HashMap<String, String> idToken, HttpServletRequest request) {
+    @PostMapping(value = "/login", produces="application/json; charset=utf8")
+    public void Login( @RequestBody  HashMap<String, String> idToken, HttpServletRequest request) {
         log.info("로그인 시작 ");
         try{
             GoogleIdToken.Payload idTokenString = decodeIdToken(idToken.values().toString());
@@ -138,7 +141,7 @@ public class LoginGoogleController {
 
     }
 
-    @PostMapping("/logout")
+    @PostMapping(value = "/logout",produces="application/json; charset=utf8")
     public void logout(HttpServletRequest request) {
         log.info("로그아웃시작");
         HttpSession session = request.getSession(false);
