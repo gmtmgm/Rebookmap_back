@@ -114,12 +114,14 @@ public class LoginGoogleController {
 
 
     @PostMapping("/login")
-    public void Login(@RequestBody @Valid HashMap<String, String> idToken, HttpServletRequest request) {
+    public void Login( HashMap<String, String> idToken, HttpServletRequest request) {
+        log.info("로그인 시작 ");
         try{
             GoogleIdToken.Payload idTokenString = decodeIdToken(idToken.values().toString());
+            log.info("id토큰 검증 완료");
 
             MemberLogin(idTokenString, request);
-
+            log.info("로그인 완료");
 
 
         }catch(GeneralSecurityException e){	//FileNotFoundException이 발생했다면
@@ -136,8 +138,9 @@ public class LoginGoogleController {
 
     }
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public void logout(HttpServletRequest request) {
+        log.info("로그아웃시작");
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();

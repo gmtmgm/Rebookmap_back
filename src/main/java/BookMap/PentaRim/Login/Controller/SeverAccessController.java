@@ -2,32 +2,37 @@
 
 package BookMap.PentaRim.Login.Controller;
 
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleRefreshTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.nimbusds.oauth2.sdk.token.AccessToken;
-import io.jsonwebtoken.io.IOException;
+import com.google.auth.http.HttpCredentialsAdapter;
+import com.google.auth.oauth2.AccessToken;
+import com.google.auth.oauth2.GoogleCredentials;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/*
+
 @Slf4j
 
 public class SeverAccessController {
+
+    /*
 
     String CLIENT_SECRET_FILE = "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.json";
     String REDIRECT_URI = "http://localhost:8080/login/oauth2/code/google";
@@ -58,10 +63,8 @@ public class SeverAccessController {
 
     public GoogleClientSecrets getClientSecret(FileReader fileReader) {
        try {
-           GoogleClientSecrets clientSecrets =
-                   GoogleClientSecrets.load(
-                           JacksonFactory.getDefaultInstance(), fileReader);
-                    return clientSecrets;
+           return GoogleClientSecrets.load(
+                   JacksonFactory.getDefaultInstance(), fileReader);
        } catch (java.io.IOException e) {
            log.info("구글 시크릿 관련 입출력 예외");
            throw new RuntimeException(e);
@@ -87,10 +90,7 @@ public class SeverAccessController {
                             // specify an empty string.
                             .execute();
 
-            String accessToken = tokenResponse.getAccessToken();
-
-            return accessToken;
-
+            return tokenResponse.getAccessToken();
         } catch (java.io.IOException e) {
             log.info("토큰 리퀘스트 입출력 예외");
             throw new RuntimeException(e);
@@ -98,13 +98,13 @@ public class SeverAccessController {
 
 
     }
-    @PostMapping("/authcode")
+    @PostMapping("/accessToken")
     public void callAPI(@RequestBody @Valid HashMap<String, String> authCode, HttpServletRequest request) {
         HashMap<String,String> authcode = getAuthCode(authCode, request);
         List<String> fileString = getClientFileReader(CLIENT_SECRET_FILE);
         String accessToken = getAccessToken(authcode);
 
-        GoogleCredentials credentials = new GoogleCredentials().setAccessToken(accessToken);
+        GoogleCredentials credentials = GoogleCredentials.create();
         Drive drive =
                 new Drive.Builder(new NetHttpTransport(), JacksonFactory.getDefaultInstance(), credential)
                         .setApplicationName("Auth Code Exchange Demo")
@@ -112,7 +112,36 @@ public class SeverAccessController {
         File file = drive.files().get("appfolder").execute();
     }
 
+     */
+
+    /*
+
+    @PostMapping("/accessToken")
+    public void callAPI(@RequestBody @Valid AccessToken accessToken, HttpServletRequest request) {
+        GoogleCredentials googleCredentials =  GoogleCredentials.create(accessToken);
+
+        HttpRequestInitializer requestInitializer = new HttpCredentialsAdapter(googleCredentials);
+
+        try {
+                NetHttpTransport transport = GoogleNetHttpTransport.newTrustedTransport();
+            } catch (GeneralSecurityException e) {
+                log.info("구글 크레덴셜 사용 도중 보안 에러");
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                log.info("구글 크레덴셜 사용 도중 입출력 에러");
+                throw new RuntimeException(e);
+            }
+
+
+
+    }
+
+     */
+
 }
 
 
- */
+
+
+
+
