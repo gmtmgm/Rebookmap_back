@@ -97,6 +97,10 @@ public class LoginGoogleController {
               //세션에 로그인 회원 정보 보관
               session.setAttribute(SessionConst.LOGIN_MEMBER, email);
 
+
+              //세션을 지우기 전까지 영구유지시킴
+              session.setMaxInactiveInterval(-1);
+
               /*
 
               user.setSession(session);
@@ -124,6 +128,8 @@ public class LoginGoogleController {
               HttpSession session =request.getSession();
               //세션에 로그인 회원 정보 보관
               session.setAttribute(SessionConst.LOGIN_MEMBER, email);
+
+              session.setMaxInactiveInterval(-1);
 
               /*
 

@@ -13,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Data@EqualsAndHashCode(callSuper=false)
 @Entity
 public class User extends TimeEntity {
 
