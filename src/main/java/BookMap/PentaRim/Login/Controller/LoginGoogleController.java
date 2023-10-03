@@ -99,9 +99,11 @@ public class LoginGoogleController {
 
               user.setSession(session);
 
+
+
               userRepository.save(user);
 
-              Cookie cookie = new Cookie("session", session.toString());
+              Cookie cookie = new Cookie("session", session.getId());
               response.addCookie(cookie);
 
               return response;
@@ -123,7 +125,7 @@ public class LoginGoogleController {
 
               userRepository.save(userEntity);
 
-              Cookie cookie = new Cookie("session", session.toString());
+              Cookie cookie = new Cookie("session", session.getId());
               response.addCookie(cookie);
 
               return response;
