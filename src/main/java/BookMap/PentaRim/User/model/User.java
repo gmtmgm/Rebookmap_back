@@ -3,6 +3,7 @@ package BookMap.PentaRim.User.model;
 
 import BookMap.PentaRim.User.Role;
 import jakarta.persistence.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -34,6 +35,10 @@ public class User extends TimeEntity {
     @Column(unique = true)
     private String username;
     private String nickname;
+
+    @NotBlank
+    @Column(unique = true)
+    private HttpSession session;
 
     private Role role;
 }

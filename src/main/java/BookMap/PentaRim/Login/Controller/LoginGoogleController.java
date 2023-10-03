@@ -9,7 +9,9 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +56,8 @@ public class LoginGoogleController {
 
 
 
-    private void MemberLogin(GoogleIdToken.Payload payload, HttpServletRequest request) {
+    private HttpServletResponse MemberLogin(GoogleIdToken.Payload payload, HttpServletRequest request, HttpServletResponse
+                                            response) {
 
         String email = payload.getEmail();
         boolean emailVerified = payload.getEmailVerified();
@@ -70,7 +73,12 @@ public class LoginGoogleController {
                     userRepository.findByUsername("google" + "_" + email);
             log.info("userEntity : " + userEntity);
 
+
+
           if(userEntity == null) {
+
+
+
               User user = User.builder()
                       .username("google" + "_" + email)
                       .email(email)
@@ -83,8 +91,26 @@ public class LoginGoogleController {
 
               log.info("user : " + user);
 
+              //로그인 성공 처리
+              //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
+              HttpSession session =request.getSession();
+              //세션에 로그인 회원 정보 보관
+              session.setAttribute(SessionConst.LOGIN_MEMBER, email);
+
+              user.setSession(session);
+
               userRepository.save(user);
 
+              Cookie cookie = new Cookie("session", session.toString());
+              response.addCookie(cookie);
+
+              return response;
+
+
+
+
+
+          } else {
 
 
               //로그인 성공 처리
@@ -93,21 +119,24 @@ public class LoginGoogleController {
               //세션에 로그인 회원 정보 보관
               session.setAttribute(SessionConst.LOGIN_MEMBER, email);
 
+              userEntity.setSession(session);
 
+              userRepository.save(userEntity);
+
+              Cookie cookie = new Cookie("session", session.toString());
+              response.addCookie(cookie);
+
+              return response;
 
 
           }
 
-        } else {
-            log.info("Invalid email");
-            //로그인 성공 처리
-            //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
-            HttpSession session = request.getSession();
-            //세션에 로그인 회원 정보 보관
-            session.setAttribute(SessionConst.LOGIN_MEMBER, email);
-
-
         }
+
+        log.info("검증되지 않은 토큰입니다");
+
+        Exception e = new Exception();
+        throw new RuntimeException(e);
 
 
 
@@ -117,13 +146,13 @@ public class LoginGoogleController {
 
 
     @PostMapping(value = "/login", produces="application/json; charset=utf8")
-    public void Login( @RequestBody  HashMap<String, String> idToken, HttpServletRequest request) {
+    public void Login( @RequestBody  String idToken, HttpServletRequest request ,HttpServletResponse response) {
         log.info("로그인 시작 ");
         try{
-            GoogleIdToken.Payload idTokenString = decodeIdToken(idToken.values().toString());
+            GoogleIdToken.Payload idTokenString = decodeIdToken(idToken);
             log.info("id토큰 검증 완료");
 
-            MemberLogin(idTokenString, request);
+            MemberLogin(idTokenString, request, response);
             log.info("로그인 완료");
 
 
