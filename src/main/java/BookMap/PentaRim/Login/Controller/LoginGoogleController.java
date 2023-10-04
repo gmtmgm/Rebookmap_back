@@ -6,12 +6,9 @@ import BookMap.PentaRim.User.ouath.provider.SessionConst;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
-import java.util.HashMap;
 
-import static BookMap.PentaRim.User.Auth.Filter.JwtProperties.SECRET;
 
 @Slf4j
 @RestController
@@ -56,8 +51,7 @@ public class LoginGoogleController {
 
 
 
-    private HttpServletResponse MemberLogin(GoogleIdToken.Payload payload, HttpServletRequest request, HttpServletResponse
-                                            response) {
+    private String MemberLogin(GoogleIdToken.Payload payload, HttpServletRequest request) {
 
         String email = payload.getEmail();
         boolean emailVerified = payload.getEmailVerified();
@@ -111,10 +105,9 @@ public class LoginGoogleController {
 
               userRepository.save(user);
 
-              Cookie cookie = new Cookie("session", session.getId());
-              response.addCookie(cookie);
+              return session.getId();
 
-              return response;
+
 
 
 
@@ -137,12 +130,13 @@ public class LoginGoogleController {
 
                */
 
+              return session.getId();
 
 
-              Cookie cookie = new Cookie("session", session.getId());
-              response.addCookie(cookie);
 
-              return response;
+
+
+
 
 
           }
@@ -162,23 +156,28 @@ public class LoginGoogleController {
 
 
     @PostMapping(value = "/login", produces="application/json; charset=utf8")
-    public void Login( @RequestBody  String idToken, HttpServletRequest request ,HttpServletResponse response) {
+    public String Login( @RequestBody  String idToken, HttpServletRequest request ) {
         log.info("로그인 시작 ");
         try{
             GoogleIdToken.Payload idTokenString = decodeIdToken(idToken);
             log.info("id토큰 검증 완료");
 
-            MemberLogin(idTokenString, request, response);
+            String response = MemberLogin(idTokenString, request);
+
             log.info("로그인 완료");
+
+            return  response;
 
 
         }catch(GeneralSecurityException e){	//FileNotFoundException이 발생했다면
             log.info("알 수 없는 보안 예외");
 
+            throw new RuntimeException(e);
+
 
         }catch(IOException e){ //IOException이 발생했다면
             log.info("입출력 예외");
-
+            throw new RuntimeException(e);
 
         }
 
