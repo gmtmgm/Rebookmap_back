@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +28,7 @@ import java.util.Collections;
 public class LoginGoogleController {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 
 
@@ -81,6 +80,7 @@ public class LoginGoogleController {
                       .role(Role.USER)
                       .nickname(name)
                       .picture(pictureUrl)
+                      .role(Role.USER)
                       .build();
 
               log.info("user : " + user);
