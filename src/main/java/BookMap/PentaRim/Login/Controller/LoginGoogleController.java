@@ -89,7 +89,7 @@ public class LoginGoogleController {
               //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
               HttpSession session =request.getSession();
               //세션에 로그인 회원 정보 보관
-              session.setAttribute(SessionConst.LOGIN_MEMBER, email);
+              session.setAttribute(SessionConst.EMAIL, email);
 
 
               //세션을 지우기 전까지 영구유지시킴
@@ -120,7 +120,7 @@ public class LoginGoogleController {
               //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
               HttpSession session =request.getSession();
               //세션에 로그인 회원 정보 보관
-              session.setAttribute(SessionConst.LOGIN_MEMBER, email);
+              session.setAttribute(SessionConst.EMAIL, email);
 
               session.setMaxInactiveInterval(-1);
 
