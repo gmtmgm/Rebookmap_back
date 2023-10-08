@@ -63,7 +63,7 @@ public class LoginGoogleController {
         if (emailVerified) {
 
             User userEntity =
-                    userRepository.findByUsername("google" + "_" + email);
+                    userRepository.findByEmail(email);
             log.info("userEntity : " + userEntity);
 
 
