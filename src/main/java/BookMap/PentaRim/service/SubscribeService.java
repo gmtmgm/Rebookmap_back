@@ -41,9 +41,9 @@ public class SubscribeService {
 
     }
 
-    public List<SubscribeDto> subscribeList(Long toUserId, Long principalId) {
+    public List<SubscribeDto> subscribeList(Long toUserId, Long formUserId) {
         List<SubscribeDto> subscribeDto = subscribeRepository.findBytoUserId(toUserId);
-        List<Subscribe> subscribeList = subscribeRepository.findByFromUserId(principalId);
+        List<Subscribe> subscribeList = subscribeRepository.findByFromUserId(formUserId);
 
         for(Subscribe sub : subscribeList) {
             for(SubscribeDto dto : subscribeDto) {

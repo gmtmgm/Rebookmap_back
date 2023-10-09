@@ -10,5 +10,9 @@ oauth2:
     resource-uri: https://www.googleapis.com/oauth2/v2/userinfo
 
 
+spring:
+  session:
+    store-type: jdbc
+    jdbc.initialize-schema: always
 
 

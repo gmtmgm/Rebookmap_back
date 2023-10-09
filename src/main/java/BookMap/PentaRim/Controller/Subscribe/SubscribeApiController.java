@@ -26,19 +26,10 @@ public class SubscribeApiController {
     SubscribeService subscribeService;
 
     @PostMapping("/api/subscribe/{toUserId}")
-    public ResponseEntity<String> subscribe(@PathVariable Long toUserId, @RequestBody String sessionId){
+    public ResponseEntity<String> subscribe(@PathVariable Long toUserId, @PathVariable Long fromUserId){
 
-        Session findSession = sessionRepository.findById(sessionId);
-        if(findSession != null) {
-
-            User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            subscribeService.saveSubscribe(toUserId, user);
-            return ResponseEntity.ok().body("팔로우 성공");
-        }
-
-        log.info("유효하지 않은 세션입니다");
-        Exception e = new Exception();
-        throw new RuntimeException(e);
+        subscribeService.saveSubscribe(toUserId, userRepository.getReferenceById(fromUserId));
+        return ResponseEntity.ok().body("팔로우 성공");
 
 
 
@@ -46,20 +37,11 @@ public class SubscribeApiController {
     }
 
     @DeleteMapping("/api/subscribe/{toUserId}")
-    public ResponseEntity<String> unSubscribe(@PathVariable Long toUserId,@RequestBody String sessionId ){
+    public ResponseEntity<String> unSubscribe(@PathVariable Long toUserId, @PathVariable Long fromUserId){
 
-        Session findSession = sessionRepository.findById(sessionId);
-        if(findSession != null) {
+        subscribeService.deleteSubscribe(toUserId, fromUserId);
 
-            User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            subscribeService.deleteSubscribe(toUserId, user.getId());
-            return ResponseEntity.ok().body("팔로우 취소");
-        }
-
-        log.info("유효하지 않은 세션입니다");
-        Exception e = new Exception();
-        throw new RuntimeException(e);
-
+        return ResponseEntity.ok().body("팔로우 취소");
 
 
     }
