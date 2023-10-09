@@ -1,5 +1,6 @@
 package BookMap.PentaRim.Login.Controller;
 import BookMap.PentaRim.User.Dto.LoginResponse;
+import BookMap.PentaRim.User.Dto.MemberLoginDto;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.Role;
 import BookMap.PentaRim.User.model.User;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
+import java.lang.reflect.Member;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
@@ -52,8 +54,7 @@ public class LoginGoogleController {
 
 
 
-
-    private String MemberLogin(GoogleIdToken.Payload payload, HttpServletRequest request) {
+    private MemberLoginDto MemberLogin(GoogleIdToken.Payload payload, HttpServletRequest request) {
 
         String email = payload.getEmail();
         boolean emailVerified = payload.getEmailVerified();
@@ -100,7 +101,7 @@ public class LoginGoogleController {
               session.setAttribute(SessionConst.EMAIL, email);
 
 
-              //세션을 지우기 전까지 영구유지시킴
+              //세션 유지기간은 마지막 접속 이후로 하루
               session.setMaxInactiveInterval(86400);
 
               /*
@@ -113,7 +114,12 @@ public class LoginGoogleController {
 
               userRepository.save(user);
 
-              return session.getId();
+              MemberLoginDto memberLoginDto = new MemberLoginDto();
+
+              memberLoginDto.setSessionId(session.getId());
+              memberLoginDto.setUserId(user.getId());
+
+              return memberLoginDto;
 
 
 
@@ -142,8 +148,12 @@ public class LoginGoogleController {
               //세션을 지우기 전까지 영구유지시킴
               session.setMaxInactiveInterval(86400);
 
+              MemberLoginDto memberLoginDto = new MemberLoginDto();
+              memberLoginDto.setUserId(userEntity.getId());
+              memberLoginDto.setSessionId(session.getId());
 
-              return session.getId();
+
+              return memberLoginDto;
 
 
 
@@ -176,14 +186,17 @@ public class LoginGoogleController {
             GoogleIdToken.Payload idTokenString = decodeIdToken(idToken);
             log.info("id토큰 검증 완료");
 
-            String response = MemberLogin(idTokenString, request);
+            MemberLoginDto memberLoginDto = MemberLogin(idTokenString, request);
 
             log.info("로그인 완료");
 
             LoginResponse loginResponse = new LoginResponse();
 
             loginResponse.setStatus("");
-            loginResponse.setSessionId(response);
+            loginResponse.setSessionId(memberLoginDto.getSessionId());
+            loginResponse.setId(memberLoginDto.getUserId());
+
+
 
             return  loginResponse;
 
