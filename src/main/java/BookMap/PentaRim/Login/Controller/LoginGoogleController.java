@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -124,13 +125,16 @@ public class LoginGoogleController {
 
           } else {
 
+              //중복 로그인 처리
+
               Map<String, ? extends Session> sessions = sessionRepository.findByIndexNameAndIndexValue(SessionConst.EMAIL
-              ,email);
+              ,userEntity.getEmail());
 
               if(sessions != null) {
                   for(String key : sessions.keySet()) {
                         sessionRepository.deleteById(key);
                   }
+                  log.info("이전 세션 제거");
               }
 
 
