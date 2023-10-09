@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.session.Session;
 import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.Map;
 
 
 @Slf4j
@@ -123,7 +124,14 @@ public class LoginGoogleController {
 
           } else {
 
+              Map<String, ? extends Session> sessions = sessionRepository.findByIndexNameAndIndexValue(SessionConst.EMAIL
+              ,email);
 
+              if(sessions != null) {
+                  for(String key : sessions.keySet()) {
+                        sessionRepository.deleteById(key);
+                  }
+              }
 
 
               //로그인 성공 처리
