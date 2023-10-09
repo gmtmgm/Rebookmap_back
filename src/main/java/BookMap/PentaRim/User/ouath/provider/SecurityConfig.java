@@ -53,7 +53,7 @@ public class SecurityConfig {
         http
                 .addFilter(corsConfig.corsFilter())
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
