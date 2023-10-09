@@ -36,6 +36,8 @@ public class User extends TimeEntity {
     private String username;
     private String nickname;
 
+    private String status;
+
 
 
     private Role role;

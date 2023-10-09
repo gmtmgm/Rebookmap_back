@@ -19,8 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 
 @Slf4j
@@ -67,7 +66,7 @@ public class LoginGoogleController {
 
             User userEntity =
                     userRepository.findByEmail(email);
-            log.info("userEntity : " + userEntity);
+            log.info("userEntity : " + userEntity + " 이미 로그인 한 사용자");
 
 
 
@@ -84,6 +83,7 @@ public class LoginGoogleController {
                       .nickname(name)
                       .picture(pictureUrl)
                       .role(Role.USER)
+                      .status("")
                       .build();
 
               log.info("user : " + user);
@@ -124,11 +124,11 @@ public class LoginGoogleController {
 
               //중복 로그인 처리
 
-              Map<String, ? extends Session> sessions = sessionRepository.findByIndexNameAndIndexValue(userEntity.getEmail(),
-                      SessionConst.EMAIL);
+              Set<String> sessions =  sessionRepository.findByIndexNameAndIndexValue(SessionConst.EMAIL,
+                      email).keySet();
 
               if(!sessions.isEmpty()) {
-                  for(String key : sessions.keySet()) {
+                  for(String key : sessions) {
                         sessionRepository.deleteById(key);
                   }
                   log.info("이전 세션 제거");
