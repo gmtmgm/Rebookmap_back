@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +30,8 @@ import java.util.Collections;
 public class LoginGoogleController {
 
     private final UserRepository userRepository;
+
+    private final JdbcIndexedSessionRepository sessionRepository;
 
 
 
@@ -85,9 +89,16 @@ public class LoginGoogleController {
 
               log.info("user : " + user);
 
+              if(sessionRepository.findByIndexNameAndIndexValue(SessionConst.EMAIL, email) != null) {
+                  return sessionRepository.findByIndexNameAndIndexValue(SessionConst.EMAIL, email).keySet().toString();
+
+              }
+
               //로그인 성공 처리
               //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
               HttpSession session =request.getSession();
+
+
               //세션에 로그인 회원 정보 보관
               session.setAttribute(SessionConst.EMAIL, email);
 
@@ -114,6 +125,11 @@ public class LoginGoogleController {
 
 
           } else {
+
+              if(sessionRepository.findByIndexNameAndIndexValue(SessionConst.EMAIL, email) != null) {
+                  return sessionRepository.findByIndexNameAndIndexValue(SessionConst.EMAIL, email).keySet().toString();
+
+              }
 
 
               //로그인 성공 처리
@@ -151,6 +167,7 @@ public class LoginGoogleController {
 
 
     }
+
 
 
 

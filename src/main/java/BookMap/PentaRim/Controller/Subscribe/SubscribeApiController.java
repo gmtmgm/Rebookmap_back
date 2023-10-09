@@ -25,8 +25,8 @@ public class SubscribeApiController {
     @Autowired
     SubscribeService subscribeService;
 
-    @PostMapping("/api/subscribe/{toUserId}")
-    public ResponseEntity<String> subscribe(@PathVariable Long toUserId, @PathVariable Long fromUserId){
+    @PostMapping("/api/subscribe/success")
+    public ResponseEntity<String> subscribe(@RequestBody Long toUserId, @RequestBody Long fromUserId){
 
         subscribeService.saveSubscribe(toUserId, userRepository.getReferenceById(fromUserId));
         return ResponseEntity.ok().body("팔로우 성공");
@@ -36,8 +36,8 @@ public class SubscribeApiController {
 
     }
 
-    @DeleteMapping("/api/subscribe/{toUserId}")
-    public ResponseEntity<String> unSubscribe(@PathVariable Long toUserId, @PathVariable Long fromUserId){
+    @DeleteMapping("/api/subscribe/do_not")
+    public ResponseEntity<String> unSubscribe(@RequestBody Long toUserId, @RequestBody Long fromUserId){
 
         subscribeService.deleteSubscribe(toUserId, fromUserId);
 
