@@ -1,4 +1,5 @@
 package BookMap.PentaRim.Login.Controller;
+import BookMap.PentaRim.User.Dto.LoginResponse;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.Role;
 import BookMap.PentaRim.User.model.User;
@@ -100,7 +101,7 @@ public class LoginGoogleController {
 
 
               //세션을 지우기 전까지 영구유지시킴
-              session.setMaxInactiveInterval(-1);
+              session.setMaxInactiveInterval(86400);
 
               /*
 
@@ -122,17 +123,9 @@ public class LoginGoogleController {
 
           } else {
 
-              //중복 로그인 처리
 
-              Set<String> sessions =  sessionRepository.findByIndexNameAndIndexValue(SessionConst.EMAIL,
-                      email).keySet();
-
-              if(!sessions.isEmpty()) {
-                  for(String key : sessions) {
-                        sessionRepository.deleteById(key);
-                  }
-                  log.info("이전 세션 제거");
-              }
+              //이전 세션 삭제
+              sessionRepository.cleanUpExpiredSessions();
 
 
               //로그인 성공 처리
@@ -147,7 +140,7 @@ public class LoginGoogleController {
 
 
               //세션을 지우기 전까지 영구유지시킴
-              session.setMaxInactiveInterval(-1);
+              session.setMaxInactiveInterval(86400);
 
 
               return session.getId();
@@ -177,7 +170,7 @@ public class LoginGoogleController {
 
 
     @PostMapping(value = "/login", produces="application/json; charset=utf8")
-    public String Login( @RequestBody  String idToken, HttpServletRequest request ) {
+    public LoginResponse Login(@RequestBody  String idToken, HttpServletRequest request ) {
         log.info("로그인 시작 ");
         try{
             GoogleIdToken.Payload idTokenString = decodeIdToken(idToken);
@@ -187,7 +180,12 @@ public class LoginGoogleController {
 
             log.info("로그인 완료");
 
-            return  response;
+            LoginResponse loginResponse = new LoginResponse();
+
+            loginResponse.setStatus("");
+            loginResponse.setSessionId(response);
+
+            return  loginResponse;
 
 
         }catch(GeneralSecurityException e){	//FileNotFoundException이 발생했다면
