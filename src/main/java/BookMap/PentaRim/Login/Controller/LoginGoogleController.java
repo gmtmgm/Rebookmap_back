@@ -15,14 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.session.Session;
 import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -127,10 +124,10 @@ public class LoginGoogleController {
 
               //중복 로그인 처리
 
-              Map<String, ? extends Session> sessions = sessionRepository.findByIndexNameAndIndexValue(SessionConst.EMAIL
-              ,userEntity.getEmail());
+              Map<String, ? extends Session> sessions = sessionRepository.findByIndexNameAndIndexValue(userEntity.getEmail(),
+                      SessionConst.EMAIL);
 
-              if(sessions != null) {
+              if(!sessions.isEmpty()) {
                   for(String key : sessions.keySet()) {
                         sessionRepository.deleteById(key);
                   }
@@ -145,6 +142,8 @@ public class LoginGoogleController {
 
               //세션에 로그인 회원 정보 보관
               session.setAttribute(SessionConst.EMAIL, email);
+
+
 
 
               //세션을 지우기 전까지 영구유지시킴
