@@ -1,6 +1,5 @@
 package BookMap.PentaRim.Login.Controller;
 import BookMap.PentaRim.User.Dto.LoginResponse;
-import BookMap.PentaRim.User.Dto.MemberLoginDto;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.Role;
 import BookMap.PentaRim.User.model.User;
@@ -14,13 +13,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.session.Session;
 import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
-import java.lang.reflect.Member;
 import java.security.GeneralSecurityException;
 import java.util.*;
 

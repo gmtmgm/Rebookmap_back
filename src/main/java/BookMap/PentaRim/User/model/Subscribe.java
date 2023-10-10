@@ -9,7 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
-
+/*
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -23,6 +23,8 @@ import java.sql.Timestamp;
                 )
         }
 )
+
+ */
 public class Subscribe {
 
     /*
