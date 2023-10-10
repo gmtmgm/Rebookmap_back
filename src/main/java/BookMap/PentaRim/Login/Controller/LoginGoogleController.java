@@ -169,7 +169,7 @@ public class LoginGoogleController {
 
 
     @PostMapping(value = "/login", produces="application/json; charset=utf8")
-    public LoginResponse Login(@RequestBody  String idToken, HttpServletRequest request ) {
+    public String Login(@RequestBody  String idToken, HttpServletRequest request ) {
         log.info("로그인 시작 ");
         try{
             GoogleIdToken.Payload idTokenString = decodeIdToken(idToken);
@@ -179,15 +179,14 @@ public class LoginGoogleController {
 
             log.info("로그인 완료");
 
-            LoginResponse loginResponse = new LoginResponse();
-
-            loginResponse.setStatus("");
-            loginResponse.setSessionId(sessionId);
 
 
 
 
-            return  loginResponse;
+
+
+
+            return  sessionId;
 
 
         }catch(GeneralSecurityException e){	//FileNotFoundException이 발생했다면
