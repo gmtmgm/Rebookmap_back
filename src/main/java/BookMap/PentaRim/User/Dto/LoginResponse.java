@@ -8,7 +8,7 @@ public class LoginResponse {
     String sessionId;
     String status;
 
-    Long id;
+
 
     }
 

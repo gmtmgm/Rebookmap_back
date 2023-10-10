@@ -54,7 +54,7 @@ public class LoginGoogleController {
 
 
 
-    private MemberLoginDto MemberLogin(GoogleIdToken.Payload payload, HttpServletRequest request) {
+    private String MemberLogin(GoogleIdToken.Payload payload, HttpServletRequest request) {
 
         String email = payload.getEmail();
         boolean emailVerified = payload.getEmailVerified();
@@ -114,12 +114,7 @@ public class LoginGoogleController {
 
               userRepository.save(user);
 
-              MemberLoginDto memberLoginDto = new MemberLoginDto();
-
-              memberLoginDto.setSessionId(session.getId());
-              memberLoginDto.setUserId(user.getId());
-
-              return memberLoginDto;
+             return session.getId();
 
 
 
@@ -147,12 +142,10 @@ public class LoginGoogleController {
               //세션을 지우기 전까지 영구유지시킴
               session.setMaxInactiveInterval(86400);
 
-              MemberLoginDto memberLoginDto = new MemberLoginDto();
-              memberLoginDto.setUserId(userEntity.getId());
-              memberLoginDto.setSessionId(session.getId());
 
 
-              return memberLoginDto;
+
+              return session.getId();
 
 
 
@@ -185,15 +178,15 @@ public class LoginGoogleController {
             GoogleIdToken.Payload idTokenString = decodeIdToken(idToken);
             log.info("id토큰 검증 완료");
 
-            MemberLoginDto memberLoginDto = MemberLogin(idTokenString, request);
+            String sessionId = MemberLogin(idTokenString, request);
 
             log.info("로그인 완료");
 
             LoginResponse loginResponse = new LoginResponse();
 
             loginResponse.setStatus("");
-            loginResponse.setSessionId(memberLoginDto.getSessionId());
-            loginResponse.setId(memberLoginDto.getUserId());
+            loginResponse.setSessionId(sessionId);
+
 
 
 
