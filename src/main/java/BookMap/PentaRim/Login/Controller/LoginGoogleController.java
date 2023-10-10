@@ -130,8 +130,7 @@ public class LoginGoogleController {
           } else {
 
 
-              //이전 세션 삭제
-              sessionRepository.cleanUpExpiredSessions();
+
 
 
               //로그인 성공 처리
