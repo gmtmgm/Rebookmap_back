@@ -1,7 +1,6 @@
 package BookMap.PentaRim.User.Dto;
 
 
-import BookMap.PentaRim.User.model.Subscribe;
 import lombok.Data;
 
 @Data
