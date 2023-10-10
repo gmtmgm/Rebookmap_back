@@ -1,4 +1,4 @@
-package BookMap.PentaRim.Login.Controller;
+package BookMap.PentaRim.service;
 
 
 import lombok.RequiredArgsConstructor;
