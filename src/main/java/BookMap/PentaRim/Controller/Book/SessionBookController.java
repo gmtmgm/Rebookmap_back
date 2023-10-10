@@ -1,10 +1,12 @@
 package BookMap.PentaRim.Controller.Book;
 
 
+import BookMap.PentaRim.Book.Book;
 import BookMap.PentaRim.Book.Dto.BookMemoRequestDto;
 import BookMap.PentaRim.Book.Dto.BookPersonalRequestDto;
 import BookMap.PentaRim.Book.Dto.BookPersonalUpdateRequestDto;
 import BookMap.PentaRim.Book.Dto.BookPersonalUpdateStateDto;
+import BookMap.PentaRim.ControllerDto.*;
 import BookMap.PentaRim.Dto.ProfileUpdateRequestDto;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.model.User;
@@ -35,21 +37,15 @@ public class SessionBookController {
 
     //책 저장 기능
 
-    /**
-     *
-     * @param isbn
-     * @param bookPersonalRequestDto
-     * @return boolean
-     */
+
     @PostMapping("/book/save")  //책 저장
-    public boolean bookSave(@RequestParam String isbn, @RequestBody BookPersonalRequestDto bookPersonalRequestDto,
-                            @RequestBody String sessionId){
+    public boolean bookSave(@RequestParam BookSaveDto bookSaveDto){
 
-        Session findSession = sessionRepository.findById(sessionId);
+        Session findSession = sessionRepository.findById(bookSaveDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            return bookSaved.booksave(user.getId(),isbn,bookPersonalRequestDto);
+            return bookSaved.booksave(user.getId(),bookSaveDto.getIsbn(),bookSaveDto.getBookPersonalRequestDto());
         }
 
         log.info("유효하지 않은 세션입니다");
@@ -57,20 +53,15 @@ public class SessionBookController {
         throw new RuntimeException(e);
     }
 
-    /**
-     *
-     * @param isbn
-     * @param bookPersonalUpdateRequestDto
-     */
+
     @PostMapping("/book/changeall")  //책 정보 변경
-    public void changeBookAll(@RequestParam String isbn
-            , @RequestBody BookPersonalUpdateRequestDto bookPersonalUpdateRequestDto, @RequestBody String sessionId){
+    public void changeBookAll(@RequestParam ChangeBookAllDto changeBookAllDto){
 
-        Session findSession = sessionRepository.findById(sessionId);
+        Session findSession = sessionRepository.findById(changeBookAllDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            bookSaved.changeAll(user.getId(), isbn, bookPersonalUpdateRequestDto);
+            bookSaved.changeAll(user.getId(), changeBookAllDto.getIsbn(), changeBookAllDto.getBookPersonalUpdateRequestDto());
         }
         log.info("유효하지 않은 세션입니다");
         Exception e = new Exception();
@@ -78,17 +69,14 @@ public class SessionBookController {
 
     }
 
-    /**
-     *
-     * @param isbn
-     */
+
     @DeleteMapping("/book/delete") //책 삭제
-    public void deleteBook(@RequestParam String isbn, @RequestBody String sessionId){
-        Session findSession = sessionRepository.findById(sessionId);
+    public void deleteBook(@RequestParam BookDeleteDto bookDeleteDto){
+        Session findSession = sessionRepository.findById(bookDeleteDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            bookSaved.deleteBook(user.getId(),isbn);
+            bookSaved.deleteBook(user.getId(),bookDeleteDto.getIsbn());
         }
         log.info("유효하지 않은 세션입니다");
         Exception e = new Exception();
@@ -96,12 +84,12 @@ public class SessionBookController {
     }
 
     @GetMapping("/book/detail")  //상세 조회
-    public ResponseEntity<?> bookdetail(@RequestParam String isbn , @RequestBody String sessionId){
-        Session findSession = sessionRepository.findById(sessionId);
+    public ResponseEntity<?> bookdetail(@RequestParam BookDeleteDto bookDeleteDto){
+        Session findSession = sessionRepository.findById(bookDeleteDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            return new ResponseEntity<>(bookSaved.bookPersonalDetail(user.getId(),isbn),HttpStatus.OK);
+            return new ResponseEntity<>(bookSaved.bookPersonalDetail(user.getId(),bookDeleteDto.getIsbn()),HttpStatus.OK);
         }
         log.info("유효하지 않은 세션입니다");
         Exception e = new Exception();
@@ -111,19 +99,14 @@ public class SessionBookController {
 
     //책 메모 기능
 
-    /**
-     *
-     * @param isbn
-     * @param bookMemoRequestDto
-     */
+
     @PostMapping("/bookmemo/save")  //책 메모 저장
-    public void bookMemoSave1(@RequestParam String isbn, @RequestBody BookMemoRequestDto bookMemoRequestDto,
-                              @RequestBody String sessionId){
-        Session findSession = sessionRepository.findById(sessionId);
+    public void bookMemoSave1(@RequestParam BookMemoSaveDto bookMemoSaveDto){
+        Session findSession = sessionRepository.findById(bookMemoSaveDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            bookSaved.bookMemoSave(user.getId(), isbn,bookMemoRequestDto);
+            bookSaved.bookMemoSave(user.getId(), bookMemoSaveDto.getIsbn(),bookMemoSaveDto.getBookMemoRequestDto());
 
         }
         log.info("유효하지 않은 세션입니다");
@@ -132,14 +115,10 @@ public class SessionBookController {
 
     }
 
-    /**
-     *
-     * @param bookMemoId
-     * @param bookMemoRequestDto
-     */
+
     @PostMapping("/bookmemo/update/{bookMemoId}")  //메모 수정
-    public void bookMemoUpdate(@PathVariable Long bookMemoId, @RequestBody BookMemoRequestDto bookMemoRequestDto){
-        bookSaved.bookMemoUpdate(bookMemoId, bookMemoRequestDto);
+    public void bookMemoUpdate(@RequestBody BookMemoUpdateDto bookMemoUpdateDto){
+        bookSaved.bookMemoUpdate(bookMemoUpdateDto.getBookMemoId(), bookMemoUpdateDto.getBookMemoRequestDto());
     }
 
     /**
@@ -251,25 +230,16 @@ public class SessionBookController {
 
     //월별 완독 책
 
-    /**
-     *
-     * @param id
-     * @param year, month
-     * @return 통계별 완독 책
-     */
-    @GetMapping("/summary/{id}")
-    public ResponseEntity<?> bookPersonalMonth(@PathVariable Long id, @RequestParam String year){
-        return new ResponseEntity<>(bookSaved.findByYear(id, year), HttpStatus.OK);
-    }
+
 
     @PostMapping("/summary")
-    public ResponseEntity<?> bookPersonalMonth(@RequestParam String year, @RequestBody String sessionId){
+    public ResponseEntity<?> bookPersonalMonth(@RequestBody SummaryDto summaryDto){
 
-        Session findSession = sessionRepository.findById(sessionId);
+        Session findSession = sessionRepository.findById(summaryDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-           return new ResponseEntity<>(bookSaved.findByYear(user.getId(), year),HttpStatus.OK);
+           return new ResponseEntity<>(bookSaved.findByYear(user.getId(), summaryDto.getYear()),HttpStatus.OK);
 
         }
         log.info("유효하지 않은 세션입니다");
@@ -312,13 +282,12 @@ public class SessionBookController {
     }
 
     @PostMapping("/profile/update")
-    public void profileUpdate(@RequestBody ProfileUpdateRequestDto profileUpdateRequestDto,
-                              @RequestBody String sessionId){
-        Session findSession = sessionRepository.findById(sessionId);
+    public void profileUpdate(@RequestBody ProfileUpdateDto profileUpdateDto){
+        Session findSession = sessionRepository.findById(profileUpdateDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            totalService.profileUpdate(user.getId(),profileUpdateRequestDto);
+            totalService.profileUpdate(user.getId(),profileUpdateDto.getProfileUpdateRequestDto());
 
         }
         log.info("유효하지 않은 세션입니다");
@@ -328,14 +297,16 @@ public class SessionBookController {
 
 
 
-    @PostMapping("/book/savedornot")
-    public ResponseEntity<?> savedOrNot(@RequestParam String isbn,@RequestBody String sessionId){
 
-        Session findSession = sessionRepository.findById(sessionId);
+    //형식이 똑같아서 북 딜리트디티오 사용
+    @PostMapping("/book/savedornot")
+    public ResponseEntity<?> savedOrNot(@RequestBody BookDeleteDto bookDeleteDto){
+
+        Session findSession = sessionRepository.findById(bookDeleteDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-           return new ResponseEntity<>(bookSaved.checkSavedOrNot(user.getId(), isbn), HttpStatus.OK);
+           return new ResponseEntity<>(bookSaved.checkSavedOrNot(user.getId(), bookDeleteDto.getIsbn()), HttpStatus.OK);
 
         }
         log.info("유효하지 않은 세션입니다");

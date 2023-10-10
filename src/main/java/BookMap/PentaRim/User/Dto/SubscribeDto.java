@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 public class SubscribeDto {
 
+    /*
+
     private Long id;
     private String name;
     private String profileImage;
@@ -17,5 +19,9 @@ public class SubscribeDto {
         this.name = subscribe.getFromUser().getNickname();
         this.profileImage = subscribe.getFromUser().getPicture();
         this.subscribeState = false;
+
+
     }
+
+     */
 }

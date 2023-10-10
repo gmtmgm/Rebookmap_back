@@ -11,8 +11,12 @@ import lombok.Setter;
 @Setter
 public class UserProfileDto {
 
+    /*
+
     //팔로워 카운트, 구독 여부
 
     private boolean subscribeState;
     private Long subscribeCount;
+
+     */
 }

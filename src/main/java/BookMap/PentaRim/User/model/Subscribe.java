@@ -25,6 +25,8 @@ import java.sql.Timestamp;
 )
 public class Subscribe {
 
+    /*
+
     //팔로잉 팔로워 기능
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,5 +49,7 @@ public class Subscribe {
         this.toUserId = toUserId;
         this.fromUser = fromUser;
     }
+
+     */
 
 }

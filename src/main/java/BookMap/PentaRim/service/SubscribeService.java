@@ -15,6 +15,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SubscribeService {
 
+    /*
+
     //팔로잉 팔로워 서비스
 
     @Autowired
@@ -54,4 +56,6 @@ public class SubscribeService {
         }
         return subscribeDto;
     }
+
+     */
 }

@@ -2,6 +2,8 @@ package BookMap.PentaRim.Controller.BookMap;
 
 import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.Dto.*;
+import BookMap.PentaRim.BookMapControllerDto.BookMapSaveDto;
+import BookMap.PentaRim.BookMapControllerDto.BookMapScrapSaveDto;
 import BookMap.PentaRim.Repository.service.BookMapRepositoryService;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.model.User;
@@ -70,12 +72,12 @@ public class BookMapController {
 
 
     @PostMapping("/bookmap/save") //특정 유저의 북맵 저장
-    public Long bookMapSave(@RequestBody BookMapSaveRequestDto bookMapSaveRequestDto,@RequestBody String sessionId){
-        Session findSession = sessionRepository.findById(sessionId);
+    public Long bookMapSave(@RequestBody BookMapSaveDto bookMapSaveDto){
+        Session findSession = sessionRepository.findById(bookMapSaveDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            return bookMapRepositoryService.saveBookMap(user.getId(), bookMapSaveRequestDto);
+            return bookMapRepositoryService.saveBookMap(user.getId(), bookMapSaveDto.getBookMapSaveRequestDto());
         }
 
         log.info("유효하지 않은 세션입니다");
@@ -93,12 +95,12 @@ public class BookMapController {
 
 
     @PostMapping("/bookmap/scrap/save/{bookmapid}") //특정 유저의 북맵 스크랩 저장
-    public boolean userBookMapScrapSave(@PathVariable Long bookmapid, @RequestBody String sessionId){
-        Session findSession = sessionRepository.findById(sessionId);
+    public boolean userBookMapScrapSave(@PathVariable BookMapScrapSaveDto bookMapScrapSaveDto){
+        Session findSession = sessionRepository.findById(bookMapScrapSaveDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            return bookMapRepositoryService.saveBookMapScrap(user.getId(), bookmapid);
+            return bookMapRepositoryService.saveBookMapScrap(user.getId(), bookMapScrapSaveDto.getBookmapid());
         }
 
         log.info("유효하지 않은 세션입니다");
@@ -111,13 +113,15 @@ public class BookMapController {
         return bookMapRepositoryService.saveBookMapScrap(id, bookmapid);
     }
 
+
+    //이거도 유형이 같아서 북맵스크랩세이브디티오 그대로 사용
     @PostMapping("bookmap/tomy/save/{bookMapId}") //다른 유저의 북맵을 내걸로 저장
-    public void bookMapSaveToMy(@PathVariable Long bookMapId, @RequestBody String sessionId){
-        Session findSession = sessionRepository.findById(sessionId);
+    public void bookMapSaveToMy(@RequestBody BookMapScrapSaveDto bookMapScrapSaveDto){
+        Session findSession = sessionRepository.findById(bookMapScrapSaveDto.getSessionId());
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            bookMapRepositoryService.saveToMyBookMap(user.getId(), bookMapId);
+            bookMapRepositoryService.saveToMyBookMap(user.getId(), bookMapScrapSaveDto.getBookmapid());
         }
 
         log.info("유효하지 않은 세션입니다");

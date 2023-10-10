@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface SubscribeRepository extends JpaRepository<Subscribe, Integer> {
 
+    /*
+
 
     //팔로워 팔로잉 레포지토리 꽤 복잡한 쿼리 갖고잇음.......
     //참고한 자료 출처 오주연에게 문의
@@ -32,5 +34,7 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Integer> {
     List<SubscribeDto> findBytoUserId(@Param("toUserId") Long toUserId);
 
     List<Subscribe> findByFromUserId(Long fromUserId);
+
+     */
 
 }

@@ -1,5 +1,6 @@
 package BookMap.PentaRim.Controller.Subscribe;
 
+import BookMap.PentaRim.ControllerDto.SubscribeDto;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.ouath.provider.SessionConst;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class SubscribeApiController {
 
+    /*
+
     private final JdbcIndexedSessionRepository sessionRepository;
     private final UserRepository userRepository;
 
@@ -26,9 +29,10 @@ public class SubscribeApiController {
     SubscribeService subscribeService;
 
     @PostMapping("/api/subscribe/success")
-    public ResponseEntity<String> subscribe(@RequestBody Long toUserId, @RequestBody Long fromUserId){
+    public ResponseEntity<String> subscribe(@RequestBody SubscribeDto subscribeDto){
 
-        subscribeService.saveSubscribe(toUserId, userRepository.getReferenceById(fromUserId));
+        subscribeService.saveSubscribe(subscribeDto.getToUserId(),
+                userRepository.getReferenceById(subscribeDto.getFromUserId()));
         return ResponseEntity.ok().body("팔로우 성공");
 
 
@@ -37,12 +41,14 @@ public class SubscribeApiController {
     }
 
     @DeleteMapping("/api/subscribe/do_not")
-    public ResponseEntity<String> unSubscribe(@RequestBody Long toUserId, @RequestBody Long fromUserId){
+    public ResponseEntity<String> unSubscribe(@RequestBody SubscribeDto subscribeDto){
 
-        subscribeService.deleteSubscribe(toUserId, fromUserId);
+        subscribeService.deleteSubscribe(subscribeDto.getToUserId(), subscribeDto.getFromUserId());
 
         return ResponseEntity.ok().body("팔로우 취소");
 
 
     }
+
+     */
 }
