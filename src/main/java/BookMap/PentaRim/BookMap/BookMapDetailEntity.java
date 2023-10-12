@@ -31,13 +31,17 @@ public class BookMapDetailEntity {
     @Column(name = "BOOKMAPDETAIL_INDEX")
     private int index;
 
+    private String nickname;
+
     @Builder
-    public BookMapDetailEntity(Long bookMapDetailId, BookMapEntity bookMapEntity, String type, String memo, int index){
+    public BookMapDetailEntity(Long bookMapDetailId, BookMapEntity bookMapEntity, String type, String memo, int index,
+                               String nickname){
         this.bookMapDetailId = bookMapDetailId;
         this.bookMapEntity = bookMapEntity;
         this.type = type;
         this.memo = memo;
         this.index = index;
+        this.nickname = nickname;
     }
 
     public void update(String memo, int index){

@@ -18,6 +18,8 @@ public class BookMapDetailRequestDto {
     private String type;
     private String memo;
     private int index;
+
+    private String nickname;
 /*
     @Builder
     public BookMapDetailRequestDto(Long bookMapDetailId, BookMapEntity bookMapEntity, String type, String memo, int index){
@@ -29,11 +31,12 @@ public class BookMapDetailRequestDto {
     }
  */
     @Builder
-    public BookMapDetailRequestDto(/*BookMapEntity bookMapEntity, */String type, String memo, int index) {
+    public BookMapDetailRequestDto(/*BookMapEntity bookMapEntity, */String type, String memo, int index,String nickname) {
 //        this.bookMapEntity = bookMapEntity;
         this.type = type;
         this.memo = memo;
         this.index = index;
+        this.nickname = nickname;
     }
 
     public BookMapDetailEntity toEntity(){
@@ -42,6 +45,7 @@ public class BookMapDetailRequestDto {
                 .type(type)
                 .memo(memo)
                 .index(index)
+                .nickname(nickname)
                 .build();
     }
 

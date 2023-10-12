@@ -28,6 +28,7 @@ public class User extends TimeEntity {
 
     @NotBlank
     private String email;
+
     private String picture;
     private String book_state;
 
