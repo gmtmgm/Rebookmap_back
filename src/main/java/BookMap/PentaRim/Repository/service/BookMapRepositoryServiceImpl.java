@@ -224,7 +224,8 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
         for (BookMap.BookMapDetail bookMapDetail : bookMapDetails) {
             saveBookMapDetail(bookMapEntity, new BookMapDetailRequestDto(
-                    bookMapDetail.getType(), bookMapDetail.getMemo(), bookMapDetails.indexOf(bookMapDetail)));
+                    bookMapDetail.getType(), bookMapDetail.getMemo(), bookMapDetails.indexOf(bookMapDetail),
+                    bookMapEntity.getUser().getNickname()));
             if ("Book".equals(bookMapDetail.getType())){
                 ArrayList<BookImageDto> map = bookMapDetail.getMap();
                 ArrayList<BookListRequestDto> bookListRequestDtos = new ArrayList<>();

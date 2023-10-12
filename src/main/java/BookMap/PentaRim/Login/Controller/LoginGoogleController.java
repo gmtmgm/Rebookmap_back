@@ -98,7 +98,11 @@ public class LoginGoogleController {
               //세션에 로그인 회원 정보 보관
               session.setAttribute(SessionConst.EMAIL, email);
 
+
+
               String sessionId = session.getId();
+
+
 
 
 
@@ -137,15 +141,13 @@ public class LoginGoogleController {
               //db에 세션 저장
               session.setAttribute(SessionConst.EMAIL, email);
 
-              String sessionId = session.getId();
-
               //메모리에 저장된 세션 지움 db에 저장된 세션만 남김
 
 
 
 
 
-              return sessionId;
+              return session.getId();
 
 
 
