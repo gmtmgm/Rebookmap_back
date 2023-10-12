@@ -214,8 +214,8 @@ public class SessionBookController {
         return new ResponseEntity<>(bookSaved.findByTop10(),HttpStatus.OK);
     }
 
-    @PostMapping("/bookmemo/all")
-    public ResponseEntity<?> bookMemoAll(@RequestBody String sessionId){
+    @GetMapping("/bookmemo/all")
+    public ResponseEntity<?> bookMemoAll(@RequestHeader String sessionId){
         Session findSession = sessionRepository.findById(sessionId);
         if(findSession != null) {
 
@@ -270,8 +270,8 @@ public class SessionBookController {
     }
 
     //프로필
-    @PostMapping("/profile")
-    public ResponseEntity<?> profile(@RequestBody String sessionId){
+    @GetMapping("/profile")
+    public ResponseEntity<?> profile(@RequestHeader String sessionId){
         Session findSession = sessionRepository.findById(sessionId);
         if(findSession != null) {
 
@@ -285,12 +285,12 @@ public class SessionBookController {
     }
 
     @PostMapping("/profile/update")
-    public void profileUpdate(@RequestBody ProfileUpdateDto profileUpdateDto){
-        Session findSession = sessionRepository.findById(profileUpdateDto.getSessionId());
+    public void profileUpdate(@RequestHeader String sessionId, @RequestBody ProfileUpdateRequestDto profileUpdateRequestDto){
+        Session findSession = sessionRepository.findById(sessionId);
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            totalService.profileUpdate(user.getId(),profileUpdateDto.getProfileUpdateRequestDto());
+            totalService.profileUpdate(user.getId(), profileUpdateRequestDto);
 
         }
         log.info("유효하지 않은 세션입니다");

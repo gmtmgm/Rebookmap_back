@@ -144,7 +144,8 @@ public class TotalServiceImpl implements TotalService{
         for(BookMemo bookMemo: bookMemoList){
             profileMemoResponseDtoList.add(new ProfileMemoResponseDto(bookMemo));
         }
-        return new ProfileResponseDto(user, count, status, profileMemoResponseDtoList);
+        Integer bookmapCount = bookMapRepository.countBookMapByUser(user);
+        return new ProfileResponseDto(user, count, bookmapCount, status,  profileMemoResponseDtoList);
     }
 
     @Override
@@ -164,7 +165,7 @@ public class TotalServiceImpl implements TotalService{
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
         List<BookPersonal> bookPersonalList = bookPersonalRepository.findByUser(user);
-        List<BookMemo> bookMemoList = bookMemoRepository.findTop2ByBookPersonal_UserOrderBySavedDesc(user);
+        List<BookMemo> bookMemoList = bookMemoRepository.findByBookPersonal_UserOrderBySavedDesc(user);
         List<ProfileMemoResponseDto> bookMemoResponseDtoList = new ArrayList<>();
         for(BookMemo bookMemo: bookMemoList){
             bookMemoResponseDtoList.add(new ProfileMemoResponseDto(bookMemo));
