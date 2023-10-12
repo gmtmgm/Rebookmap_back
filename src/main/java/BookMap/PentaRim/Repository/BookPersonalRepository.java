@@ -27,6 +27,9 @@ public interface BookPersonalRepository extends JpaRepository<BookPersonal, Long
     @Query("SELECT bp.book FROM BookPersonal bp GROUP BY bp.book ORDER BY count (bp.book.id) DESC LIMIT 2")
     List<Book> findBooksTop2ByOrderByBookCountDesc();
 
+    @Query("SELECT bp.book FROM BookPersonal bp GROUP BY bp.book ORDER BY count (bp.book.id) DESC LIMIT 5")
+    List<Book> findBooksTop5ByOrderByBookCountDesc();
+
     @Query("SELECT bp.book FROM BookPersonal bp GROUP BY bp.book ORDER BY count (bp.book.id) DESC LIMIT 10")
     List<Book> findBooksTop10ByOrderByBookCountDesc();
 

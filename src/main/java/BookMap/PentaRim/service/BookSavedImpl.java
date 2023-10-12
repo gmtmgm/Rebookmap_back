@@ -70,6 +70,7 @@ public class BookSavedImpl implements BookSaved{
                     .orElseThrow(() ->  new
                             IllegalArgumentException("해당 book이 없습니다."));
         } else{
+            System.out.println("isbn: "+book.getIsbn());
             bookRepository.save(book);
         }
         return book;
@@ -163,6 +164,7 @@ public class BookSavedImpl implements BookSaved{
                 .saved(LocalDateTime.now())
                 .page(bookMemoRequestDto.getPage())
                 .content(bookMemoRequestDto.getContent())
+                .title(bookMemoRequestDto.getTitle())
                 .build();
 
         bookMemoRepository.save(bookMemo);
@@ -283,6 +285,17 @@ public class BookSavedImpl implements BookSaved{
 
     @Override
     @Transactional
+    public List<BookTopResponseDto> findByTop5(){
+        List<Book> bookList = bookPersonalRepository.findBooksTop5ByOrderByBookCountDesc();
+        List<BookTopResponseDto> bookTopResponseDtos = new ArrayList<>();
+        for(Book book: bookList){
+            bookTopResponseDtos.add(new BookTopResponseDto(book));
+        }
+        return bookTopResponseDtos;
+    }
+
+    @Override
+    @Transactional
     public List<BookTopResponseDto> findByTop10(){
         List<Book> bookList = bookPersonalRepository.findBooksTop10ByOrderByBookCountDesc();
         List<BookTopResponseDto> bookTopResponseDtos = new ArrayList<>();
@@ -333,7 +346,7 @@ public class BookSavedImpl implements BookSaved{
         String isbnFirst = new String();
         if(isbn.contains(" ")){
             String[] stringList = isbn.split(" ");
-            if(stringList[0].isEmpty()){
+            if(stringList[0].isEmpty() || stringList[0].contains("X")){
                 isbnFirst = stringList[1];
             }else{
                 isbnFirst = stringList[0];
@@ -367,6 +380,22 @@ public class BookSavedImpl implements BookSaved{
         return Optional.of(new SearchBookResponseDto(bookSearchService.searchBooks(isbn)));
     }
 
+    @Override
+    public List<Optional<BookPersonalStateResponseDto>> allstoredBook(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
+        List<BookPersonal> bookPersonalList = bookPersonalRepository.findByUser(user);
+        List<String> isbns = new ArrayList<>();
+        for(BookPersonal bookPersonal: bookPersonalList){
+            isbns.add(bookPersonal.getBook().getIsbn());
+        }
+        List<Optional<BookPersonalStateResponseDto>> bookPersonalStateResponseDtos = new ArrayList<>();
+        for(String isbn: isbns){
+            bookPersonalStateResponseDtos.add(bookPersonalDetail(id, isbn));
+        }
+        return bookPersonalStateResponseDtos;
+
+    }
 
     @Override
     public BookState checkBookState(BookPersonal bookPersonal){

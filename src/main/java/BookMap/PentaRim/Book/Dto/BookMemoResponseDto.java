@@ -11,12 +11,14 @@ public class BookMemoResponseDto {
     private String content;
     private LocalDateTime saved;
     private Integer page;
+    private String title;
 
     public BookMemoResponseDto(BookMemo bookMemo){
         this.id = bookMemo.getId();
         this.page = bookMemo.getPage();
         this.saved = bookMemo.getSaved();
         this.content = bookMemo.getContent();
+        this.title = bookMemo.getTitle();
     }
 
 }

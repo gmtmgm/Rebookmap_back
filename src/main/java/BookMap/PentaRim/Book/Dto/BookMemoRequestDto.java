@@ -15,18 +15,21 @@ import java.time.LocalDateTime;
 @Component
 public class BookMemoRequestDto {
     private String content;
+    private String title;
     private Integer page;
 
     @Builder
-    public BookMemoRequestDto(String content, Integer page){
+    public BookMemoRequestDto(String content, Integer page, String title){
         this.content = content;
         this.page = page;
+        this.title = title;
     }
 
     public BookMemo toEntity(){
         return BookMemo.builder()
                 .content(content)
                 .page(page)
+                .title(title)
                 .build();
     }
 

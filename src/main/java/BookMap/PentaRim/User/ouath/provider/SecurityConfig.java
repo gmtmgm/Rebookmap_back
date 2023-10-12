@@ -75,14 +75,14 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Configuration
-    public class SpringSessionJdbcConfiguration {
-        @Bean
-        @Description("mariadb용 SessionRepositoryCustomizer")
-        public SessionRepositoryCustomizer<JdbcIndexedSessionRepository> oracleCustomizer() {
-            return new OracleJdbcIndexedSessionRepositoryCustomizer();
-        }
-    }
+//    @Configuration
+//    public class SpringSessionJdbcConfiguration {
+//        @Bean
+//        @Description("mariadb용 SessionRepositoryCustomizer")
+//        public SessionRepositoryCustomizer<JdbcIndexedSessionRepository> oracleCustomizer() {
+//            return new OracleJdbcIndexedSessionRepositoryCustomizer();
+//        }
+//    }
 
 
 }

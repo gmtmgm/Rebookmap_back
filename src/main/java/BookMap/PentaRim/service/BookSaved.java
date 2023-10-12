@@ -35,6 +35,8 @@ public interface BookSaved {
 
     List<BookTopResponseDto> findByTop2();
 
+    List<BookTopResponseDto> findByTop5();
+
     List<BookTopResponseDto> findByTop10();
 
     Integer findByMonthCount(Long id);
@@ -44,5 +46,7 @@ public interface BookSaved {
     Optional<BookPersonalStateResponseDto> bookPersonalDetail(Long id, String isbn);
 
     BookState checkBookState(BookPersonal bookPersonal);
+
+    List<Optional<BookPersonalStateResponseDto>> allstoredBook(Long id);
 
 }

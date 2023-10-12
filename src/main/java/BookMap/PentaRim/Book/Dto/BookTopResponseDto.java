@@ -10,11 +10,13 @@ public class BookTopResponseDto {
     private String author;
     private String publisher;
     private String image;
+    private String isbn;
     public BookTopResponseDto(Book book){
         this.id = book.getId();
         this.title = book.getTitle();
         this.author = book.getAuthor();
         this.publisher = book.getPublisher();
         this.image = book.getImage();
+        this.isbn = book.getIsbn();
     }
 }

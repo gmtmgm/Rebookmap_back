@@ -8,6 +8,7 @@ import BookMap.PentaRim.Dto.BookShelfResponseDto;
 import BookMap.PentaRim.Dto.MainResponseDto;
 import BookMap.PentaRim.Dto.ProfileResponseDto;
 import BookMap.PentaRim.Dto.ProfileUpdateRequestDto;
+import BookMap.PentaRim.User.Dto.UserSearchResponseDto;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface TotalService {
     ProfileResponseDto profile(Long id);
     void profileUpdate(Long id, ProfileUpdateRequestDto profileUpdateRequestDto);
     List<ProfileMemoResponseDto> findMemoByUser(Long id);
+    List<UserSearchResponseDto> getSearchUsers(Long id, String keyword);
+
 }

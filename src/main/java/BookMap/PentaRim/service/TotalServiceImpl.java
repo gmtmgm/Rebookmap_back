@@ -14,10 +14,12 @@ import BookMap.PentaRim.Dto.ProfileUpdateRequestDto;
 import BookMap.PentaRim.Repository.BookMapRepository;
 import BookMap.PentaRim.Repository.BookMemoRepository;
 import BookMap.PentaRim.Repository.BookPersonalRepository;
+import BookMap.PentaRim.User.Dto.UserSearchResponseDto;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class TotalServiceImpl implements TotalService{
         for(BookMapEntity bookMapEntity: bookMap) {
             bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity));
         }
-        List<BookTopResponseDto> bookTopResponseDtos = bookSaved.findByTop2();
+        List<BookTopResponseDto> bookTopResponseDtos = bookSaved.findByTop5();
         return new MainResponseDto(bookImageDtos, bookMapResponseDtos, bookTopResponseDtos);
     }
 
@@ -168,5 +170,22 @@ public class TotalServiceImpl implements TotalService{
             bookMemoResponseDtoList.add(new ProfileMemoResponseDto(bookMemo));
         }
         return bookMemoResponseDtoList;
+    }
+
+    @Override
+    @Transactional
+    public List<UserSearchResponseDto> getSearchUsers(Long id, String keyword){
+        List<User> users = userRepository.findByNicknameContaining(keyword);
+
+        List<UserSearchResponseDto> userSearchResponseDtos = new ArrayList<>();
+        for(User user : users){
+                userSearchResponseDtos.add(new UserSearchResponseDto(
+                        user.getId(),
+                        user.getNickname(),
+                        user.getStatus(),
+                        false
+                ));
+        }
+        return userSearchResponseDtos;
     }
 }

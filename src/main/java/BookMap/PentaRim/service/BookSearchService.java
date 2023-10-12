@@ -28,11 +28,12 @@ public class BookSearchService {
     String adminKey;
 
     public Book searchBooks(String keyword){
+        System.out.println("isbn: " + keyword);
 
         try {
             if(keyword.contains(" ")){
                 String[] isbn = keyword.split(" ");
-                if(isbn[0].isEmpty()){
+                if(isbn[0].isEmpty() || isbn[0].contains("X")){
                     keyword = isbn[1];
                 }else{
                     keyword = isbn[0];
