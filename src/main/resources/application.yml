@@ -12,7 +12,10 @@ oauth2:
 
 spring:
   session:
+    timeout: 86400
     store-type: jdbc
     jdbc.initialize-schema: always
 
-
+jpa:
+  open-in-view: false
+  generate-ddl: true

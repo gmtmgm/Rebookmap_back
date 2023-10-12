@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.session.Session;
 import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -97,9 +98,10 @@ public class LoginGoogleController {
               //세션에 로그인 회원 정보 보관
               session.setAttribute(SessionConst.EMAIL, email);
 
+              String sessionId = session.getId();
+              session.invalidate();
 
-              //세션 유지기간은 마지막 접속 이후로 하루
-              session.setMaxInactiveInterval(86400);
+
 
               /*
 
@@ -111,7 +113,7 @@ public class LoginGoogleController {
 
               userRepository.save(user);
 
-             return session.getId();
+             return sessionId;
 
 
 
@@ -125,24 +127,25 @@ public class LoginGoogleController {
 
 
 
+
               //로그인 성공 처리
               //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
               HttpSession session =request.getSession();
 
 
               //세션에 로그인 회원 정보 보관
+              //db에 세션 저장
               session.setAttribute(SessionConst.EMAIL, email);
 
+              String sessionId = session.getId();
+
+              //메모리에 저장된 세션 지움 db에 저장된 세션만 남김
+              session.invalidate();
 
 
 
-              //세션을 지우기 전까지 영구유지시킴
-              session.setMaxInactiveInterval(86400);
 
-
-
-
-              return session.getId();
+              return sessionId;
 
 
 
@@ -206,12 +209,10 @@ public class LoginGoogleController {
     }
 
     @PostMapping(value = "/logout",produces="application/json; charset=utf8")
-    public void logout(HttpServletRequest request) {
+    public void logout(@RequestBody String sessionId) {
         log.info("로그아웃시작");
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+        Session session = sessionRepository.findById(sessionId);
+        session.isExpired();
 
     }
 

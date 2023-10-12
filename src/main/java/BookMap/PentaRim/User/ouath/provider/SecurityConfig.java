@@ -14,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Description;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -25,6 +29,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.session.config.SessionRepositoryCustomizer;
+import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
+import org.springframework.session.jdbc.OracleJdbcIndexedSessionRepositoryCustomizer;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import javax.sql.DataSource;
 
 
 @Slf4j
@@ -64,6 +74,17 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    @Configuration
+    public class SpringSessionJdbcConfiguration {
+        @Bean
+        @Description("mariadb용 SessionRepositoryCustomizer")
+        public SessionRepositoryCustomizer<JdbcIndexedSessionRepository> oracleCustomizer() {
+            return new OracleJdbcIndexedSessionRepositoryCustomizer();
+        }
+    }
+
+
 }
 
 /*
