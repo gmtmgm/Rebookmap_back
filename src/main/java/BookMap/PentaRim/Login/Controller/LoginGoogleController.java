@@ -99,7 +99,7 @@ public class LoginGoogleController {
               session.setAttribute(SessionConst.EMAIL, email);
 
               String sessionId = session.getId();
-              session.invalidate();
+
 
 
 
@@ -127,10 +127,10 @@ public class LoginGoogleController {
 
 
 
-
               //로그인 성공 처리
               //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
               HttpSession session =request.getSession();
+
 
 
               //세션에 로그인 회원 정보 보관
@@ -140,7 +140,7 @@ public class LoginGoogleController {
               String sessionId = session.getId();
 
               //메모리에 저장된 세션 지움 db에 저장된 세션만 남김
-              session.invalidate();
+
 
 
 
@@ -209,10 +209,14 @@ public class LoginGoogleController {
     }
 
     @PostMapping(value = "/logout",produces="application/json; charset=utf8")
-    public void logout(@RequestBody String sessionId) {
+    public void logout(@RequestBody String sessionId, HttpServletRequest request) {
         log.info("로그아웃시작");
-        Session session = sessionRepository.findById(sessionId);
-        session.isExpired();
+        HttpSession session = request.getSession(false);
+        if(session != null) {
+            session.invalidate();
+        }
+        Session savedSession = sessionRepository.findById(sessionId);
+        savedSession.isExpired();
 
     }
 

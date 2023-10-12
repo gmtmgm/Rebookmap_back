@@ -21,9 +21,9 @@ public class JwtAuthorFilter  {
 
     /*
 
-    private final UserRepository userRepository;
+    private final UserRepository;
 
-    public JwtAuthorFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public JwtAuthorFilter(AuthenticationManager, UserRepository userRepository) {
         super(authenticationManager);
         this.userRepository = userRepository;
     }
