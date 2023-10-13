@@ -136,7 +136,7 @@ public class TotalServiceImpl implements TotalService{
         if(user.getBook_state() == null){
             status = "";
         }else{
-            status = user.getBook_state();
+            status = user.getStatus();
         }
         Integer count = bookSaved.findByMonthCount(id);
         List<BookMemo> bookMemoList = bookMemoRepository.findTop2ByBookPersonal_UserOrderBySavedDesc(user);
@@ -155,7 +155,7 @@ public class TotalServiceImpl implements TotalService{
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + id));
         user.setNickname(profileUpdateRequestDto.getNickName());
-        user.setBook_state(profileUpdateRequestDto.getStatus());
+        user.setStatus(profileUpdateRequestDto.getStatus());
     }
 
     @Override

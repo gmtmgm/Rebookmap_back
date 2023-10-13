@@ -79,9 +79,9 @@ public class SessionBookController {
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
             bookSaved.deleteBook(user.getId(),isbn);
         }
-        log.info("유효하지 않은 세션입니다");
-        Exception e = new Exception();
-        throw new RuntimeException(e);
+//        log.info("유효하지 않은 세션입니다");
+//        Exception e = new Exception();
+//        throw new RuntimeException(e);
     }
 
     @GetMapping("/book/detail")  //상세 조회
@@ -286,16 +286,21 @@ public class SessionBookController {
 
     @PostMapping("/profile/update")
     public void profileUpdate(@RequestHeader String sessionId, @RequestBody ProfileUpdateRequestDto profileUpdateRequestDto){
+        log.info("profileUpdate's sessionId : " + sessionId);
         Session findSession = sessionRepository.findById(sessionId);
+
+        log.info("findSession" + findSession);
+
+        log.info(findSession.getAttribute(SessionConst.EMAIL));
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
             totalService.profileUpdate(user.getId(), profileUpdateRequestDto);
 
         }
-        log.info("유효하지 않은 세션입니다");
-        Exception e = new Exception();
-        throw new RuntimeException(e);
+        //log.info("유효하지 않은 세션입니다");
+        //Exception e = new Exception();
+        //throw new RuntimeException(e);
     }
 
 
