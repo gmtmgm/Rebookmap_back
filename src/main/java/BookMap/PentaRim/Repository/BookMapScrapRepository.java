@@ -14,4 +14,5 @@ public interface BookMapScrapRepository extends JpaRepository<BookMapScrapEntity
     List<BookMapScrapEntity> findByUserOrderByBookMapSaveTime(User user);
     boolean existsByUserAndBookMap(User user, BookMapEntity bookMap);
     List<BookMapScrapEntity> findAllByBookMap(BookMapEntity bookMapEntity);
+    BookMapScrapEntity findByUserAndBookMap(User user, BookMapEntity bookMap);
 }

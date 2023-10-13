@@ -15,15 +15,12 @@ public class BookMapDetailResponseDto {
     private String memo;
     private int index;
 
-    private String nickname;
-
     public BookMapDetailResponseDto(BookMapDetailEntity bookMapDetailEntity){
         this.bookMapDetailId = bookMapDetailEntity.getBookMapDetailId();
         this.bookMapEntity = bookMapDetailEntity.getBookMapEntity();
         this.type = bookMapDetailEntity.getType();
         if (type == "Memo") { this.memo = bookMapDetailEntity.getMemo(); }
         this.index = bookMapDetailEntity.getIndex();
-        this.nickname = bookMapEntity.getUser().getNickname();
     }
 
 }

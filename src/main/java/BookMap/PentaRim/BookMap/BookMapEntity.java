@@ -43,7 +43,8 @@ public class BookMapEntity {
 
 
     @Builder
-    public BookMapEntity(Long bookMapId, User user, String bookMapTitle, String bookMapContent, String bookMapImage, boolean share, LocalDateTime bookMapSaveTime){
+    public BookMapEntity(Long bookMapId, User user, String bookMapTitle, String bookMapContent, String bookMapImage, boolean share,
+                         LocalDateTime bookMapSaveTime){
         this.bookMapId = bookMapId;
         this.user = user;
         this.bookMapTitle = bookMapTitle;

@@ -30,6 +30,7 @@ public class BookMap implements Serializable {
     private boolean share = true; //북맵 잠금 여부
     @JsonIgnore
     private LocalDateTime bookMapSaveTime; // 저장 시간
+    private String nickname;
 
     @Getter
     @Setter

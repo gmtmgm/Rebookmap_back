@@ -21,15 +21,17 @@ public class BookMapRequestDto {
     private String bookMapImage;
     private List<String> hashTag;
     private boolean share;
+    private String nickname;
 
 
     @Builder
-    public BookMapRequestDto(String bookMapTitle, String bookMapContent, String bookMapImage, List<String> hashTag, boolean share) {
+    public BookMapRequestDto(String bookMapTitle, String bookMapContent, String bookMapImage, List<String> hashTag, boolean share, String nickname) {
         this.bookMapTitle = bookMapTitle;
         this.bookMapContent = bookMapContent;
         this.bookMapImage = bookMapImage;
         this.hashTag = hashTag;
         this.share = share;
+        this.nickname = nickname;
     }
 
     public BookMapEntity toEntity() {

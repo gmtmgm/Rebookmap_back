@@ -18,6 +18,7 @@ public class BookMapResponseDto {
 
     private List<String> hashTag;
     private boolean share;
+    private String nickname;
 
 
     public BookMapResponseDto(BookMapEntity bookMapEntity, List<String> hashTag) {
@@ -28,6 +29,7 @@ public class BookMapResponseDto {
         //if (bookMapEntity.getMapHashTags()!= null) { this.hashTag = hashTag; }
         this.hashTag = hashTag;
         this.share = bookMapEntity.isShare();
+        this.nickname = bookMapEntity.getUser().getNickname();
     }
 
 
@@ -37,6 +39,7 @@ public class BookMapResponseDto {
         this.bookMapContent = bookMapEntity.getBookMapContent();
         this.bookMapImage = bookMapEntity.getBookMapImage();
         this.share = bookMapEntity.isShare();
+        this.nickname = bookMapEntity.getUser().getNickname();
     }
 
     public void toBookMap(BookMap bookMap){
@@ -45,6 +48,8 @@ public class BookMapResponseDto {
         bookMap.setBookMapImage(this.bookMapImage);
         bookMap.setHashTag(this.hashTag);
         bookMap.setShare(this.share);
+        bookMap.setNickname(this.nickname);
+
     }
 
 

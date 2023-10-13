@@ -16,6 +16,8 @@ import org.springframework.session.Session;
 import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 
 @Slf4j
 @RestController
@@ -31,22 +33,26 @@ public class BookMapController {
 
 
     @PostMapping("/bookmap") //특정 유저의 북맵 목록
-    public ResponseEntity<?> userBookMapLoad(@RequestBody String sessionId){
+    public ResponseEntity<?> userBookMapLoad(@RequestHeader String sessionId){
         Session findSession = sessionRepository.findById(sessionId);
         if(findSession != null) {
-
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
             return new ResponseEntity<>(bookMapRepositoryService.findBookMapsByUserId(user.getId()),HttpStatus.OK);
         }
 
-        log.info("유효하지 않은 세션입니다");
+        log.info("cannot find session");
         Exception e = new Exception();
         throw new RuntimeException(e);
 
     }
 
+    @GetMapping("/bookmap/{userID}") //데이터 보내는 용!! 테스트 사용 끝나면 지울 예정
+    public ResponseEntity<?> userBookMapLoadTest(@PathVariable Long userID){
+        return new ResponseEntity<>(bookMapRepositoryService.findBookMapsByUserId(userID),HttpStatus.OK);
+    }
+
     @PostMapping("/bookmap/scrap") //특정 유저의 스크랩한 북맵 목록
-    public ResponseEntity<?> userBookMapScrapLoad(@RequestBody String sessionId){
+    public ResponseEntity<?> userBookMapScrapLoad(@RequestHeader String sessionId){
         Session findSession = sessionRepository.findById(sessionId);
         if(findSession != null) {
 
@@ -72,12 +78,11 @@ public class BookMapController {
 
 
     @PostMapping("/bookmap/save") //특정 유저의 북맵 저장
-    public Long bookMapSave(@RequestBody BookMapSaveDto bookMapSaveDto){
-        Session findSession = sessionRepository.findById(bookMapSaveDto.getSessionId());
+    public Long bookMapSave(@RequestHeader String sessionId, @RequestBody BookMapSaveRequestDto bookMapSaveRequestDto){
+        Session findSession = sessionRepository.findById(sessionId);
         if(findSession != null) {
-
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            return bookMapRepositoryService.saveBookMap(user.getId(), bookMapSaveDto.getBookMapSaveRequestDto());
+            return bookMapRepositoryService.saveBookMap(user.getId(), bookMapSaveRequestDto);
         }
 
         log.info("유효하지 않은 세션입니다");
@@ -85,22 +90,22 @@ public class BookMapController {
         throw new RuntimeException(e);
     }
 
-    @PostMapping("/bookmap/save/{id}") //특정 유저의 북맵 저장
-    public Long bookMapSave1(@PathVariable Long id, @RequestBody BookMapSaveRequestDto bookMapSaveRequestDto){
-        log.info(bookMapSaveRequestDto.getBookMapTitle());
-        log.info(bookMapSaveRequestDto.getBookMapContent());
-        return bookMapRepositoryService.saveBookMap(id, bookMapSaveRequestDto);
-    }
+//    @PostMapping("/bookmap/save/{id}") //특정 유저의 북맵 저장
+//    public Long bookMapSave1(@PathVariable Long id, @RequestBody BookMapSaveRequestDto bookMapSaveRequestDto){
+//        log.info(bookMapSaveRequestDto.getBookMapTitle());
+//        log.info(bookMapSaveRequestDto.getBookMapContent());
+//        return bookMapRepositoryService.saveBookMap(id, bookMapSaveRequestDto);
+//    }
 
 
 
-    @PostMapping("/bookmap/scrap/save/{bookmapid}") //특정 유저의 북맵 스크랩 저장
-    public boolean userBookMapScrapSave(@PathVariable BookMapScrapSaveDto bookMapScrapSaveDto){
-        Session findSession = sessionRepository.findById(bookMapScrapSaveDto.getSessionId());
+    @PostMapping("/bookmap/scrap/save/{bookMapId}") //특정 유저의 북맵 스크랩 저장
+    public boolean userBookMapScrapSave(@RequestHeader String sessionId, @PathVariable Long bookMapId){
+        Session findSession = sessionRepository.findById(sessionId);
         if(findSession != null) {
 
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
-            return bookMapRepositoryService.saveBookMapScrap(user.getId(), bookMapScrapSaveDto.getBookmapid());
+            return bookMapRepositoryService.saveBookMapScrap(user.getId(), bookMapId);
         }
 
         log.info("유효하지 않은 세션입니다");
@@ -108,10 +113,10 @@ public class BookMapController {
         throw new RuntimeException(e);
     }
 
-    @PostMapping("/bookmap/scrap/save/{id}/{bookmapid}") //특정 유저의 북맵 스크랩 저장
-    public boolean userBookMapScrapSave1(@PathVariable Long id,@PathVariable Long bookmapid){
-        return bookMapRepositoryService.saveBookMapScrap(id, bookmapid);
-    }
+//    @PostMapping("/bookmap/scrap/save/{id}/{bookmapid}") //특정 유저의 북맵 스크랩 저장
+//    public boolean userBookMapScrapSave1(@PathVariable Long id,@PathVariable Long bookmapid){
+//        return bookMapRepositoryService.saveBookMapScrap(id, bookmapid);
+//    }
 
 
     //이거도 유형이 같아서 북맵스크랩세이브디티오 그대로 사용
@@ -135,6 +140,19 @@ public class BookMapController {
         return bookMap;
     } //내용 확인용으로 리턴값 넣은거라 나중에 고치기
 
+    @PostMapping("/bookmap/get/scrap/{bookMapId}") //특정 스크랩 id
+    public ResponseEntity<?> getBookMapScrapId(@PathVariable Long bookMapId, @RequestHeader String sessionId){
+        Session findSession = sessionRepository.findById(sessionId);
+        if(findSession != null) {
+
+            User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
+            return new ResponseEntity<>(bookMapRepositoryService.findBookMapScrapIdByUserIdAndBookMapId(user.getId(), bookMapId),HttpStatus.OK);
+        }
+
+        log.info("유효하지 않은 세션입니다");
+        Exception e = new Exception();
+        throw new RuntimeException(e);
+    }
 
 
 

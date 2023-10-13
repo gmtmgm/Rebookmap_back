@@ -72,7 +72,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
     @Override
     public BookMapRequestDto ToBookMapRequestDto(BookMap bookMap){
         return (new BookMapRequestDto(bookMap.getBookMapTitle(), bookMap.getBookMapContent(),
-                bookMap.getBookMapImage(), bookMap.getHashTag(), bookMap.isShare()));
+                bookMap.getBookMapImage(), bookMap.getHashTag(), bookMap.isShare(), bookMap.getNickname()));
     }
 
 
@@ -94,7 +94,6 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 .orElseThrow(() -> new
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
         List<BookMapEntity> bookMapEntity = bookMapRepository.findByUserOrderByBookMapSaveTime(user); //예외처리 안하기!!
-
         List<BookMapResponseDto> bookMapList = new ArrayList<>();
         for (BookMapEntity bookMap : bookMapEntity){
             List<String> hashTags = findHashTagByBookMap(bookMap);
@@ -117,6 +116,22 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         return bookMapResponseDtos;
     }
 
+    @Override
+    @Transactional
+    public Long findBookMapScrapIdByUserIdAndBookMapId(Long userId, Long bookMapId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
+        BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("북맵 없음" + bookMapId));
+        if (bookMapScrapRepository.existsByUserAndBookMap(user, bookMapEntity)) {
+            return bookMapScrapRepository.findByUserAndBookMap(user, bookMapEntity).getBookMapScrapId();
+        } else {
+            return  null;
+        }
+    }
+
 
     @Override
     @Transactional
@@ -131,6 +146,10 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         bookMapSaveRequestDto.setBookMapSaveTime(LocalDateTime.now());
         bookMapSaveRequestDto.setShare(true);
         Long bookMapId = bookMapRepository.save(bookMapSaveRequestDto.toEntity()).getBookMapId();
+        BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("북맵 없음" + bookMapId));
+        tagsUpdate(bookMapEntity, new TagRequestDto(bookMapSaveRequestDto.getHashTag()));
         return bookMapId;
     }
 
@@ -153,8 +172,6 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         BookMapEntity bookMap = bookMapRepository.findById(bookMapId).orElseThrow(
                 () ->  new IllegalArgumentException("해당 북맵이 없습니다.")
         );
-        String original = bookMap.getUser().getNickname() + " 님의 북맵\n" + bookMap.getBookMapTitle();
-        bookMap.update(original);
         boolean success = true;
         BookMapScrapRequestDto bookMapScrapRequestDto = new BookMapScrapRequestDto();
         bookMapScrapRequestDto.setBookMap(bookMap);
@@ -176,9 +193,14 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("북맵 없음" + bookMapId));
+        List<String> hashTag = findHashTagByBookMap(bookMapEntity);
+        for(String tag : hashTag){
+            tag.replaceAll("[#!,@%&^.?/$*()`~]", "");
+        }
         BookMapSaveRequestDto bookMapSaveRequestDto = new BookMapSaveRequestDto(
                 bookMapEntity.getBookMapTitle() + "의 사본",
                 bookMapEntity.getBookMapContent(),
+                hashTag,
                 user,
                 LocalDateTime.now(),
                 true
@@ -224,8 +246,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
         for (BookMap.BookMapDetail bookMapDetail : bookMapDetails) {
             saveBookMapDetail(bookMapEntity, new BookMapDetailRequestDto(
-                    bookMapDetail.getType(), bookMapDetail.getMemo(), bookMapDetails.indexOf(bookMapDetail),
-                    bookMapEntity.getUser().getNickname()));
+                    bookMapDetail.getType(), bookMapDetail.getMemo(), bookMapDetails.indexOf(bookMapDetail)));
             if ("Book".equals(bookMapDetail.getType())){
                 ArrayList<BookImageDto> map = bookMapDetail.getMap();
                 ArrayList<BookListRequestDto> bookListRequestDtos = new ArrayList<>();
