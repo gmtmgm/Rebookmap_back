@@ -16,4 +16,5 @@ public interface BookMapRepository extends JpaRepository<BookMapEntity,Long> {
     List<BookMapEntity> findAllByMapHashTags(Long bookMapId);
     List<BookMapEntity> findAllByBookMapTitleContaining(String bookMapTitle);
     Integer countBookMapByUser(User user);
+
 }

@@ -138,7 +138,7 @@ public class SessionBookController {
      * @return 저장된 모든 책
      */
     @GetMapping("/bookshelf/allbooks")
-    public ResponseEntity<?> bookshelf(@RequestBody String sessionId){
+    public ResponseEntity<?> bookshelf(@RequestHeader String sessionId){
         Session findSession = sessionRepository.findById(sessionId);
         if(findSession != null) {
 

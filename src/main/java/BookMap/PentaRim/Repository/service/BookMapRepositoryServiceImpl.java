@@ -251,6 +251,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 ArrayList<BookImageDto> map = bookMapDetail.getMap();
                 ArrayList<BookListRequestDto> bookListRequestDtos = new ArrayList<>();
                 for (BookImageDto book : map) {
+                    bookMapEntity.imageUpdate(book.getImage());
                     bookListRequestDtos.add(new BookListRequestDto(bookSaved.saveBookToRepo(book.getIsbn()), map.indexOf(book)));
                 }
                 listOfBookList.add(bookListRequestDtos);

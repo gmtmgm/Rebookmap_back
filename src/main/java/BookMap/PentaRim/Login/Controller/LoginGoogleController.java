@@ -17,6 +17,7 @@ import org.springframework.session.Session;
 import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -211,7 +212,7 @@ public class LoginGoogleController {
     }
 
     @PostMapping(value = "/logout",produces="application/json; charset=utf8")
-    public void logout(@RequestBody String sessionId, HttpServletRequest request) {
+    public void logout(@RequestHeader String sessionId, HttpServletRequest request) {
         log.info("로그아웃시작");
         HttpSession session = request.getSession(false);
         if(session != null) {

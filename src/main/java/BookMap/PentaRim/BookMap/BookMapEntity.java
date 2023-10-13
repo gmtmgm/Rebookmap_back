@@ -66,6 +66,7 @@ public class BookMapEntity {
     public void update(String bookMapTitle){
         this.bookMapTitle = bookMapTitle;
     }
+    public void imageUpdate(String image) {this.bookMapImage = image;}
 
 
 
