@@ -171,7 +171,9 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
         BookMapEntity bookMap = bookMapRepository.findById(bookMapId).orElseThrow(
                 () ->  new IllegalArgumentException("해당 북맵이 없습니다.")
+
         );
+        bookMap.countScraped();
         boolean success = true;
         BookMapScrapRequestDto bookMapScrapRequestDto = new BookMapScrapRequestDto();
         bookMapScrapRequestDto.setBookMap(bookMap);

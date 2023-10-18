@@ -40,6 +40,7 @@ public class BookMapEntity {
     @OneToMany(mappedBy = "bookMap")
     private List<MapHashTag> mapHashTags;
 
+    private int scraped;
 
 
     @Builder
@@ -53,6 +54,7 @@ public class BookMapEntity {
         this.share = share;
         this.bookMapSaveTime = bookMapSaveTime;
         //this.hashTag = hashTag;
+        this.scraped = 0;
     }
 
     public void update(String bookMapTitle, String bookMapContent, String bookMapImage, boolean share){
@@ -68,6 +70,10 @@ public class BookMapEntity {
     }
     public void imageUpdate(String image) {this.bookMapImage = image;}
 
+
+    public void countScraped() {
+        this.scraped++;
+    }
 
 
 }

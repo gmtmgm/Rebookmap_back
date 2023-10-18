@@ -32,6 +32,8 @@ public class BookMap implements Serializable {
     private LocalDateTime bookMapSaveTime; // 저장 시간
     private String nickname;
 
+    private int scraped; //스크랩된 횟수
+
     @Getter
     @Setter
     @NoArgsConstructor
@@ -90,6 +92,8 @@ public class BookMap implements Serializable {
         memoObj.setMemo(memo);
         bookMapIndex.add(memoObj);
     }
+
+
 
 }
 
