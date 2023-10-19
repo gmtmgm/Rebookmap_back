@@ -175,16 +175,17 @@ public class TotalServiceImpl implements TotalService{
 
     @Override
     @Transactional
-    public List<UserSearchResponseDto> getSearchUsers(Long id, String keyword){
+    public List<UserSearchResponseDto> getSearchUsers(User user, String keyword){
         List<User> users = userRepository.findByNicknameContaining(keyword);
-
+        users.remove(user);
         List<UserSearchResponseDto> userSearchResponseDtos = new ArrayList<>();
-        for(User user : users){
+        for(User person : users){
                 userSearchResponseDtos.add(new UserSearchResponseDto(
-                        user.getId(),
-                        user.getNickname(),
-                        user.getStatus(),
-                        false
+                        person.getId(),
+                        person.getNickname(),
+                        person.getStatus(),
+                        false,
+                        person.getPicture()
                 ));
         }
         return userSearchResponseDtos;
