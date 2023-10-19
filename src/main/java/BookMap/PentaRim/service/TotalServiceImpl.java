@@ -145,7 +145,7 @@ public class TotalServiceImpl implements TotalService{
             profileMemoResponseDtoList.add(new ProfileMemoResponseDto(bookMemo));
         }
         Integer bookmapCount = bookMapRepository.countBookMapByUser(user);
-        return new ProfileResponseDto(user, count, bookmapCount, status,  profileMemoResponseDtoList);
+        return new ProfileResponseDto(user,  bookmapCount, count, status,  profileMemoResponseDtoList);
     }
 
     @Override
