@@ -42,11 +42,13 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                         IllegalArgumentException("북맵 없음" + bookMapId));
         BookMapResponseDto bookMapResponseDto = new BookMapResponseDto(bookMapEntity);
         List<String> hashTag = findHashTagByBookMap(bookMapEntity);
+        bookMap.setBookMapId(bookMapEntity.getUser().getId());
         for(String tag : hashTag){
             tag.replaceAll("[#!,@%&^.?/$*()`~]", "");
         }
         bookMapResponseDto.setHashTag(hashTag);
         bookMapResponseDto.toBookMap(bookMap);
+        bookMap.setScrapCount(bookMapScrapRepository.findAllByBookMap(bookMapEntity).size());
         List<BookMapDetailEntity> detailList = bookMapDetailRepository.findByBookMapEntityOrderByIndex(bookMapEntity);
         for(BookMapDetailEntity detail: detailList){
 
@@ -173,7 +175,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 () ->  new IllegalArgumentException("해당 북맵이 없습니다.")
 
         );
-        bookMap.countScraped();
+//        bookMap.countScraped();
         boolean success = true;
         BookMapScrapRequestDto bookMapScrapRequestDto = new BookMapScrapRequestDto();
         bookMapScrapRequestDto.setBookMap(bookMap);

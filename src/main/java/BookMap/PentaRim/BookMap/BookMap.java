@@ -22,6 +22,7 @@ public class BookMap implements Serializable {
     private Long bookMapId;
     @JsonIgnore
     private User user;
+    private Long userID;
     private String bookMapTitle; //북맵이름
     private String bookMapContent; //북맵설명
     private String bookMapImage;
@@ -31,8 +32,7 @@ public class BookMap implements Serializable {
     @JsonIgnore
     private LocalDateTime bookMapSaveTime; // 저장 시간
     private String nickname;
-
-    private int scraped; //스크랩된 횟수
+    private int scrapCount; //스크랩된 횟수
 
     @Getter
     @Setter
@@ -44,7 +44,6 @@ public class BookMap implements Serializable {
 //        private ArrayList<Book> map;
         private ArrayList<BookImageDto> map;
         private String memo;
-
         @JsonIgnore
         private int index;
 
