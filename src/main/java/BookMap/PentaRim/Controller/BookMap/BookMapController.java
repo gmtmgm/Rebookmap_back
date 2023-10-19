@@ -50,10 +50,6 @@ public class BookMapController {
 
     }
 
-    @GetMapping("/bookmap/{userID}") //데이터 보내는 용!! 테스트 사용 끝나면 지울 예정
-    public ResponseEntity<?> userBookMapLoadTest(@PathVariable Long userID){
-        return new ResponseEntity<>(bookMapRepositoryService.findBookMapsByUserId(userID),HttpStatus.OK);
-    }
 
     @PostMapping("/bookmap/scrap") //특정 유저의 스크랩한 북맵 목록
     public ResponseEntity<?> userBookMapScrapLoad(@RequestHeader String sessionId){
@@ -77,6 +73,15 @@ public class BookMapController {
     @GetMapping(value = "/bookmap/search/{text}", produces = "application/json; charset=utf8") //검색 페이지
     public ResponseEntity<?> bookMapSearchLoad(@PathVariable String text){
         return new ResponseEntity<>(bookMapRepositoryService.searchBookMap(text), HttpStatus.OK);
+    }
+
+    @GetMapping("/get/userId") //sessionId로 userId 반환
+    public Long getUserId(@RequestHeader String sessionId){
+        Session findSession = sessionRepository.findById(sessionId);
+        if(findSession != null) {
+            User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
+            return user.getId();
+        } else return -10L;
     }
 
 

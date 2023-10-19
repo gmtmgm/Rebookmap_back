@@ -97,9 +97,10 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
         List<BookMapEntity> bookMapEntity = bookMapRepository.findByUserOrderByBookMapSaveTime(user); //예외처리 안하기!!
         List<BookMapResponseDto> bookMapList = new ArrayList<>();
+
         for (BookMapEntity bookMap : bookMapEntity){
             List<String> hashTags = findHashTagByBookMap(bookMap);
-            bookMapList.add(new BookMapResponseDto(bookMap, hashTags));
+            bookMapList.add(new BookMapResponseDto(bookMap, hashTags, bookMapScrapRepository.findAllByBookMap(bookMap).size()));
         }
         return bookMapList;
     }
@@ -378,7 +379,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 for (HashTag hashTag : hashTags) {
                     strings.add(hashTag.getTag());
                 }
-                bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity, strings));
+                bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity, strings, bookMapScrapRepository.findAllByBookMap(bookMapEntity).size()));
             }
         }
         return bookMapResponseDtos;

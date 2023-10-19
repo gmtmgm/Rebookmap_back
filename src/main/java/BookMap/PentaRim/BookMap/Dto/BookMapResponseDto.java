@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 public class BookMapResponseDto {
     private Long bookMapId;
+    private Long userId;
     private String bookMapTitle; //북맵이름
     private String bookMapContent; //북맵설명
     private String bookMapImage;
@@ -19,10 +20,12 @@ public class BookMapResponseDto {
     private List<String> hashTag;
     private boolean share;
     private String nickname;
+    private int scrapCount;
 
 
-    public BookMapResponseDto(BookMapEntity bookMapEntity, List<String> hashTag) {
+    public BookMapResponseDto(BookMapEntity bookMapEntity, List<String> hashTag, int scrapCount) {
         this.bookMapId = bookMapEntity.getBookMapId();
+        this.userId = bookMapEntity.getUser().getId();
         this.bookMapTitle = bookMapEntity.getBookMapTitle();
         this.bookMapContent = bookMapEntity.getBookMapContent();
         this.bookMapImage = bookMapEntity.getBookMapImage();
@@ -30,11 +33,13 @@ public class BookMapResponseDto {
         this.hashTag = hashTag;
         this.share = bookMapEntity.isShare();
         this.nickname = bookMapEntity.getUser().getNickname();
+        this.scrapCount = scrapCount;
     }
 
 
     public BookMapResponseDto(BookMapEntity bookMapEntity){
         this.bookMapId = bookMapEntity.getBookMapId();
+        this.userId = bookMapEntity.getUser().getId();
         this.bookMapTitle = bookMapEntity.getBookMapTitle();
         this.bookMapContent = bookMapEntity.getBookMapContent();
         this.bookMapImage = bookMapEntity.getBookMapImage();
