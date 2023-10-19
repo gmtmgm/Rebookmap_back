@@ -4,6 +4,8 @@ import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.Dto.*;
 import BookMap.PentaRim.BookMapControllerDto.BookMapSaveDto;
 import BookMap.PentaRim.BookMapControllerDto.BookMapScrapSaveDto;
+import BookMap.PentaRim.ControllerDto.UserProfileDto;
+import BookMap.PentaRim.Repository.BookMapRepository;
 import BookMap.PentaRim.Repository.service.BookMapRepositoryService;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import BookMap.PentaRim.User.model.User;
@@ -30,6 +32,8 @@ public class BookMapController {
     private final UserRepository userRepository;
 
     private final JdbcIndexedSessionRepository sessionRepository;
+
+    private final BookMapRepository bookMapRepository;
 
 
     @PostMapping("/bookmap") //특정 유저의 북맵 목록
@@ -139,6 +143,22 @@ public class BookMapController {
         bookMapRepositoryService.updateBookMapAll(bookMapId, bookMap);
         return bookMap;
     } //내용 확인용으로 리턴값 넣은거라 나중에 고치기
+
+    @PostMapping("/bookmap/get/search/NickName")
+    public ResponseEntity<?> getBookMapSearchNickName(@RequestHeader Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
+        UserProfileDto userProfileDto = new UserProfileDto();
+        userProfileDto.setNickName(user.getNickname());
+        userProfileDto.setUserId(userId);
+        userProfileDto.setPicture(user.getPicture());
+        userProfileDto.setStatus(user.getStatus());
+        userProfileDto.setUserBookMapResponseDto(bookMapRepository.findBookMapResponseDtoByUserId(userId));
+
+        return new ResponseEntity<>(userProfileDto,HttpStatus.OK);
+
+    }
 
     @PostMapping("/bookmap/get/scrap/{bookMapId}") //특정 스크랩 id
     public ResponseEntity<?> getBookMapScrapId(@PathVariable Long bookMapId, @RequestHeader String sessionId){
