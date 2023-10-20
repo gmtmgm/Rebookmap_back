@@ -169,7 +169,7 @@ public class BookMapController {
         userProfileDto.setUserId(userId);
         userProfileDto.setPicture(user.getPicture());
         userProfileDto.setStatus(user.getStatus());
-        userProfileDto.setUserBookMapResponseDto(bookMapRepository.findBookMapResponseDtoByUserId(userId));
+        userProfileDto.setUserBookMapResponseDto(bookMapRepositoryService.findBookMapsByUserId(user.getId()));
 
         return new ResponseEntity<>(userProfileDto,HttpStatus.OK);
 
