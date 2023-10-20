@@ -321,6 +321,33 @@ public class SessionBookController {
         Exception e = new Exception();
         throw new RuntimeException(e);
     }
+
+    @GetMapping("/search/users")
+    public ResponseEntity<?> searchUsers(@RequestParam String keyword, @RequestHeader String sessionId){
+        Session findSession = sessionRepository.findById(sessionId);
+        if(findSession != null) {
+
+            User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
+            return new ResponseEntity<>(totalService.getSearchUsers(user, keyword), HttpStatus.OK);
+
+        }
+        log.info("유효하지 않은 세션입니다");
+        Exception e = new Exception();
+        throw new RuntimeException(e);
+
+
+    }
+
+    @GetMapping("/search/users/{id}")
+    public ResponseEntity<?> searchUsers1(@PathVariable Long id, @RequestParam String keyword){
+
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저가 없습니다.")
+        );
+        return new ResponseEntity<>(totalService.getSearchUsers(user, keyword), HttpStatus.OK);
+
+
+    }
     //연습용
 
     @GetMapping(value = "/book/{id}",produces = "application/json; charset=utf8")
