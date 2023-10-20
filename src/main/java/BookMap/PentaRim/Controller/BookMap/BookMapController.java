@@ -112,12 +112,22 @@ public class BookMapController {
     public boolean userBookMapScrapSave(@RequestHeader String sessionId, @PathVariable Long bookMapId){
         Session findSession = sessionRepository.findById(sessionId);
         if(findSession != null) {
-
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
             return bookMapRepositoryService.saveBookMapScrap(user.getId(), bookMapId);
         }
 
         log.info("유효하지 않은 세션입니다");
+        Exception e = new Exception();
+        throw new RuntimeException(e);
+    }
+
+    @GetMapping("/scrap/check/{bookMapId}")
+    public boolean checkBookMapScrapExist(@RequestHeader String sessionId, @PathVariable Long bookMapId){
+        Session findSession = sessionRepository.findById(sessionId);
+        if(findSession != null) {
+            User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
+            return bookMapRepositoryService.checkBookMapScrap(user.getId(), bookMapId);
+        }
         Exception e = new Exception();
         throw new RuntimeException(e);
     }

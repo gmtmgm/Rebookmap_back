@@ -42,7 +42,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                         IllegalArgumentException("북맵 없음" + bookMapId));
         BookMapResponseDto bookMapResponseDto = new BookMapResponseDto(bookMapEntity);
         List<String> hashTag = findHashTagByBookMap(bookMapEntity);
-        bookMap.setBookMapId(bookMapEntity.getUser().getId());
+        bookMap.setUserId(bookMapEntity.getUser().getId());
         for(String tag : hashTag){
             tag.replaceAll("[#!,@%&^.?/$*()`~]", "");
         }
@@ -97,7 +97,6 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
         List<BookMapEntity> bookMapEntity = bookMapRepository.findByUserOrderByBookMapSaveTime(user); //예외처리 안하기!!
         List<BookMapResponseDto> bookMapList = new ArrayList<>();
-
         for (BookMapEntity bookMap : bookMapEntity){
             List<String> hashTags = findHashTagByBookMap(bookMap);
             bookMapList.add(new BookMapResponseDto(bookMap, hashTags, bookMapScrapRepository.findAllByBookMap(bookMap).size()));
@@ -174,9 +173,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                         IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
         BookMapEntity bookMap = bookMapRepository.findById(bookMapId).orElseThrow(
                 () ->  new IllegalArgumentException("해당 북맵이 없습니다.")
-
         );
-//        bookMap.countScraped();
         boolean success = true;
         BookMapScrapRequestDto bookMapScrapRequestDto = new BookMapScrapRequestDto();
         bookMapScrapRequestDto.setBookMap(bookMap);
@@ -187,6 +184,18 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         }
         else { success = false; }
         return success;
+    }
+
+    @Override
+    @Transactional
+    public boolean checkBookMapScrap(Long userId, Long bookMapId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
+        BookMapEntity bookMap = bookMapRepository.findById(bookMapId).orElseThrow(
+                () ->  new IllegalArgumentException("해당 북맵이 없습니다.")
+        );
+        return bookMapScrapRepository.existsByUserAndBookMap(user, bookMap);
     }
 
     @Override

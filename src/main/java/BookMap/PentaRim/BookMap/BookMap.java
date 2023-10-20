@@ -22,7 +22,7 @@ public class BookMap implements Serializable {
     private Long bookMapId;
     @JsonIgnore
     private User user;
-    private Long userID;
+    private Long userId;
     private String bookMapTitle; //북맵이름
     private String bookMapContent; //북맵설명
     private String bookMapImage;
