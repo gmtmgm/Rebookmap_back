@@ -106,6 +106,23 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
     @Override
     @Transactional
+    public List<UserBookMapResponseDto> findUserBookMapsByUserId(Long myId, Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
+        List<BookMapEntity> bookMapEntity = bookMapRepository.findByUserOrderByBookMapSaveTime(user); //예외처리 안하기!!
+        List<UserBookMapResponseDto> bookMapList = new ArrayList<>();
+        for (BookMapEntity bookMap : bookMapEntity){
+            List<String> hashTags = findHashTagByBookMap(bookMap);
+
+            bookMapList.add(new UserBookMapResponseDto(bookMap, hashTags, bookMapScrapRepository.findAllByBookMap(bookMap).size(),
+                    checkBookMapScrap(myId, bookMap.getBookMapId())));
+        }
+        return bookMapList;
+    }
+
+    @Override
+    @Transactional
     public List<BookMapResponseDto> findBookMapScrapsByUserId(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new

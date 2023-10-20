@@ -159,19 +159,28 @@ public class BookMapController {
         return bookMap;
     } //내용 확인용으로 리턴값 넣은거라 나중에 고치기
 
-    @PostMapping("/bookmap/get/search/NickName")
-    public ResponseEntity<?> getBookMapSearchNickName(@RequestHeader Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new
-                        IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
-        UserProfileDto userProfileDto = new UserProfileDto();
-        userProfileDto.setNickName(user.getNickname());
-        userProfileDto.setUserId(userId);
-        userProfileDto.setPicture(user.getPicture());
-        userProfileDto.setStatus(user.getStatus());
-        userProfileDto.setUserBookMapResponseDto(bookMapRepositoryService.findBookMapsByUserId(user.getId()));
+    @GetMapping("/bookmap/get/search/NickName")
+    public ResponseEntity<?> getBookMapSearchNickName(@RequestHeader String sessionId, @RequestHeader Long userId) {
+        Session findSession = sessionRepository.findById(sessionId);
+        if(findSession != null) {
+            User myUser = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new
+                            IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
+            UserProfileDto userProfileDto = new UserProfileDto();
+            userProfileDto.setNickName(user.getNickname());
+            userProfileDto.setUserId(userId);
+            userProfileDto.setPicture(user.getPicture());
+            userProfileDto.setStatus(user.getStatus());
+            userProfileDto.setUserBookMapResponseDto(bookMapRepositoryService.findUserBookMapsByUserId(myUser.getId(), user.getId()));
 
-        return new ResponseEntity<>(userProfileDto,HttpStatus.OK);
+            return new ResponseEntity<>(userProfileDto,HttpStatus.OK);
+        }
+        log.info("유효하지 않은 세션입니다");
+        Exception e = new Exception();
+        throw new RuntimeException(e);
+
+
 
     }
 

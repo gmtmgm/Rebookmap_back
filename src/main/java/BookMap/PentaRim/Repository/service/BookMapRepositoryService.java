@@ -3,6 +3,7 @@ package BookMap.PentaRim.Repository.service;
 import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.BookMapEntity;
 import BookMap.PentaRim.BookMap.Dto.*;
+import BookMap.PentaRim.User.model.User;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public interface BookMapRepositoryService {
 
     List<String> findHashTagByBookMap(BookMapEntity bookMapEntity);
     List<BookMapResponseDto> findBookMapsByUserId(Long userId);
+    List<UserBookMapResponseDto> findUserBookMapsByUserId(Long myId, Long userId);
     List<BookMapResponseDto> findBookMapScrapsByUserId(Long userId);
 
     Long findBookMapScrapIdByUserIdAndBookMapId(Long userId, Long bookMapId);

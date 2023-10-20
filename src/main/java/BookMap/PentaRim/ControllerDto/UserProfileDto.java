@@ -2,6 +2,7 @@ package BookMap.PentaRim.ControllerDto;
 
 
 import BookMap.PentaRim.BookMap.Dto.BookMapResponseDto;
+import BookMap.PentaRim.BookMap.Dto.UserBookMapResponseDto;
 import lombok.Data;
 
 import java.util.List;
@@ -17,5 +18,6 @@ public class UserProfileDto {
 
      String status;
 
-     List<BookMapResponseDto> userBookMapResponseDto;
+     List<UserBookMapResponseDto> userBookMapResponseDto;
+
 }
