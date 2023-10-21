@@ -2,7 +2,6 @@ package BookMap.PentaRim.Controller.BookMap;
 
 import BookMap.PentaRim.BookMap.BookMap;
 import BookMap.PentaRim.BookMap.Dto.*;
-import BookMap.PentaRim.BookMapControllerDto.BookMapSaveDto;
 import BookMap.PentaRim.BookMapControllerDto.BookMapScrapSaveDto;
 import BookMap.PentaRim.ControllerDto.UserProfileDto;
 import BookMap.PentaRim.Repository.BookMapRepository;
@@ -18,8 +17,6 @@ import org.springframework.session.Session;
 import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 
 @Slf4j
 @RestController
@@ -33,7 +30,6 @@ public class BookMapController {
 
     private final JdbcIndexedSessionRepository sessionRepository;
 
-    private final BookMapRepository bookMapRepository;
 
 
     @PostMapping("/bookmap") //특정 유저의 북맵 목록
@@ -55,7 +51,6 @@ public class BookMapController {
     public ResponseEntity<?> userBookMapScrapLoad(@RequestHeader String sessionId){
         Session findSession = sessionRepository.findById(sessionId);
         if(findSession != null) {
-
             User user = userRepository.findByEmail(findSession.getAttribute(SessionConst.EMAIL));
             return new ResponseEntity<>(bookMapRepositoryService.findBookMapScrapsByUserId(user.getId()),HttpStatus.OK);
         }

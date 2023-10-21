@@ -37,16 +37,6 @@ public class BookMapResponseDto {
     }
 
 
-    public BookMapResponseDto(BookMapEntity bookMapEntity){
-        this.bookMapId = bookMapEntity.getBookMapId();
-        this.userId = bookMapEntity.getUser().getId();
-        this.bookMapTitle = bookMapEntity.getBookMapTitle();
-        this.bookMapContent = bookMapEntity.getBookMapContent();
-        this.bookMapImage = bookMapEntity.getBookMapImage();
-        this.share = bookMapEntity.isShare();
-        this.nickname = bookMapEntity.getUser().getNickname();
-    }
-
     public void toBookMap(BookMap bookMap){
         bookMap.setBookMapTitle(this.bookMapTitle);
         bookMap.setBookMapContent(this.bookMapContent);
@@ -57,8 +47,14 @@ public class BookMapResponseDto {
 
     }
 
-
-
+    @Override
+    public boolean equals(Object object) {
+        BookMapEntity bookMapEntity = (BookMapEntity) object;
+        if (bookMapEntity.getBookMapId() == this.bookMapId) {
+            return true;
+        }
+        return false;
+    }
 
 
 }

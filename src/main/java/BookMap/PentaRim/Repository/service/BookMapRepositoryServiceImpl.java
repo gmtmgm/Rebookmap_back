@@ -40,15 +40,11 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         BookMapEntity bookMapEntity = bookMapRepository.findById(bookMapId)
                 .orElseThrow(() -> new
                         IllegalArgumentException("북맵 없음" + bookMapId));
-        BookMapResponseDto bookMapResponseDto = new BookMapResponseDto(bookMapEntity);
         List<String> hashTag = findHashTagByBookMap(bookMapEntity);
+
+        BookMapResponseDto bookMapResponseDto = new BookMapResponseDto(bookMapEntity, hashTag, bookMapScrapRepository.findAllByBookMap(bookMapEntity).size());
         bookMap.setUserId(bookMapEntity.getUser().getId());
-        for(String tag : hashTag){
-            tag.replaceAll("[#!,@%&^.?/$*()`~]", "");
-        }
-        bookMapResponseDto.setHashTag(hashTag);
         bookMapResponseDto.toBookMap(bookMap);
-        bookMap.setScrapCount(bookMapScrapRepository.findAllByBookMap(bookMapEntity).size());
         List<BookMapDetailEntity> detailList = bookMapDetailRepository.findByBookMapEntityOrderByIndex(bookMapEntity);
         for(BookMapDetailEntity detail: detailList){
 
@@ -106,6 +102,24 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
 
     @Override
     @Transactional
+    public List<BookMapResponseDto> findBookMapScrapsByUserId(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
+        List<BookMapScrapEntity> bookMapScrapEntities = bookMapScrapRepository.findByUserOrderByBookMapSaveTime(user);
+        List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
+
+        for (BookMapScrapEntity bookMapScrap : bookMapScrapEntities){
+            BookMapEntity bookMapEntity = bookMapScrap.getBookMap();
+            List<String> hashTag = findHashTagByBookMap(bookMapEntity);
+
+            bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity, hashTag, bookMapScrapRepository.findAllByBookMap(bookMapEntity).size()));
+        }
+        return bookMapResponseDtos;
+    }
+
+    @Override
+    @Transactional
     public List<UserBookMapResponseDto> findUserBookMapsByUserId(Long myId, Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new
@@ -119,20 +133,6 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                     checkBookMapScrap(myId, bookMap.getBookMapId())));
         }
         return bookMapList;
-    }
-
-    @Override
-    @Transactional
-    public List<BookMapResponseDto> findBookMapScrapsByUserId(Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new
-                        IllegalArgumentException("해당 사용자가 없습니다. id = " + userId));
-        List<BookMapScrapEntity> bookMapScrapEntities = bookMapScrapRepository.findByUserOrderByBookMapSaveTime(user);
-        List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
-        for (BookMapScrapEntity bookMapScrap : bookMapScrapEntities){
-            bookMapResponseDtos.add(new BookMapResponseDto(bookMapScrap.getBookMap()));
-        }
-        return bookMapResponseDtos;
     }
 
     @Override
@@ -225,9 +225,7 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
                 .orElseThrow(() -> new
                         IllegalArgumentException("북맵 없음" + bookMapId));
         List<String> hashTag = findHashTagByBookMap(bookMapEntity);
-        for(String tag : hashTag){
-            tag.replaceAll("[#!,@%&^.?/$*()`~]", "");
-        }
+
         BookMapSaveRequestDto bookMapSaveRequestDto = new BookMapSaveRequestDto(
                 bookMapEntity.getBookMapTitle() + "의 사본",
                 bookMapEntity.getBookMapContent(),
@@ -420,8 +418,10 @@ public class BookMapRepositoryServiceImpl implements BookMapRepositoryService {
         List<BookMapEntity> bookMapResponseDtosTitle = bookMapRepository.findAllByBookMapTitleContaining(text);
         List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
         for (BookMapEntity bookMapEntity : bookMapResponseDtosTitle){
-            if (bookMapEntity.isShare()) {
-                bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity));
+            if (bookMapEntity.isShare() && result.contains(bookMapEntity)) {
+                List<String> hashTag = findHashTagByBookMap(bookMapEntity);
+
+                bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity, hashTag, bookMapScrapRepository.findAllByBookMap(bookMapEntity).size()));
             }
         }
         result.addAll(bookMapResponseDtos);

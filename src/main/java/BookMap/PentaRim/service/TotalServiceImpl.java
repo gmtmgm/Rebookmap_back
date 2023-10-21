@@ -12,14 +12,15 @@ import BookMap.PentaRim.Dto.MainResponseDto;
 import BookMap.PentaRim.Dto.ProfileResponseDto;
 import BookMap.PentaRim.Dto.ProfileUpdateRequestDto;
 import BookMap.PentaRim.Repository.BookMapRepository;
+import BookMap.PentaRim.Repository.BookMapScrapRepository;
 import BookMap.PentaRim.Repository.BookMemoRepository;
 import BookMap.PentaRim.Repository.BookPersonalRepository;
+import BookMap.PentaRim.Repository.service.BookMapRepositoryService;
 import BookMap.PentaRim.User.Dto.UserSearchResponseDto;
 import BookMap.PentaRim.User.model.User;
 import BookMap.PentaRim.User.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class TotalServiceImpl implements TotalService{
     final BookMemoRepository bookMemoRepository;
     final BookSaved bookSaved;
     final BookMapRepository bookMapRepository;
+    final BookMapScrapRepository bookMapScrapRepository;
+    final BookMapRepositoryService bookMapRepositoryService;
 
     @Override
     @Transactional
@@ -52,7 +55,8 @@ public class TotalServiceImpl implements TotalService{
         List<BookMapEntity> bookMap = bookMapRepository.findTop3ByUserOrderByBookMapSaveTime(user);
         List<BookMapResponseDto> bookMapResponseDtos = new ArrayList<>();
         for(BookMapEntity bookMapEntity: bookMap) {
-            bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity));
+            List<String> hashTag = bookMapRepositoryService.findHashTagByBookMap(bookMapEntity);
+            bookMapResponseDtos.add(new BookMapResponseDto(bookMapEntity, hashTag, bookMapScrapRepository.findAllByBookMap(bookMapEntity).size()));
         }
         List<BookTopResponseDto> bookTopResponseDtos = bookSaved.findByTop5();
         return new MainResponseDto(bookImageDtos, bookMapResponseDtos, bookTopResponseDtos);
