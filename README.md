@@ -64,9 +64,12 @@
 
 #### ERD 및 아키텍처
 
+<img width="1777" height="1087" alt="북맵 다이어그램 (2)" src="https://github.com/user-attachments/assets/94943fe9-7084-403f-a9a1-252513706d91" />
+
+
 <img width="1426" height="677" alt="image" src="https://github.com/user-attachments/assets/dddf12d1-2ec0-431e-971f-c259c1fd2b07" />
 
-<img width="1426" height="677" alt="image" src="https://github.com/user-attachments/assets/4f5fb203-c96f-4d7f-ac41-ecb64c47629c" />
+
 
 
 
@@ -74,7 +77,8 @@
 ### 기대 효과
 
  **독서 접근성 향상**
- **독서 편식을 줄이고 다양한 책에 접근해 볼 수 있음 **
+ 
+ **독서 편식을 줄이고 다양한 책에 접근해 볼 수 있음**
     
 
 
